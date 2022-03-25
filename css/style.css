@@ -1,0 +1,34 @@
+*{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.container-fluid.p-5{
+    background-image: url('../Foto/nero.png');
+    background-size: cover;
+}
+
+.jumbotron.p-5{
+    border: 2px whitesmoke;
+}
+
+
+.newbanner{
+    color: aliceblue;
+    font-weight: bold;
+    text-shadow: 5px 5px 10px #000;
+}
+
+.btn.btn-light{
+    padding-left: 17px;
+    padding-right: 17px;
+}
+
+.btn.btn-light:hover{
+    background-color: whitesmoke;
+}
+
+h3:hover{
+    color: cadetblue;
+}
+
+.margin {margin-bottom: 45px;}
