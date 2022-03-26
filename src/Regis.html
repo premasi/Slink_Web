@@ -7,7 +7,7 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="../css/style2.css" />
     <title>Registation</title>
   </head>
   <body>
@@ -26,33 +26,45 @@
           </div>
         </div>
       </nav>
-      <br><br><br><br>
+      <br><br><br>
     <section class="container-fluid">
         <!-- justify-content-center untuk mengatur posisi form agar berada di tengah-tengah -->
         <section class="row justify-content-center">
         <section class="col-12 col-sm-6 col-md-4">
-            <form class="form-container">
+            <form class="form-container border">
                 <h4 class="text-center font-weight-bold"> Sign-Up </h4>
+                <br><br>
                 <div class="form-group">
-                    <label for="name">Nama</label>
-                    <input type="text" class="form-control" id="name" placeholder="Masukkan Nama">
+                  <label for="InputEmail">First Name</label>
+                  <input type="email" class="form-control" id="Inputnama1" aria-describeby="emailHelp" placeholder="Masukkan Nama depan">
+              </div>
+              <div class="form-group">
+                <label for="InputEmail">Last Name</label>
+                <input type="email" class="form-control" id="Inputnama2" aria-describeby="emailHelp" placeholder="Masukkan Nama belakang">
+            </div>
+                <div class="form-group">
+                    <label for="InputEmail">Jenis Kelamin</label><br><br>
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="Laki" value="option1">
+                    <label class="form-check-label" for="inlineRadio1">Laki - laki</label>
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="Perempuan" value="option1">
+                    <label class="form-check-label" for="inlineRadio1">Perempuan</label>
+                  </div>
+                <div class="form-group">
+                    <label for="name">No-Telp</label>
+                    <input type="text" class="form-control" id="inputTelp" placeholder="Masukan No-Telphon">
                 </div>
                 <div class="form-group">
-                    <label for="InputEmail">Alamat Email</label>
-                    <input type="email" class="form-control" id="InputEmail" aria-describeby="emailHelp" placeholder="Masukkan email">
-                </div>
-                <div class="form-group">
-                    <label for="name">Username</label>
-                    <input type="text" class="form-control" id="username" placeholder="Masukkan username">
+                    <label for="InputPassword">Profesi</label>
+                    <input type="password" class="form-control" id="InputProfesi" placeholder="Masukan Profesi">
                 </div>
                 <div class="form-group">
                     <label for="InputPassword">Password</label>
-                    <input type="password" class="form-control" id="InputPassword" placeholder="Password">
+                    <input type="password" class="form-control" id="InputPassword" placeholder="Masukan Password">
                 </div>
                 <div class="form-group">
-                    <label for="InputPassword">Re-Password</label>
-                    <input type="password" class="form-control" id="InputRePassword" placeholder="Re-Password">
-                </div>
+                  <label for="InputPassword">Link_linkedin</label>
+                  <input type="password" class="form-control" id="Inputlinkedin" placeholder="Masukan Link_linkedin">
+              </div>
                <center><button class="btn btn-primary" type="button">Sign in</button>
                 <div class="form-footer mt-2">
                     <p> Sudah punya account? <a href="#">Login</a></p>
@@ -61,6 +73,7 @@
         </section>
         </section>
     </section>
+    <br><br><br>
 
    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
