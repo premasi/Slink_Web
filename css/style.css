@@ -2,13 +2,6 @@ body{
     font-family:'Roboto' ,Arial, Helvetica, sans-serif;
 }
 
-.navbar{
-    background-color: #a3d2d5;
-    
-
-}
-
-
 .container-fluid.p-5{
     background-image: url('../Foto/nero.png');
     background-size: cover;
