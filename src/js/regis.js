@@ -1,69 +1,50 @@
-// Masukan Data
+// Import Data
 var DataUsers = JSON.parse(localStorage.getItem("data-users"));
 
-// const login = (e) => {
-//     e.preventDefault();
-//     const logUser = {
-//         username: document.getElementById("floatingInput").value,
-//         pass: document.getElementById("floatingPassword").value 
-//     }
-
-//     console.log(logUser);
-
-//     DataUsers.map((item) => {
-//         if(logUser.username == item.username && logUser.pass == item.pass){
-//             window.location.href = "../cms.html";
-//         } else {
-//             alert("Kamu siapa... aku siapa... kamu siapa.....")
-//         }
-//     })
-
-
-    // console.log(newUser);
-    // if (DataUsers === null) {
-    //   DataUsers = [];
-    //   DataUsers.push(newUser);
-    //   localStorage.setItem("data-users", JSON.stringify(DataUsers));
-    //   document.location.reload();
-    // } else {
-    //   DataUsers.push(newUser);
-    //   localStorage.setItem("data-users", JSON.stringify(DataUsers));
-    //   document.location.reload();
-    // }
-//   };
-// document.getElementById("submit_login").addEventListener("click", login);
-
-//masukin data register user
+//registrasi User
 const Register = (e) => {
-    e.preventDefault();
-    const newUser = { 
-        id: Math.random(),
-        nama: document.getElementById("inputnama1").value, 
-        namab: document.getElementById("inputnama2").value, 
-        laki: document.getElementById("jenisk1").value,
-        perempuan: document.getElementById("jenisk2").value,
-        telp: document.getElementById("inputTelp").value,
-        prof: document.getElementById("inputProfesi").value,
-        username: document.getElementById("inputUsername").value,
-        pass: document.getElementById("inputPassword").value,
-        linked: document.getElementById("inputlinkedin").value
-    };
+  e.preventDefault();
 
-    console.log(newUser);
-    if (DataUsers === null) {
-      DataUsers = [];
-      DataUsers.push(newUser);
-      localStorage.setItem("data-users", JSON.stringify(DataUsers));
-      //document.location.reload();
-      document.location.href = "../src/Login.html";
-    } else {
-      DataUsers.push(newUser);
-      localStorage.setItem("data-users", JSON.stringify(DataUsers));
-      //document.location.reload();
-      document.location.href = "../src/Login.html";
-
-    }
+  let newUser = {
+    id: Math.random(),
+    nama: document.getElementById("inputnama1").value,
+    namab: document.getElementById("inputnama2").value,
+    telp: document.getElementById("inputTelp").value,
+    prof: document.getElementById("inputProfesi").value,
+    username: document.getElementById("inputUsername").value,
+    pass: document.getElementById("inputPassword").value,
+    linked: document.getElementById("inputlinkedin").value,
   };
+  let gender = document.getElementsByName("inputGender");
+  for (let i = 0; i < gender.length; i++) {
+    if (gender[i].checked) {
+      newUser.gender = gender[i].value;
+    }
+  }
 
-//nulis data
+  let used = false;
+  DataUsers.map((user) => {
+    if (newUser.username === user.username) {
+      used = true;
+    }
+  });
+
+  if (used) {
+    return alert("Username sudah digunakan!");
+  }
+
+  console.log(newUser);
+  if (DataUsers === null) {
+    DataUsers = [];
+    DataUsers.push(newUser);
+    localStorage.setItem("data-users", JSON.stringify(DataUsers));
+    document.location.href = "../src/Login.html";
+  } else {
+    DataUsers.push(newUser);
+    localStorage.setItem("data-users", JSON.stringify(DataUsers));
+    document.location.href = "../src/Login.html";
+  }
+};
+
+// Trigger Registrasi User
 document.getElementById("submit_user").addEventListener("click", Register);
