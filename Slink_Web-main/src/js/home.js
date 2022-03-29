@@ -1,5 +1,13 @@
+// Import Data
 var DataUsers = JSON.parse(localStorage.getItem("data-users"));
+var DataLog = JSON.parse(localStorage.getItem("log-user"));
 
+// Cek Login atau Belum
+if (DataLog === null) {
+  document.location.href = "../index.html";
+}
+
+// Menampilkan Post dari Semua User
 const showAllPosts = () => {
   let list = "";
   DataUsers.map((user) => {
@@ -34,3 +42,11 @@ const showAllPosts = () => {
 
 // Trigger Tampilkan Data Ketika Page di Load
 window.addEventListener("load", showAllPosts);
+
+// LogOut
+const logout = (e) => {
+  localStorage.removeItem("log-user");
+};
+
+// Trigger LogOut
+document.getElementById("logout").addEventListener("click", logout);

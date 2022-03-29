@@ -24,18 +24,6 @@ const login = (e) => {
   if (auth === false) {
     alert("Kamu siapa... aku siapa... kamu siapa...");
   }
-
-  console.log(newUser);
-  if (DataUsers === null) {
-    DataUsers = [];
-    DataUsers.push(newUser);
-    localStorage.setItem("data-users", JSON.stringify(DataUsers));
-    document.location.reload();
-  } else {
-    DataUsers.push(newUser);
-    localStorage.setItem("data-users", JSON.stringify(DataUsers));
-    document.location.reload();
-  }
 };
 
 // Trigger Login

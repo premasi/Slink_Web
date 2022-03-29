@@ -1,5 +1,12 @@
-// Import Data
+// Import Data Auth
 var DataLog = JSON.parse(localStorage.getItem("log-user"));
+
+// Cek Login Atau Belum
+if (DataLog === null) {
+  document.location.href = "../index.html";
+}
+
+// Import Data Posts sesuai User yang Login
 var DataPosts = JSON.parse(localStorage.getItem(`data-posts-${DataLog.id}`));
 
 // Tampilkan Data di CMS
@@ -108,3 +115,11 @@ const searchData = (e) => {
 
 // Trigger Cari Data
 document.getElementById("submit_keyword").addEventListener("click", searchData);
+
+// LogOut
+const logout = (e) => {
+  localStorage.removeItem("log-user");
+};
+
+// Trigger LogOut
+document.getElementById("logout").addEventListener("click", logout);
