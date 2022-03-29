@@ -17,7 +17,7 @@ const login = (e) => {
     if (logUser.username == item.username && logUser.pass == item.pass) {
       auth = true;
       localStorage.setItem("log-user", JSON.stringify(item));
-      window.location.href = "./cms.html";
+      window.location.href = "./home.html";
     }
   });
 
