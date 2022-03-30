@@ -22,19 +22,29 @@ const Register = (e) => {
     }
   }
 
-  let used = false;
+
+  let usedusername = false;
+  let usedtelp = false
+  if (DataUsers !== null && DataUsers.length !== 0){
   DataUsers.map((user) => {
     if (newUser.username === user.username) {
-      used = true;    
-      document.getElementById('user-text').innerHTML = "Username sudah digunakan";
-    }
+      usedusername = true;    
 
+    }
     if(newUser.telp === user.telp) {
-      used = true;
-      document.getElementById('telp-text').innerHTML = "No telephone sudah digunakan";
+      usedtelp = true;
+
     }
   });
+}
 
+  if(usedusername){
+    return document.getElementById('user-text').innerHTML = "Username sudah digunakan";
+  }
+
+  if(usedtelp){
+    return document.getElementById('telp-text').innerHTML = "No telephone sudah digunakan";  
+  }
 
 
   console.log(newUser);
@@ -42,12 +52,12 @@ const Register = (e) => {
     DataUsers = [];
     DataUsers.push(newUser);
     localStorage.setItem("data-users", JSON.stringify(DataUsers));
-    // document.location.href = "../src/Login.html";
+    document.location.href = "../src/Login.html";
   } else {
     DataUsers.push(newUser);
     localStorage.setItem("data-users", JSON.stringify(DataUsers));
     return alert("Registrasi berhasil");
-    // document.location.href = "../src/Login.html";
+    document.location.href = "../src/Login.html";
   }
 
 };
