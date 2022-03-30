@@ -27,10 +27,10 @@ const showAllPosts = () => {
     }
   });
   console.log(list);
-  if (list !== null) {
+  if (list !== null && list !== "") {
     document.getElementById("postingan").innerHTML = list;
   } else {
-    document.getElementById("postingan").innerHTML = '<h3 class="d-flex justify-content-center">Belum ada Post</h3>';
+    document.getElementById("postingan").innerHTML = '<h4 class="d-flex justify-content-center">Sayang sekali masih belum ada info :( </h4><br><br><h4 class="d-flex justify-content-center">Ayo share info terbaru</h4>';
   }
 };
 
