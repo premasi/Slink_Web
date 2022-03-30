@@ -18,8 +18,9 @@
     <div class="animasi">
     <section class="container-fluid">
         <!-- justify-content-center untuk mengatur posisi form agar berada di tengah-tengah -->
+   
         <section class="row justify-content-center">
-        <section class="col-12 col-sm-6 col-md-4">
+        <section class="col-12 col-sm-6 col-md-4 m-5">
             <form class="form-container border" method="post" id="form-regis">
                 <h4 class="text-center font-weight-bold"> Sign Up </h4>
                 <br><br>
@@ -29,7 +30,7 @@
               </div>
               <div class="form-group">
                 <label for="Inputnama2">Last Name</label>
-                <input type="text" class="form-control" name="inputnama2" id="inputnama2" placeholder="Masukkan Nama belakang">
+                <input type="text" class="form-control" name="inputnama2" id="inputnama2" placeholder="Masukkan Nama belakang" autocomplete="fa">
             </div>
                 <div class="form-group">
                     <label for="InputEmail">Jenis Kelamin</label><br><br>
@@ -41,14 +42,20 @@
                 <div class="form-group">
                     <label for="name">No-Telp</label>
                     <input type="text" class="form-control" name="inputTelp" id="inputTelp" placeholder="Masukan No-Telephone">
+                    <h6 class="mt-1" id="telp-text"></h6>
                 </div>
-                <div class="form-group">
+              </section>
+
+                <section class="col-12 col-sm-6 col-md-4 m-5 form-container border">
+
+                <div class="form-group ">
                     <label for="InputPassword">Profesi</label>
                     <input type="text" class="form-control" name="inputProfesi" id="inputProfesi" placeholder="Masukan Profesi">
                 </div>
                 <div class="form-group">
                   <label for="inputUsername">Username</label>
                   <input type="text" class="form-control" name="inputUsername" id="inputUsername" placeholder="Masukan Password">
+                  <h6 class="mt-1" id="user-text"></h6>
               </div>
                 <div class="form-group">
                     <label for="InputPassword">Password</label>
@@ -59,17 +66,27 @@
                   <input type="text" class="form-control" id="inputlinkedin" placeholder="Masukan Link linkedin">
               </div>
               <br><br>
-               <center><button class="btn " name="submit" type="submit" id="submit_user">Sign Up</button>
+               <center><button class="btn-lg" name="submit" style="background-color: ;" type="submit" id="submit_user">Sign Up</button>
                 <div class="form-footer mt-2">
                     <br><p> Already have account? <a href="./Login.html">Login</a></p>
-                </div>
+                </div>              
+            </section>
+
             </form>
         </section>
         </section>
     </section>
     <br><br><br>
   </div>
-
+  <footer>
+    <div class="row">
+      <div class="col-lg-12 text-center mt-5">
+          <p><small>Copyright &copy; Slink 2022</small></p>
+      </div>
+      <!-- /.col-lg-12 -->
+  </div>
+  <!-- /.row -->
+</footer>
    
     <script src="./js/regis.js"></script>
   </body>

@@ -30,7 +30,7 @@ const showAllPosts = () => {
   if (list !== null && list !== "") {
     document.getElementById("postingan").innerHTML = list;
   } else {
-    document.getElementById("postingan").innerHTML = '<h4 class="d-flex justify-content-center">Sayang sekali masih belum ada info :( </h4><br><br><h4 class="d-flex justify-content-center">Ayo share info terbaru</h4>';
+    document.getElementById("postingan").innerHTML = '<pre><h4 class="d-flex justify-content-center">Sayang sekali masih belum ada info :( </h4></pre><br><br><pre><h4 class="d-flex justify-content-center">Ayo share info terbaru</h4></pre>';
   }
 };
 
