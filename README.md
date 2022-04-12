@@ -3,7 +3,6 @@ Merupakan sebuab forum yang memfasilitasi para penggunanya untuk mengelola dan m
 ## Fitur:
 - Autentifikasi
 - CRUD Posts
-- Search
 - Komentar
 - Landing(Branding)
 ### **Masih Berada Pada Tahap Pengembangan...**
