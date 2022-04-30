@@ -43,7 +43,7 @@ window.addEventListener("load", showData(DataPosts));
 // Tambah Data Post
 const insertPost = (e) => {
   e.preventDefault();
-  const newPost = { id: Math.random(), judul: document.getElementById("insert_judul").value, deskripsi: document.getElementById("insert_deskripsi").value, link: document.getElementById("insert_link").value };
+  const newPost = { id: Math.random(), judul: document.getElementById("insert_judul").value, deskripsi: document.getElementById("insert_deskripsi").value, link: document.getElementById("insert_link").value, comment:[] };
   console.log(newPost);
   if (DataPosts === null) {
     DataPosts = [];

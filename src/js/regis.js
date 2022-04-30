@@ -15,6 +15,12 @@ const Register = (e) => {
     pass: document.getElementById("inputPassword").value,
     linked: document.getElementById("inputlinkedin").value,
   };
+if(newUser.nama.length === 0 || newUser.namab.length === 0 ||newUser.telp.length === 0 ||newUser.prof.length === 0 
+  ||newUser.username.length === 0 || newUser.pass.length === 0 || newUser.linked.length === 0 ){
+  return alert("Mohon isi kolom yang ada!!");
+}
+
+
   let gender = document.getElementsByName("inputGender");
   for (let i = 0; i < gender.length; i++) {
     if (gender[i].checked) {
@@ -22,30 +28,26 @@ const Register = (e) => {
     }
   }
 
-
   let usedusername = false;
-  let usedtelp = false
-  if (DataUsers !== null && DataUsers.length !== 0){
-  DataUsers.map((user) => {
-    if (newUser.username === user.username) {
-      usedusername = true;    
-
-    }
-    if(newUser.telp === user.telp) {
-      usedtelp = true;
-
-    }
-  });
-}
-
-  if(usedusername){
-    return document.getElementById('user-text').innerHTML = "Username sudah digunakan";
+  let usedtelp = false;
+  if (DataUsers !== null && DataUsers.length !== 0) {
+    DataUsers.map((user) => {
+      if (newUser.username === user.username) {
+        usedusername = true;
+      }
+      if (newUser.telp === user.telp) {
+        usedtelp = true;
+      }
+    });
   }
 
-  if(usedtelp){
-    return document.getElementById('telp-text').innerHTML = "No telephone sudah digunakan";  
+  if (usedusername) {
+    return (document.getElementById("user-text").innerHTML = "Username sudah digunakan");
   }
 
+  if (usedtelp) {
+    return (document.getElementById("telp-text").innerHTML = "No telephone sudah digunakan");
+  }
 
   console.log(newUser);
   if (DataUsers === null) {
@@ -59,7 +61,6 @@ const Register = (e) => {
     return alert("Registrasi berhasil");
     document.location.href = "../src/Login.html";
   }
-
 };
 
 // Trigger Registrasi User
