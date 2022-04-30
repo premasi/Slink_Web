@@ -2,6 +2,6 @@
 - Autentifikasi
 - CRUD Posts
 - Search
-- Komentar
+- Komentar(belum buat ulang) 
 - Landing(Branding)
 ### **Masih Berada Pada Tahap Pengembangan...**
