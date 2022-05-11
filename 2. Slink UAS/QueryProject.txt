@@ -1,0 +1,72 @@
+CREATE DATABASE slink;
+
+USE slink;
+
+CREATE TABLE users(
+id int primary key auto_increment,
+nama varchar(255),
+email varchar(255) unique,
+username varchar(255) unique,
+password varchar(255),
+waktu_bergabung datetime default current_timestamp(),
+bio text,
+verified bool default 0
+);
+
+INSERT INTO users VALUES(NULL, "Akun Test-1", NULL, "test1", "12345", NOW(), NULL, '');
+INSERT INTO users VALUES(NULL, "Akun Test-2", NULL, "test2", "12345", NOW(), NULL, '');
+
+CREATE VIEW profile AS SELECT nama, username, email, bio, waktu_bergabung FROM users;
+
+CREATE TABLE posts(
+id int primary key auto_increment,
+judul varchar(255),
+deskripsi varchar(255),
+link varchar(255),
+waktu_aksi datetime default current_timestamp(),
+user_id int,
+FOREIGN KEY(user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+INSERT INTO posts VALUES(NULL, 'Cara Menjadi Ayam','Tutorial berubah wujud','link-a',NOW(),1);
+INSERT INTO posts VALUES(NULL, 'Cara Menjadi Sapi','Tutorial berubah','link-a',NOW(),2);
+INSERT INTO posts VALUES(NULL, 'Buat Dihapus','Hpus Kuy','link-hapus',NOW(),1);
+
+CREATE TABLE comments(
+id int primary key auto_increment,
+komentar text,
+post_id int,
+user_id int,
+parent_comment_id int,
+waktu_komentar datetime default current_timestamp(),
+FOREIGN KEY(user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+FOREIGN KEY(post_id) REFERENCES posts(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+INSERT INTO comments VALUES(NULL, 'Gagal jadi ayam...', 1, 2, 0, NOW());
+INSERT INTO comments VALUES(NULL, 'Ah berhasil', 1, 2, 1, NOW());
+INSERT INTO comments VALUES(NULL, 'Noh berhasil', 1, 1, 1, NOW());
+INSERT INTO comments VALUES(NULL, 'Gagal jadi ayam...', 1, 2, 0, NOW());
+
+CREATE TABLE likes(
+id int primary key auto_increment,
+post_id int,
+user_id int,
+FOREIGN KEY(user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+FOREIGN KEY(post_id) REFERENCES posts(id) ON UPDATE CASCADE ON DELETE CASCADE,
+CONSTRAINT Composite_Unique unique(post_id, user_id)
+);
+
+CREATE TABLE follows(
+id int primary key auto_increment,
+user_id int,
+follower_id int,
+FOREIGN KEY(user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+FOREIGN KEY(follower_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+CONSTRAINT Composite_Unique unique(user_id, follower_id)
+);
+
+CREATE TABLE otp(
+email varchar(255),
+otp_code varchar(6)
+);
