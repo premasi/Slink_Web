@@ -20,68 +20,20 @@ if (isset($_GET['logout'])) {
 // Handler Tombol Insert Data Post
 if (isset($_POST["submit_createPost"])) {
 
-  //cek data berhasil ditambah atau tidak
-  if (createPost($_POST) > 0) {
-    echo
-    "
-      <script>
-      alert('Post Berhasil Dibuat');
-      document.location.href = 'cms.php';
-      </script>
-      ";
-  } else {
-    echo
-    "
-      <script>
-      alert('Data Gagal Dibuat');
-      document.location.href = 'cms.php';
-      </script>
-      ";
-  }
+  // Eksekusi Create Post
+  $postStatus = createPost($_POST);
 }
 
 // Handler Tombol Update Data Post
 if (isset($_POST["submit_updatePost"])) {
 
-  // Cek Data Post Berhasil Diubah atau Tidak
-  if (updatePost($_POST) > 0) {
-    echo
-    "
-      <script>
-      alert('Post Berhasil Di-Update');
-      document.location.href = 'cms.php';
-      </script>
-      ";
-  } else {
-    echo
-    "
-      <script>
-      alert('Post Gagal Di-Update');
-      document.location.href = 'cms.php';
-      </script>
-      ";
-  }
+  // Eksekusi Update Post
+  $postStatus = updatePost($_POST);
 }
 
 // Handler Tombol Delete Data Post
 if (isset($_GET["delete_id"])) {
-  if (deletePost($_GET["delete_id"]) > 0) {
-    echo
-    "
-          <script>
-          alert('Post Berhasil Dihapus');
-          document.location.href = 'cms.php';
-          </script>
-          ";
-  } else {
-    echo
-    "
-          <script>
-          alert('Post Gagal Dihapus');
-          document.location.href = 'cms.php';
-          </script>
-          ";
-  }
+  $postStatus = deletePost($_GET["delete_id"]);
 }
 
 // Ambil Data Post untuk Ditampilkan
@@ -127,8 +79,12 @@ if (isset($_POST["submit_search"])) {
     <main class="container shadow p-3 mb-5 bg-body rounded m-auto mt-5">
       <div class="row mb-2 d-flex">
         <!-- Tombol Trigger Modal untuk Insert/Tambah Data -->
-        <div class="col-4">
+        <div class="col-3">
           <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal_form" id="trigger_createPost">+ Tambah Post</button>
+        </div>
+        <div class="col-6 justify-content-center">
+          <?php if (isset($postStatus["error_link"])) echo $postStatus["error_link"] ?>
+          <?php if (isset($postStatus["success"])) echo $postStatus["success"] ?>
         </div>
       </div>
 

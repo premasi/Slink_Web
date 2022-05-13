@@ -23,14 +23,8 @@ if (isset($_SESSION["login"])) {
 
 // Trigger Login
 if (isset($_POST["login"])) {
-  if (login($_POST) === (0 || false)) {
-    echo
-    "
-        <script>
-        alert('Username atau Password salah!');
-        </script>
-        ";
-  }
+  // Eksekusi Fungsi Login
+  $login = login($_POST);
 }
 
 
@@ -45,7 +39,7 @@ if (isset($_POST["login"])) {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link rel="stylesheet" href="../css/style2.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -58,7 +52,7 @@ if (isset($_POST["login"])) {
   <div class="animasi">
     <div class="login border">
       <center><img src="../Foto/logo.png" alt="Logo_slink" class="logo1"></center>
-      <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+      <h1 class="h3 mb-3 fw-normal">Login</h1>
       <form action="" method="POST">
         <div class="form-floating mb-3">
           <input type="text" class="form-control" id="username" name="username" placeholder="Username" required />
@@ -80,6 +74,7 @@ if (isset($_POST["login"])) {
     </div>
     <center>
       <hr class="my-4">Belum Punya Akun? <a href="register.php">Register</a> Sekarang</h3>
+      <?php if (isset($login["error"])) echo $login["error"] ?>
     </center>
   </div>
   <!--akhir login-->
@@ -94,7 +89,7 @@ if (isset($_POST["login"])) {
     <!-- /.row -->
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 
 </html>

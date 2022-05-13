@@ -31,13 +31,12 @@ function createPost($data)
 
     // Cek Link
     if (filter_var($link, FILTER_VALIDATE_URL) === false) {
-        echo "<script>
-        alert('Link/URL Tidak Valid!');
-        </script>
-        ";
-        return false;
+        return ["error_link" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Isi Field Dengan Benar!</strong> Jangan Isi Field dengan whitespace/spasi Saja
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+        exit;
     }
-
 
     // Query Insert Data ke DB
     $query = "INSERT INTO posts VALUES (NULL,'$judul','$deskripsi', '$link', NOW(), '$user_id')";
@@ -45,8 +44,11 @@ function createPost($data)
     // Eksekusi Query
     mysqli_query($conn, $query) or die(mysqli_error($conn));
 
-    // Cek Berhasil atau Tidak
-    return mysqli_affected_rows($conn);
+    // Jika Berhasil
+    return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+        <strong>Post Berhasil Dibuat!</strong> Ayo Buat Lebih Banyak Post
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
 }
 
 // Fungsi Update Data Post
@@ -60,7 +62,14 @@ function updatePost($data)
     $deskripsi = htmlspecialchars($data["deskripsi"]);
     $link = htmlspecialchars($data["link"]);
 
-
+    // Cek Link
+    if (filter_var($link, FILTER_VALIDATE_URL) === false) {
+        return ["error_link" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Isi Field Dengan Benar!</strong> Jangan Isi Field dengan whitespace/spasi Saja
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+        exit;
+    }
 
     // Query Update
     $query = "UPDATE posts SET judul = '$judul', deskripsi = '$deskripsi', link = '$link', waktu_aksi = NOW() WHERE id = $id";
@@ -68,8 +77,11 @@ function updatePost($data)
     // Eksekusi Query
     mysqli_query($conn, $query) or die(mysqli_error($conn));
 
-    // Cek Berhasil atau Tidak
-    return mysqli_affected_rows($conn);
+    // Jika Berhasil
+    return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+        <strong>Post Berhasil Diupdate!</strong> Ayo Buat Post Sesempurna Mungkin
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
 }
 
 
@@ -81,8 +93,11 @@ function deletePost($id)
     // Eksekusi Query
     mysqli_query($conn, "DELETE FROM posts WHERE id = $id") or die(mysqli_error($conn));
 
-    // Cek Berhasil atau Tidak
-    return mysqli_affected_rows($conn);
+    // Jika Berhasil
+    return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+        <strong>Post Berhasil Dihapus!</strong> Tetap Semangat Bikin Post Ya
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
 }
 
 // Fungsi Cari Data Post berdasarkan Keyword
@@ -102,11 +117,6 @@ function register($data)
 
     global $conn;
 
-    //default condition
-    $info_name = "";
-    $info_email = "";
-    $info_pass = "";
-    $info_pass2 = "";
 
     $nama = htmlspecialchars(stripslashes($data["nama"]));
     $email = htmlspecialchars(stripslashes($data["email"]));
@@ -116,44 +126,49 @@ function register($data)
 
     // Cek Field Diisi atau Tidak... Menghindari Inputan Berupa Whitespace(' ')
     if (ctype_space($nama) || ctype_space($email) || ctype_space($username) || ctype_space($password) || ctype_space($passwordCon)) {
-        echo "<script>
-        alert('Isi Field Dengan Benar!');
-        </script>
-        ";
-        return false;
+        return ["error_space" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Isi Field Dengan Benar!</strong> Jangan Isi Field dengan whitespace/spasi Saja
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+        exit;
     }
 
 
     // Cek Username Digunakan atau Belum
     if (queryGetData("SELECT * FROM users WHERE username = '$username'")) {
-        echo "<script>
-        alert('Username Sudah Digunakan!');
-        </script>
-        ";
-        return false;
+        return ["error_username" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Username Sudah Digunakan!</strong> Silahkan Gunakan Username Lain
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+        exit;
     }
 
     // Cek Username Digunakan atau Belum
     if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-        echo "<script>
-        alert('Email Tidak Valid!');
-        </script>
-        ";
-        return false;
+        return ["error_email" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Email Tidak Valid!</strong> Silahkan Gunakan Email yang Benar
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+        exit;
     }
 
 
     // Cek Apakah Password Kurang dari 8 Karakter atau Tidak
     if (strlen($password) < 8) {
-        echo "<script>
-            alert('Password Tidak Boleh Kurang dari 8 Karakter!');
-            </script>
-            ";
-        return false;
+        return ["error_password" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Password Tidak Boleh Kurang Dari 8 Karakter!</strong> Silahkan Tambah Karakter untuk Password
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+        exit;
     }
 
     // Cek Apakah Konfirmasi Password Benar
     if ($password !== $passwordCon) {
+        return ["error_passwordCon" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Konfirmasi Password Salah!</strong> Silahkan Masukan Password yang Sudah diisi Di Field Sebelumnya
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+        exit;
         echo "<script>
         alert('Konfirmasi Password Salah!');
         </script>
@@ -177,7 +192,10 @@ function register($data)
     mysqli_query($conn, $query) or die(mysqli_error($conn));
 
     // Cek Berhasil atau Tidak
-    return mysqli_affected_rows($conn);
+    return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+        <strong>Registrasi Berhasil!</strong> Silahkan verifikasi Akun Menggunakan Email dan Kode OTP yang Sudah Dikirim ke Email
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
 }
 
 // Fungsi Login
@@ -204,7 +222,11 @@ function login($data)
             header("Location: home.php");
             exit();
         }
-        return false;
+        return ["error" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Username atau Password Salah!</strong>
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+        exit;
     }
 }
 

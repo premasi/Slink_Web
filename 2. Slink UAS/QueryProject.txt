@@ -120,9 +120,9 @@ CREATE FUNCTION getPostLikes(postId INT)
 RETURNS int
 BEGIN
 
-DECLARE like int;
-SELECT COUNT(post_id) INTO like FROM likes WHERE post_id = postId; 
-RETURN like;
+DECLARE likes_temp int; 
+SELECT COUNT(*) INTO likes_temp FROM likes WHERE post_id = postId; 
+RETURN likes_temp;
 
 END//
 DELIMITER ;
@@ -135,7 +135,7 @@ BEGIN
 
 DECLARE status int;
 DECLARE row_temp int;
-SELECT COUNT(*) FROM likes WHERE post_id = postId AND user_id = userId ; 
+SELECT COUNT(*) INTO row_temp FROM likes WHERE post_id = postId AND user_id = userId ; 
 IF row_temp = 0 THEN SET status = 0;
 ELSE SET status = 1;
 END IF; 
@@ -158,15 +158,15 @@ DELIMITER ;
 
 -- Fungsi Cek Follower Apakah Sudah di Following
 DELIMITER //
-CREATE FUNCTION checkFollowerFollowing(userId INT ,followerId INT)
+CREATE FUNCTION checkFollows(userId INT ,followerId INT)
 RETURNS tinyint
 BEGIN
 
 DECLARE status int;
 DECLARE row_temp int;
-SELECT COUNT(*) FROM follows WHERE user_id = userId AND follower_id = followerId; 
+SELECT COUNT(*) INTO status FROM follows WHERE user_id = userId AND follower_id = followerId; 
 IF row_temp = 0 THEN SET status = 0;
-ELSE SET status = 1;
+ELSEIF row_temp = 1 THEN SET status = 1;
 END IF; 
 RETURN status;
 
@@ -209,13 +209,16 @@ END//
 
 DELIMITER ;
 
--- Store Procedure untuk Menampilkan Rekomendasi Post
+-- Store Procedure untuk Menampilkan Post Milik Teman(Follower dan Following)
 DELIMITER //
-CREATE PROCEDURE getRekPost(
+CREATE PROCEDURE getFollowsPost(
 IN userId int
 )
 
 BEGIN
+SELECT * FROM posts WHERE user_id  IN((SELECT user_id FROM follows WHERE follower_id = userId UNION SELECT follower_id FROM follows WHERE user_id = userId ));
 END//
 
 DELIMITER ;
+
+--
