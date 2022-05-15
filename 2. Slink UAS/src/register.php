@@ -60,7 +60,8 @@ if (isset($_POST["register"])) {
                                             <div class="form-outline flex-fill mb-0">
                                                 <input type="email" name="email" id="email" class="form-control" require />
                                                 <label class="form-label" for="email">Email</label>
-                                                <?php if (isset($register["error_email"])) echo $register["error_email"] ?>
+                                                <?php if (isset($register["error_emailVal"])) echo $register["error_emailVal"] ?>
+                                                <?php if (isset($register["error_emailUni"])) echo $register["error_emailUni"] ?>
                                             </div>
                                         </div>
 

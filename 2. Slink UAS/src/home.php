@@ -13,7 +13,9 @@ if (isset($_GET['logout'])) {
   logout();
 }
 
-$posts = queryGetData("SELECT posts.judul, posts.deskripsi, posts.link, users.username FROM posts INNER JOIN users ON posts.user_id = users.id");
+$user_id = $_SESSION['user_id'];
+
+$posts = queryGetData("SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi FROM posts INNER JOIN users ON posts.user_id = users.id");
 
 ?>
 
@@ -29,6 +31,8 @@ $posts = queryGetData("SELECT posts.judul, posts.deskripsi, posts.link, users.us
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
   <link rel="stylesheet" href="../css/style3.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.2/font/bootstrap-icons.min.css" integrity="sha512-YzwGgFdO1NQw1CZkPoGyRkEnUTxPSbGWXvGiXrWk8IeSqdyci0dEDYdLLjMxq1zCoU0QBa4kHAFiRhUL3z2bow==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
   <title>Slink | Home</title>
 </head>
 
@@ -55,6 +59,11 @@ $posts = queryGetData("SELECT posts.judul, posts.deskripsi, posts.link, users.us
           <h5><span style="color: #45625D;">by</span><?= " " . $post["username"]; ?></h5>
           <a class="btn col-1 mt-1 mb-1 shadow" href="<?= $post["link"] ?>" style="background-color:#6aa5a9; color: white;" target="_blank">Go Link</a>
           <p class="mt-1 mb-1"><?= $post['deskripsi']; ?></p>
+          <i <?php if (checkPostLiked($user_id, $post['id'])) : ?> class="bi bi-heart-fill text-danger fs-5 mx-1 like_button" <?php else : ?> class="bi bi-heart fs-5 mx-1 like_button" <?php endif ?> data-id="<?= $post["id"] ?>"></i>
+          <i class="bi bi-chat fs-5 mx-1 comment_button" data-bs-toggle="modal" data-bs-target="#modal_form"></i>
+          <i <?php if (checkPostBookmarked($user_id, $post['id'])) : ?> class="bi bi-bookmark-fill text-primary fs-5 mx-1 bookmark_button" <?php else : ?> class="bi bi-bookmark fs-5 mx-1 bookmark_button" <?php endif ?> data-id="<?= $post["id"] ?>"></i>
+          <br>
+          <span class="likes"><?= getPostLikes($post['id']); ?> Likes</span>
         </div>
       </div>
     <?php endforeach; ?>
@@ -67,6 +76,35 @@ $posts = queryGetData("SELECT posts.judul, posts.deskripsi, posts.link, users.us
       </div>
     </div>
   </footer>
+
+  <!-- Modal Form-->
+  <div class="modal fade" id="modal_form" tabindex="-1" aria-labelledby="modal_form" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal_label">Komentar</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+        </div>
+        <hr>
+        <form action="" method="POST">
+          <div class="row mb-2 mx-1">
+            <div class="col-8">
+              <textarea class="form-control form-control-sm" id="komentar" name="komentar" placeholder="Tulis Komentar..." required></textarea>
+            </div>
+            <div class="col-3">
+              <button type="submit" class="btn btn-outline-primary" type="button" name="submit_komentar">Comment</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  <script src="js/home.js"></script>
 </body>
 
 </html>

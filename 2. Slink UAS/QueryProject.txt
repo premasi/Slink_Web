@@ -19,7 +19,7 @@ INSERT INTO users VALUES(NULL, "Akun Test-2", NULL, "test2", "12345", NOW(), NUL
 INSERT INTO users VALUES(NULL, "Akun Test-3", NULL, "test3", "12345", NOW(), NULL, '');
 INSERT INTO users VALUES(NULL, "Akun Test-4", NULL, "test4", "12345", NOW(), NULL, '');
 
-CREATE VIEW profile AS SELECT nama, username, email, bio, waktu_bergabung FROM users;
+CREATE VIEW profile AS SELECT id, nama, username, email, bio, waktu_bergabung FROM users;
 
 CREATE TABLE posts(
 id int primary key auto_increment,
@@ -66,10 +66,6 @@ CONSTRAINT Composite_Unique unique(post_id, user_id)
 INSERT INTO likes VALUES(3, 1);
 INSERT INTO likes VALUES(1, 3);
 INSERT INTO likes VALUES(6, 3);
-INSERT INTO likes VALUES(7, 3);
-INSERT INTO likes VALUES(8, 3);
-INSERT INTO likes VALUES(8, 2);
-
 
 CREATE TABLE follows(
 user_id int,
@@ -82,8 +78,14 @@ CONSTRAINT Composite_Unique unique(user_id, follower_id)
 INSERT INTO follows VALUES(3, 1);
 INSERT INTO follows VALUES(1, 3);
 INSERT INTO follows VALUES(3, 2);
+INSERT INTO follows VALUES(1, 4);
+INSERT INTO follows VALUES(2, 1);
+INSERT INTO follows VALUES(2, 4);
+INSERT INTO follows VALUES(1, 2);
+INSERT INTO follows VALUES(4, 2);
 
-CREATE TABLE bookmark(
+
+CREATE TABLE bookmarks(
 post_id int,
 user_id int,
 FOREIGN KEY(user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -91,9 +93,9 @@ FOREIGN KEY(post_id) REFERENCES posts(id) ON UPDATE CASCADE ON DELETE CASCADE,
 CONSTRAINT Composite_Unique unique(post_id, user_id)
 );
 
-INSERT INTO bookmark VALUES(1,4);
-INSERT INTO bookmark VALUES(2,4);
-INSERT INTO bookmark VALUES(3,1);
+INSERT INTO bookmarks VALUES(1,4);
+INSERT INTO bookmarks VALUES(2,4);
+INSERT INTO bookmarks VALUES(3,1);
 
 CREATE TABLE otp(
 email varchar(255),
@@ -185,6 +187,18 @@ END//
 
 DELIMITER ;
 
+-- Store Procedure untuk Menampilkan Follower yang Belum di Following(ERROR)
+DELIMITER //
+CREATE PROCEDURE getFollowerNotFollowing(
+IN userId int
+)
+
+BEGIN
+SELECT users.id AS user_id, users.username, COUNT(posts.id) AS jml_post, COUNT(likes.user_id) AS jml_like FROM users LEFT JOIN posts ON posts.user_id = users.id LEFT JOIN likes ON likes.post_id = posts.id WHERE users.id IN((SELECT follower_id FROM follows WHERE user_id = userId EXCEPT SELECT user_id FROM follows WHERE follower_id = userId )) GROUP BY users.id;
+END//
+
+DELIMITER ;
+
 -- Store Procedure untuk Rekomendasi User yang Diifollow oleh Follower dan Followin menggunakan Set Operation
 DELIMITER //
 CREATE PROCEDURE getRekFollows(
@@ -209,6 +223,23 @@ END//
 
 DELIMITER ;
 
+-- Fungsi Cek apakah Post Sudah di Bookmark
+DELIMITER //
+CREATE FUNCTION checkPostBookmarked(userId INT ,postId INT)
+RETURNS tinyint
+BEGIN
+
+DECLARE status int;
+DECLARE row_temp int;
+SELECT COUNT(*) INTO row_temp FROM bookmarks WHERE post_id = postId AND user_id = userId ; 
+IF row_temp = 0 THEN SET status = 0;
+ELSE SET status = 1;
+END IF; 
+RETURN status;
+
+END//
+DELIMITER ;
+
 -- Store Procedure untuk Menampilkan Post Milik Teman(Follower dan Following)
 DELIMITER //
 CREATE PROCEDURE getFollowsPost(
@@ -216,9 +247,27 @@ IN userId int
 )
 
 BEGIN
-SELECT * FROM posts WHERE user_id  IN((SELECT user_id FROM follows WHERE follower_id = userId UNION SELECT follower_id FROM follows WHERE user_id = userId ));
+SELECT posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi FROM posts INNER JOIN users ON posts.user_id = users.id WHERE posts.user_id  IN((SELECT user_id FROM follows WHERE follower_id = userId UNION SELECT follower_id FROM follows WHERE user_id = userId ));
 END//
 
 DELIMITER ;
 
---
+-- Store Procedure untuk Menampilkan Profile
+DELIMITER //
+CREATE PROCEDURE getProfile(
+IN userId int
+)
+
+BEGIN
+
+DECLARE count_likes int;
+DECLARE count_follower int;
+DECLARE count_following int;
+SELECT COUNT(id) INTO count_follower FROM users WHERE id IN((SELECT follower_id FROM follows WHERE user_id = userId));
+SELECT COUNT(id) INTO count_following FROM users WHERE id IN((SELECT user_id FROM follows WHERE follower_id = userId));
+SELECT COUNT(likes.post_id) INTO count_likes FROM users LEFT JOIN posts ON posts.user_id = users.id LEFT JOIN likes ON likes.post_id = posts.id WHERE users.id = userId;
+SELECT * FROM posts WHERE user_id  IN((SELECT user_id FROM follows WHERE follower_id = userId UNION SELECT follower_id FROM follows WHERE user_id = userId ));
+SELECT *, count_follower, count_following, count_likes FROM profile WHERE id = userId; 
+END//
+
+DELIMITER ;

@@ -7,8 +7,10 @@ header("Content-Type: application/json");
 require 'function.php';
 
 // Get Data Mahasiswa untuk Diedit Lalu Kirim dalam Bentuk JSON untuk Ditampilkan
-$id = $_POST['id'];
+if (isset($_POST["id"])) {
+    $id = $_POST['id'];
 
-$post =  queryGetData("SELECT * FROM posts WHERE id = $id");
+    $post =  queryGetData("SELECT * FROM posts WHERE id = $id");
 
-echo json_encode($post[0]);
+    echo json_encode($post[0]);
+}
