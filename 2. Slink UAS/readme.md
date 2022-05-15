@@ -2,6 +2,7 @@ Ongoing Fitur Baru:
 - [ ] Verifikasi Aktifasi Akun With OTP + Email
 - [ ] Recovery Password
 - [ ] Komentar
-- [ ] Like
+- [x] Like
+- [x] Tombol Bookmark
+- [ ] Nampilin Bookmark
 - [ ] Friend(Follower&Following)
-- [ ] Bookmark
