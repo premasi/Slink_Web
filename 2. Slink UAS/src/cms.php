@@ -7,6 +7,7 @@ require "function.php";
 // Redirect Ke Halaman Login Ketika Belum Login
 if (!isset($_SESSION["login"])) {
   header("Location: login.php");
+  exit;
 }
 
 
@@ -83,6 +84,7 @@ if (isset($_POST["submit_search"])) {
           <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal_form" id="trigger_createPost">+ Tambah Post</button>
         </div>
         <div class="col-6 justify-content-center">
+          <?php if (isset($postStatus["error_space"])) echo $postStatus["error_space"] ?>
           <?php if (isset($postStatus["error_link"])) echo $postStatus["error_link"] ?>
           <?php if (isset($postStatus["success"])) echo $postStatus["success"] ?>
         </div>

@@ -5,6 +5,7 @@ require "function.php";
 // Redirect Ke Halaman Login Ketika Belum Login
 if (!isset($_SESSION["login"])) {
   header("Location: login.php");
+  exit;
 }
 
 
@@ -60,7 +61,7 @@ $posts = queryGetData("SELECT posts.id, posts.judul, posts.deskripsi, posts.link
           <a class="btn col-1 mt-1 mb-1 shadow" href="<?= $post["link"] ?>" style="background-color:#6aa5a9; color: white;" target="_blank">Go Link</a>
           <p class="mt-1 mb-1"><?= $post['deskripsi']; ?></p>
           <i <?php if (checkPostLiked($user_id, $post['id'])) : ?> class="bi bi-heart-fill text-danger fs-5 mx-1 like_button" <?php else : ?> class="bi bi-heart fs-5 mx-1 like_button" <?php endif ?> data-id="<?= $post["id"] ?>"></i>
-          <i class="bi bi-chat fs-5 mx-1 comment_button" data-bs-toggle="modal" data-bs-target="#modal_form"></i>
+          <i class="bi bi-chat fs-5 mx-1 comment_button" data-bs-toggle="modal" data-bs-target="#modal_form" data-id="<?= $post['id'] ?>"></i>
           <i <?php if (checkPostBookmarked($user_id, $post['id'])) : ?> class="bi bi-bookmark-fill text-primary fs-5 mx-1 bookmark_button" <?php else : ?> class="bi bi-bookmark fs-5 mx-1 bookmark_button" <?php endif ?> data-id="<?= $post["id"] ?>"></i>
           <br>
           <span class="likes"><?= getPostLikes($post['id']); ?> Likes</span>
@@ -79,26 +80,59 @@ $posts = queryGetData("SELECT posts.id, posts.judul, posts.deskripsi, posts.link
 
   <!-- Modal Form-->
   <div class="modal fade" id="modal_form" tabindex="-1" aria-labelledby="modal_form" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="modal_label">Komentar</h5>
+          <div id="message"></div>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
 
-        </div>
-        <hr>
-        <form action="" method="POST">
-          <div class="row mb-2 mx-1">
-            <div class="col-8">
-              <textarea class="form-control form-control-sm" id="komentar" name="komentar" placeholder="Tulis Komentar..." required></textarea>
+          <!-- <div class="card w-50 mb-4">
+            <div class="card-header row justify-content-between">
+              <h5 class="col-4">Greys</h5>
+              <h5 class="col-4">12-34-1223 12:12:45</>
             </div>
-            <div class="col-3">
-              <button type="submit" class="btn btn-outline-primary" type="button" name="submit_komentar">Comment</button>
+            <div class="card-body">
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dol, accusantium ad, praesentium tempore asperiores! Saepe quisquam similique dolor illo exercitationem ullam nesciunt fugiat velit ab.</p>
+            </div>
+            <div class="card-footer d-flex justify-content-end">
+              <button type="button" name="reply" id="reply" class="btn btn-primary">Reply</button>
             </div>
           </div>
-        </form>
+
+          <div class="card w-50" style="margin-left: 80px;">
+            <div class="card-header row justify-content-between">
+              <h5 class="col-4">Greys</h5>
+              <h5 class="col-4">12-34-1223 12:12:45</>
+            </div>
+            <div class="card-body">
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing eoluptatem? Cupidis dicta facere, accusantium ad, praesentium tempore asperiores! Saepe quisquam similique dolor illo exercitationem ullam nesciunt fugiat velit ab.</p>
+            </div>
+            <div class="card-footer d-flex justify-content-end">
+              <button type="button" name="reply" id="reply" class="btn btn-primary">Reply</button>
+            </div>
+          </div> -->
+
+        </div>
+        <hr>
+        <div class="mb-5">
+          <form action="" method="POST" id="comment_form">
+            <input type="hidden" name="user_id" value="<?= $user_id ?>">
+            <input type="hidden" name="post_id" id="post_id">
+            <input type="hidden" name="parent_comment_id" id="parent_comment_id" value="0">
+            <input type="hidden" name="submit_comment">
+            <div class="row mb-2 mx-1">
+              <div class="col-8">
+                <textarea class="form-control form-control-sm" id="comment" name="comment" placeholder="Tulis comment..." required></textarea>
+              </div>
+              <div class="col-3">
+                <button type="submit" class="btn btn-outline-primary" name="button_submit_comment">Comment</button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>

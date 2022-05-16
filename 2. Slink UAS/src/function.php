@@ -29,6 +29,15 @@ function createPost($data)
   $link = htmlspecialchars($data["link"]);
   $user_id = (int)htmlspecialchars($data["user_id"]);
 
+  // Cek Field Diisi atau Tidak... Menghindari Inputan Berupa Whitespace(' ')
+  if (ctype_space($judul) || ctype_space($deskripsi) || ctype_space($link)) {
+    return ["error_space" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Isi Field Dengan Benar!</strong> Jangan Isi Field dengan whitespace/spasi Saja
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+    exit;
+  }
+
   // Cek Link
   if (filter_var($link, FILTER_VALIDATE_URL) === false) {
     return ["error_link" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
@@ -61,6 +70,15 @@ function updatePost($data)
   $judul = htmlspecialchars($data["judul"]);
   $deskripsi = htmlspecialchars($data["deskripsi"]);
   $link = htmlspecialchars($data["link"]);
+
+  // Cek Field Diisi atau Tidak... Menghindari Inputan Berupa Whitespace(' ')
+  if (ctype_space($judul) || ctype_space($deskripsi) || ctype_space($link)) {
+    return ["error_space" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+          <strong>Isi Field Dengan Benar!</strong> Jangan Isi Field dengan whitespace/spasi Saja
+          <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+        </div>"];
+    exit;
+  }
 
   // Cek Link
   if (filter_var($link, FILTER_VALIDATE_URL) === false) {
@@ -302,4 +320,102 @@ function checkPostBookmarked($user_id, $post_id)
   } else {
     return false;
   }
+}
+
+function showComments($post_id)
+{
+  global $conn;
+
+  $query = "SELECT comments.id, users.id AS user_id, users.username, comments.komentar, comments.waktu_komentar FROM comments INNER JOIN users ON comments.user_id = users.id WHERE comments.post_id = $post_id AND comments.parent_comment_id = 0 ORDER BY comments.waktu_komentar ASC";
+  $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
+  $comments = '';
+  while ($comment = mysqli_fetch_assoc($result)) {
+    $comments .= '
+    <div class="card w-50 mb-4 border-primary">
+      <div class="card-body">
+          <div class="row justify-content-between">
+            <h5 class="col-4">' . $comment['username'] . '</h5>
+            <h5 class="col-4">' . $comment['waktu_komentar'] . '</h5>
+          </div>
+          <div class="mt-4">
+            <p>' . $comment['komentar'] . '</p>
+          </div>
+          <div class="d-flex justify-content-end">
+            <button type="button" name="reply" class="btn btn-primary text-white reply" id="' . $comment['id'] . '">Reply</button>
+          </div>
+        </div>
+	  </div>';
+    $comments .= getCommentReply($conn, $post_id, $comment["id"]);
+  }
+  echo $comments;
+}
+
+function getCommentReply($conn, $post_id, $parent_comment_id = 0, $bd = 'border-primary', $marginLeft = 0)
+{
+  $comments = '';
+  $query = "SELECT comments.id, users.id AS user_id, users.username, comments.komentar, comments.waktu_komentar FROM comments INNER JOIN users ON comments.user_id = users.id WHERE comments.post_id = $post_id AND parent_comment_id = '" . $parent_comment_id . "' ";
+  $result = mysqli_query($conn, $query);
+  $count = mysqli_num_rows($result);
+
+  if ($parent_comment_id == 0) {
+    $marginLeft = 0;
+  } else {
+    $marginLeft = $marginLeft + 80;
+    $bdarr = ['border-secondary', 'border-success', 'border-danger', 'border-dark', 'border-warning', 'border-info'];
+    $bdkey = array_rand($bdarr, 1);
+    $bd = $bdarr[$bdkey];
+  }
+  if ($count > 0) {
+    while ($comment = mysqli_fetch_assoc($result)) {
+      $comments .= '
+      <div class="card w-50 mb-4  ' . $bd . '" style="margin-left: ' . $marginLeft . 'px">
+        <div class="card-body">
+          <div class="row justify-content-between">
+            <h5 class="col-4">' . $comment['username'] . '</h5>
+            <h5 class="col-4">' . $comment['waktu_komentar'] . '</h5>
+          </div>
+          <div class="mt-4">
+            <p>' . $comment['komentar'] . '</p>
+          </div>
+          <div class="d-flex justify-content-end">
+            <button type="button" name="reply" class="btn btn-primary text-white reply" id="' . $comment['id'] . '">Reply</button>
+          </div>
+        </div>
+      </div>';
+      $comments .= getCommentReply($conn, $post_id, $comment["id"], $bd, $marginLeft);
+    }
+  }
+  return $comments;
+}
+
+function createComment($data)
+{
+  global $conn;
+
+  // Pass Data ke Var untuk Diproses 
+  $post_id = (int)htmlspecialchars($data["post_id"]);
+  $user_id = (int)htmlspecialchars($data["user_id"]);
+  $parent_comment_id = (int)htmlspecialchars($data["parent_comment_id"]);
+  $comment = htmlspecialchars($data["comment"]);
+
+  // Cek Field Diisi atau Tidak... Menghindari Inputan Berupa Whitespace(' ')
+  if (ctype_space($comment)) {
+    return ["error_space" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Isi Field Dengan Benar!</strong> Jangan Isi Field dengan whitespace/spasi Saja
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+    exit;
+  }
+
+  $query = "INSERT INTO comments VALUES(NULL, '$comment', '$post_id', '$user_id', '$parent_comment_id', NOW())";
+
+  mysqli_query($conn, $query) or die(mysqli_error($conn));
+
+  return mysqli_affected_rows($conn);
+
+  // // Cek Berhasil atau Tidak
+  // return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+  //       <strong>comment Berhasil Dibuat!</strong>
+  //       <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+  //     </div>"];
 }

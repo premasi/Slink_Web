@@ -42,3 +42,13 @@ if (isset($_POST['action'])) {
 
     exit;
 }
+
+if (isset($_POST['getComments'])) {
+    echo showComments($_POST['post_id']);
+    exit;
+}
+
+if (isset($_POST['submit_comment'])) {
+    echo createComment($_POST);
+    exit;
+}
