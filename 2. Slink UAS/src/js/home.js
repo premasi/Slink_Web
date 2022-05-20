@@ -74,48 +74,42 @@ $(() => {
 
   // Trigger Komentar
   $(".comment_button").on("click", function () {
-    let post_id = $(this).data("id");
-    $("#post_id").val(post_id);
+    $("#post_id").val($(this).data("id"));
 
     // Ajax untuk Menampilkan Komentar
+    showComments($(this).data("id"));
+
+    // Trigger Menutup Komentar
+    $("#close").on("click", function () {
+      post_id = "";
+      $("#post_id").val("");
+      $("#comment_form")[0].reset();
+    });
+  });
+
+  // Trigger untuk Membuat Komentar
+  $("#comment_form").on("submit", function (event) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    var formData = $(this).serialize();
+
     $.ajax({
       url: "async_home.php",
       method: "POST",
-      data: {
-        post_id: post_id,
-        getComments: true,
-      },
+      data: formData,
       crossDomain: true,
       success: function (data) {
-        $(".modal-body").html(data);
+        $("#comment_form")[0].reset();
+        $("#parent_comment_id").val("0");
+        showComments($("#post_id").val());
       },
       error: function (errorMessage) {
         alert(errorMessage);
       },
     });
-
-    // Trigger untuk Membuat Komentar
-    $("#comment_form").on("submit", function (event) {
-      event.preventDefault();
-      var formData = $(this).serialize();
-      console.log(formData);
-      $.ajax({
-        url: "async_home.php",
-        method: "POST",
-        data: formData,
-        crossDomain: true,
-        success: function (data) {
-          $("#comment_form")[0].reset();
-          $("#parent_comment_id").val("0");
-          showComments(post_id);
-        },
-        error: function (errorMessage) {
-          alert(errorMessage);
-        },
-      });
-    });
   });
 
+  // Trigger Melakukan Reply Pada Komentar
   $(document).on("click", ".reply", function () {
     let parent_comment_id = $(this).attr("id");
     $("#parent_comment_id").val(parent_comment_id);

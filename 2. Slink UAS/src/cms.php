@@ -42,7 +42,7 @@ $posts = queryGetData("SELECT * FROM posts WHERE user_id = $user_id");
 
 // Ambil Data Post Sesuai Keyword Pencarian
 if (isset($_POST["submit_search"])) {
-  $posts = searchPosts($_POST["keyword"], $user_id);
+  $posts = searchPostsPrivate($_POST["keyword"], $user_id);
 }
 ?>
 

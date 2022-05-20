@@ -6,6 +6,7 @@ header("Access-Control-Allow-Origin: *");
 require 'function.php';
 
 $user_id = $_SESSION['user_id'];
+$limit = 5;
 
 
 if (isset($_POST['action'])) {
@@ -44,7 +45,7 @@ if (isset($_POST['action'])) {
 }
 
 if (isset($_POST['getComments'])) {
-    echo showComments($_POST['post_id']);
+    echo getComments($_POST['post_id']);
     exit;
 }
 
@@ -52,3 +53,9 @@ if (isset($_POST['submit_comment'])) {
     echo createComment($_POST);
     exit;
 }
+
+// if (isset($_POST['seeMore'])) {
+//     $limit = $limit + 5;
+//     echo getPosts($limit);
+//     exit;
+// }

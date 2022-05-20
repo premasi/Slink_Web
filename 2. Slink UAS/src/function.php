@@ -9,13 +9,31 @@ $conn = mysqli_connect("localhost", "root", "", "slink");
 function queryGetData($query)
 {
   global $conn;
-  $result = mysqli_query($conn, $query);
+  $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
 
   $rows = [];
   while ($tmp = mysqli_fetch_assoc($result)) {
     $rows[] = $tmp;
   }
+  mysqli_free_result($result);
+  mysqli_next_result($conn);
   return $rows;
+}
+
+// Fungsi Ambil Data Post
+function getPosts($limit)
+{
+  // Query
+  $query = "CALL getPosts($limit)";
+
+  // Eksekusi Query
+  return queryGetData($query);
+}
+
+// Fungsi Cari Data Post
+function searchPosts($keyword)
+{
+  $query = "CALL getPostsByKeyword($keyword)";
 }
 
 // Fungsi Tambah/Buat Data Post
@@ -118,8 +136,8 @@ function deletePost($id)
       </div>"];
 }
 
-// Fungsi Cari Data Post berdasarkan Keyword
-function searchPosts($keyword, $user_id)
+// Fungsi Cari Data Post Milik Sendiri Berdasarkan Keyword 
+function searchPostsPrivate($keyword, $user_id)
 {
   // Query Cari Data
 
@@ -261,7 +279,7 @@ function logout()
 {
 
   // Hapus Session
-  $_SESSION['login'] = '';
+  $_SESSION['login'] = false;
   session_unset();
   session_destroy();
 
@@ -322,7 +340,7 @@ function checkPostBookmarked($user_id, $post_id)
   }
 }
 
-function showComments($post_id)
+function getComments($post_id)
 {
   global $conn;
 
@@ -350,19 +368,23 @@ function showComments($post_id)
   echo $comments;
 }
 
-function getCommentReply($conn, $post_id, $parent_comment_id = 0, $bd = 'border-primary', $marginLeft = 0)
+function getCommentReply($conn, $post_id, $parent_comment_id = 0, $bdkey = 0, $marginLeft = 0)
 {
   $comments = '';
   $query = "SELECT comments.id, users.id AS user_id, users.username, comments.komentar, comments.waktu_komentar FROM comments INNER JOIN users ON comments.user_id = users.id WHERE comments.post_id = $post_id AND parent_comment_id = '" . $parent_comment_id . "' ";
   $result = mysqli_query($conn, $query);
   $count = mysqli_num_rows($result);
+  $bdarr = ['border-primary', 'border-secondary', 'border-success', 'border-danger', 'border-dark', 'border-warning', 'border-info'];
 
   if ($parent_comment_id == 0) {
     $marginLeft = 0;
+    $bdkey = 0;
   } else {
     $marginLeft = $marginLeft + 80;
-    $bdarr = ['border-secondary', 'border-success', 'border-danger', 'border-dark', 'border-warning', 'border-info'];
-    $bdkey = array_rand($bdarr, 1);
+    $bdkey++;
+    if ($bdkey == 7) {
+      $bdkey = 0;
+    }
     $bd = $bdarr[$bdkey];
   }
   if ($count > 0) {
@@ -382,7 +404,7 @@ function getCommentReply($conn, $post_id, $parent_comment_id = 0, $bd = 'border-
           </div>
         </div>
       </div>';
-      $comments .= getCommentReply($conn, $post_id, $comment["id"], $bd, $marginLeft);
+      $comments .= getCommentReply($conn, $post_id, $comment["id"], $bdkey, $marginLeft);
     }
   }
   return $comments;
@@ -411,11 +433,11 @@ function createComment($data)
 
   mysqli_query($conn, $query) or die(mysqli_error($conn));
 
-  return mysqli_affected_rows($conn);
+  // return mysqli_affected_rows($conn);
 
-  // // Cek Berhasil atau Tidak
-  // return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
-  //       <strong>comment Berhasil Dibuat!</strong>
-  //       <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-  //     </div>"];
+  // Cek Berhasil atau Tidak
+  return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+        <strong>comment Berhasil Dibuat!</strong>
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
 }

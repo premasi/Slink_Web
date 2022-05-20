@@ -15,8 +15,8 @@ if (isset($_GET['logout'])) {
 }
 
 $user_id = $_SESSION['user_id'];
-
-$posts = queryGetData("SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi FROM posts INNER JOIN users ON posts.user_id = users.id");
+$limit = 5;
+$posts = getPosts($limit);
 
 ?>
 
@@ -52,7 +52,7 @@ $posts = queryGetData("SELECT posts.id, posts.judul, posts.deskripsi, posts.link
     </nav>
   </div>
 
-  <div class="container row mt-3 m-auto p-3" id="postingan">
+  <div class="container row mt-3 m-auto p-3 w-50" id="postingan">
     <?php foreach ($posts as $post) : ?>
       <div class="media border p-3 mb-3 shadow">
         <div class="media-body">
@@ -68,10 +68,13 @@ $posts = queryGetData("SELECT posts.id, posts.judul, posts.deskripsi, posts.link
         </div>
       </div>
     <?php endforeach; ?>
+    <div class="text-center">
+      <button class=" btn btn-outline-success btn-lg me-auto rounded-pill" id="button_seeMore" type="button">See More</button>
+    </div>
   </div>
 
   <footer>
-    <div class="row">
+    <div class=" row">
       <div class="col-lg-12 text-center mt-5">
         <p><small>Copyright &copy; Slink 2022</small></p>
       </div>
@@ -85,36 +88,10 @@ $posts = queryGetData("SELECT posts.id, posts.judul, posts.deskripsi, posts.link
         <div class="modal-header">
           <h5 class="modal-title" id="modal_label">Komentar</h5>
           <div id="message"></div>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" id="close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-
-          <!-- <div class="card w-50 mb-4">
-            <div class="card-header row justify-content-between">
-              <h5 class="col-4">Greys</h5>
-              <h5 class="col-4">12-34-1223 12:12:45</>
-            </div>
-            <div class="card-body">
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dol, accusantium ad, praesentium tempore asperiores! Saepe quisquam similique dolor illo exercitationem ullam nesciunt fugiat velit ab.</p>
-            </div>
-            <div class="card-footer d-flex justify-content-end">
-              <button type="button" name="reply" id="reply" class="btn btn-primary">Reply</button>
-            </div>
-          </div>
-
-          <div class="card w-50" style="margin-left: 80px;">
-            <div class="card-header row justify-content-between">
-              <h5 class="col-4">Greys</h5>
-              <h5 class="col-4">12-34-1223 12:12:45</>
-            </div>
-            <div class="card-body">
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing eoluptatem? Cupidis dicta facere, accusantium ad, praesentium tempore asperiores! Saepe quisquam similique dolor illo exercitationem ullam nesciunt fugiat velit ab.</p>
-            </div>
-            <div class="card-footer d-flex justify-content-end">
-              <button type="button" name="reply" id="reply" class="btn btn-primary">Reply</button>
-            </div>
-          </div> -->
-
+          <!-- Comments Disini -->
         </div>
         <hr>
         <div class="mb-5">

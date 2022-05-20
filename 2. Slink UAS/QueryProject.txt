@@ -242,12 +242,12 @@ DELIMITER ;
 
 -- Store Procedure untuk Menampilkan Post Milik Teman(Follower dan Following)
 DELIMITER //
-CREATE PROCEDURE getFollowsPost(
+CREATE PROCEDURE getPostsByFollows(
 IN userId int
 )
 
 BEGIN
-SELECT posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi FROM posts INNER JOIN users ON posts.user_id = users.id WHERE posts.user_id  IN((SELECT user_id FROM follows WHERE follower_id = userId UNION SELECT follower_id FROM follows WHERE user_id = userId ));
+SELECT posts.id, posts.judul, posts.deskripsi, posts.link,  users.username, posts.waktu_aksi FROM posts INNER JOIN users ON posts.user_id = users.id WHERE posts.user_id  IN((SELECT user_id FROM follows WHERE follower_id = userId UNION SELECT follower_id FROM follows WHERE user_id = userId ));
 END//
 
 DELIMITER ;
@@ -268,6 +268,30 @@ SELECT COUNT(id) INTO count_following FROM users WHERE id IN((SELECT user_id FRO
 SELECT COUNT(likes.post_id) INTO count_likes FROM users LEFT JOIN posts ON posts.user_id = users.id LEFT JOIN likes ON likes.post_id = posts.id WHERE users.id = userId;
 SELECT * FROM posts WHERE user_id  IN((SELECT user_id FROM follows WHERE follower_id = userId UNION SELECT follower_id FROM follows WHERE user_id = userId ));
 SELECT *, count_follower, count_following, count_likes FROM profile WHERE id = userId; 
+END//
+
+DELIMITER ;
+
+-- Store Procedure untuk Menampilkan Semua Posts(pake limit buat nanti ada see more)
+DELIMITER //
+CREATE PROCEDURE getPosts(
+IN limitTemp int
+)
+
+BEGIN
+SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi FROM posts INNER JOIN users ON posts.user_id = users.id ORDER BY waktu_aksi DESC LIMIT limitTemp;
+END//
+
+DELIMITER ;
+
+-- Store Procedure untuk Menampilkan Posts Berdasarkan Keyword
+DELIMITER //
+CREATE PROCEDURE getPostsByKeyword(
+IN limitTemp int
+)
+
+BEGIN
+SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi FROM posts INNER JOIN users ON posts.user_id = users.id ORDER BY waktu_aksi DESC LIMIT limitTemp;
 END//
 
 DELIMITER ;
