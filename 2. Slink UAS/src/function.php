@@ -2,6 +2,13 @@
 // Nyalakan Session
 session_start();
 
+// Import Mailer
+require_once '../vendor/autoload.php';
+
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mime\Email;
+
 // Koneksi ke DB
 $conn = mysqli_connect("localhost", "root", "", "slink");
 
@@ -31,9 +38,11 @@ function getPosts($limit)
 }
 
 // Fungsi Cari Data Post
-function searchPosts($keyword)
+function searchPosts($limit, $keyword)
 {
-  $query = "CALL getPostsByKeyword($keyword)";
+  $query = "SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi FROM posts INNER JOIN users ON posts.user_id = users.id WHERE posts.judul LIKE '%$keyword%' OR posts.deskripsi LIKE '%$keyword%'  OR users.username LIKE '%$keyword%' ORDER BY posts.waktu_aksi DESC LIMIT $limit";
+
+  return queryGetData($query);
 }
 
 // Fungsi Tambah/Buat Data Post
@@ -147,6 +156,132 @@ function searchPostsPrivate($keyword, $user_id)
   return queryGetData($query);
 }
 
+// Fungsi Kirim Email untuk OTP
+function sendOTP($email)
+{
+  global $conn;
+
+  // Cek Email Valid atau Tidak
+  if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+    return ["error_emailVal" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+          <strong>Email Tidak Valid!</strong> Silahkan Gunakan Email yang Benar
+          <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+        </div>"];
+    exit;
+  }
+
+  // Cek User Ada atau Tidak
+  if ($cek = queryGetData("SELECT * FROM users WHERE email = '$email'")) {
+
+    // Cek Status User Verified atau Belum
+    if ($cek[0]['verified'] == 1) {
+      return ["error_verified" => "<div class='alert alert-warning alert-dismissible fade show' role='alert'>
+      <strong>Akun Sudah Terverifikasi!</strong> Silahkan Login
+      <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+      exit;
+    }
+
+    // Buat Kode OTP
+    $generator = "1357902468";
+    $otp = "";
+
+    for ($i = 1; $i <= 6; $i++) {
+      $otp .= substr($generator, (rand() % (strlen($generator))), 1);
+    }
+
+    // Masukan User dan OTP ke Tabel otp
+    $query = "INSERT INTO otp VALUES('$email','$otp')";
+    mysqli_query($conn, $query) or die(mysqli_error($conn));
+
+    // Pengiriman Email
+    $transport = Transport::fromDsn('smtp://email:apppassword@smtp.gmail.com:465');
+    $mailer = new Mailer($transport);
+    $emailUser = (new Email());
+    $emailUser->from('email pengirim');
+    $emailUser->to($email);
+    $emailUser->subject('Kode OTP Verifikasi Akun Slink');
+    $emailUser->html('<h3>Selamat Bergabung Menjadi Bagian Dari Keluarga Besar Slink...</h3>
+<h4>' . $otp . '</h4>
+<h5>Silahkan Masukan Kode Berikut Ke Halaman <a href="http://localhost/Slink_Web/src/verifikasi.php">Verifikasi</a></h5>');
+    $mailer->send($emailUser);
+
+    return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+    <strong>OTP Berhasil Dikirim!</strong> Silahkan verifikasi Akun Menggunakan <strong>Email</strong>, dan Kode <strong>OTP</strong> yang Sudah Dikirim ke Email
+    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+  </div>"];
+    exit;
+  }
+
+  // Saat User Tidak Ada
+  return ["error_user" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+    <strong>Akun Dengan Email Tersebut Tidak Ditemukan!</strong> Silahkan Gunakan Email yang Terdaftar pada Akun yang Telah Registrasi
+    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>"];
+  exit;
+}
+
+// Fungsi Verifikasi
+function verifikasi($data)
+{
+  global $conn;
+
+  $email = htmlspecialchars($_POST['email']);
+  $otp = htmlspecialchars($_POST['otp']);
+
+
+  // Cek Email Valid atau Tidak
+  if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+    return ["error_emailVal" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+          <strong>Email Tidak Valid!</strong> Silahkan Gunakan Email yang Benar
+          <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+        </div>"];
+    exit;
+  }
+
+  if (ctype_space($otp)) {
+    return ["error_space" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+    <strong>Isi Field Dengan Benar!</strong> Jangan Isi Field dengan whitespace/spasi Saja
+    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+  </div>"];
+    exit;
+  }
+
+  // Cek User Ada atau Tidak
+  if ($cek = queryGetData("SELECT * FROM users WHERE email = '$email'")) {
+
+    // Cek Status User Verified atau Belum
+    if ($cek[0]['verified'] == 1) {
+      return ["error_verified" => "<div class='alert alert-warning alert-dismissible fade show' role='alert'>
+        <strong>Akun Sudah Terverifikasi Sebelumnya!</strong> Silahkan Langsung Saja Login
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+        </div>"];
+      exit;
+    }
+
+    // Cek Kesesuaian User dan OTP
+    if ($cek2 = queryGetData("SELECT * FROM otp WHERE email = '$email' AND otp_code = '$otp'")) {
+      // Hapus User dan OTP ke dari Tabel otp
+      $query = "DELETE FROM otp WHERE email = '$email' AND otp_code = '$otp'";
+      $query2 = "DELETE FROM otp WHERE email = '$email'";
+      mysqli_query($conn, $query) or die(mysqli_error($conn));
+      mysqli_query($conn, $query2) or die(mysqli_error($conn));
+      return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+        <strong>Akun Berhasil Terverifikasi!</strong> Selamat Anda Sudah Resmi Menjadi Bagian dari Keluarga Besar <strong>Slink</strong>
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+      exit;
+    }
+  }
+
+  // Saat User Tidak Ada
+  return ["error_user" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+    <strong>Akun Dengan Email Tersebut Tidak Ditemukan!</strong> Silahkan Gunakan Email yang Terdaftar pada Akun yang Telah Registrasi
+    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>"];
+  exit;
+}
+
 // Fungsi Registrasi
 function register($data)
 {
@@ -235,9 +370,12 @@ function register($data)
   // Eksekusi Query
   mysqli_query($conn, $query) or die(mysqli_error($conn));
 
+  // Kirim Email Berisi Kode OTP
+  sendOTP($email);
+
   // Cek Berhasil atau Tidak
   return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
-        <strong>Registrasi Berhasil!</strong> Silahkan verifikasi Akun Menggunakan Email dan Kode OTP yang Sudah Dikirim ke Email
+        <strong>Registrasi Berhasil!</strong> Silahkan verifikasi Akun Menggunakan <strong>Email</strong> ini, dan Kode <strong>OTP</strong> yang Sudah Dikirim ke Email
         <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
       </div>"];
 }

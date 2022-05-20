@@ -2,6 +2,11 @@
 // Import Function
 require "function.php";
 
+// Session untuk Limit Data Posts
+if (!isset($_SESSION['limit'])) {
+  $_SESSION['limit'] = 0;
+}
+
 // Redirect Ke Halaman Login Ketika Belum Login
 if (!isset($_SESSION["login"])) {
   header("Location: login.php");
@@ -14,10 +19,21 @@ if (isset($_GET['logout'])) {
   logout();
 }
 
+// Id User yang Login
 $user_id = $_SESSION['user_id'];
-$limit = 5;
-$posts = getPosts($limit);
 
+// cek limit
+if ($_SESSION['limit'] == 0) {
+  $_SESSION['limit'] = 5;
+}
+
+// Ambil Data Posts Terbaru
+$posts = getPosts($_SESSION['limit']);
+
+// Ambil Data Post Sesuai Keyword Pencarian
+if (isset($_POST["submit_search"])) {
+  $posts = searchPosts($_SESSION['limit'], $_POST["keyword"]);
+}
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +54,8 @@ $posts = getPosts($limit);
 </head>
 
 <body>
-  <div class="animasi3">
+  <!-- Header Berisi Navbar -->
+  <header class="animasi3">
     <nav class="navbar navbar-expand-sm" style="background-color: #6aa5a9">
       <div class="container-fluid">
         <a class="navbar-brand" href="./home.php"><img src="../Foto/logo.png" alt="" /></a>
@@ -50,28 +67,50 @@ $posts = getPosts($limit);
         <h3>Log Out</h3>
       </a>
     </nav>
-  </div>
+  </header>
 
-  <div class="container row mt-3 m-auto p-3 w-50" id="postingan">
-    <?php foreach ($posts as $post) : ?>
-      <div class="media border p-3 mb-3 shadow">
-        <div class="media-body">
-          <h2><?= $post['judul']; ?></h2>
-          <h5><span style="color: #45625D;">by</span><?= " " . $post["username"]; ?></h5>
-          <a class="btn col-1 mt-1 mb-1 shadow" href="<?= $post["link"] ?>" style="background-color:#6aa5a9; color: white;" target="_blank">Go Link</a>
-          <p class="mt-1 mb-1"><?= $post['deskripsi']; ?></p>
-          <i <?php if (checkPostLiked($user_id, $post['id'])) : ?> class="bi bi-heart-fill text-danger fs-5 mx-1 like_button" <?php else : ?> class="bi bi-heart fs-5 mx-1 like_button" <?php endif ?> data-id="<?= $post["id"] ?>"></i>
-          <i class="bi bi-chat fs-5 mx-1 comment_button" data-bs-toggle="modal" data-bs-target="#modal_form" data-id="<?= $post['id'] ?>"></i>
-          <i <?php if (checkPostBookmarked($user_id, $post['id'])) : ?> class="bi bi-bookmark-fill text-primary fs-5 mx-1 bookmark_button" <?php else : ?> class="bi bi-bookmark fs-5 mx-1 bookmark_button" <?php endif ?> data-id="<?= $post["id"] ?>"></i>
-          <br>
-          <span class="likes"><?= getPostLikes($post['id']); ?> Likes</span>
+
+  <section class="container m-auto mt-3 m-auto p-3 w-50">
+    <!-- Form dan Tombol Cari -->
+    <form action="" method="POST">
+      <div class="input-group mb-3 mt-4 row">
+        <div class="col-9">
+          <input type="text" class="form-control" placeholder="Cari Posts..." id="keyword" name="keyword" />
+        </div>
+        <div class="col-3">
+          <button type="submit" class="btn btn-outline-success col-12" type="button" name="submit_search">Cari</button>
         </div>
       </div>
-    <?php endforeach; ?>
-    <div class="text-center">
-      <button class=" btn btn-outline-success btn-lg me-auto rounded-pill" id="button_seeMore" type="button">See More</button>
+    </form>
+
+    <!-- Posts Terbaru -->
+    <div class="row" id="new_posts">
+      <?php if (count($posts) == 0) : ?>
+        <h3 class="d-flex justify-content-center mt-4">Posts Tidak Ditemukan</h3>
+      <?php endif; ?>
+      <?php foreach ($posts as $post) : ?>
+        <div class="media border p-3 mb-3 shadow">
+          <div class="media-body">
+            <h2><?= $post['judul']; ?></h2>
+            <h5><span style="color: #45625D;">by</span><?= " " . $post["username"]; ?></h5>
+            <a class="btn col-1 mt-1 mb-1 shadow" href="<?= $post["link"] ?>" style="background-color:#6aa5a9; color: white;" target="_blank">Go Link</a>
+            <p class="mt-1 mb-1"><?= $post['deskripsi']; ?></p>
+            <i <?php if (checkPostLiked($user_id, $post['id'])) : ?> class="bi bi-heart-fill text-danger fs-5 mx-1 like_button" <?php else : ?> class="bi bi-heart fs-5 mx-1 like_button" <?php endif ?> data-id="<?= $post["id"] ?>"></i>
+            <i class="bi bi-chat fs-5 mx-1 comment_button" data-bs-toggle="modal" data-bs-target="#modal_form" data-id="<?= $post['id'] ?>"></i>
+            <i <?php if (checkPostBookmarked($user_id, $post['id'])) : ?> class="bi bi-bookmark-fill text-primary fs-5 mx-1 bookmark_button" <?php else : ?> class="bi bi-bookmark fs-5 mx-1 bookmark_button" <?php endif ?> data-id="<?= $post["id"] ?>"></i>
+            <br>
+            <span class="likes"><?= getPostLikes($post['id']); ?> Likes</span>
+          </div>
+        </div>
+
+      <?php endforeach; ?>
     </div>
-  </div>
+
+    <div class="text-center">
+      <button class=" btn btn-outline-success btn-lg me-auto rounded-pill" id="button_seeMore" type="button" <?php if (count($posts) < $_SESSION['limit']) : ?> style="display: none;" <?php endif;  ?>>See More</button>
+      <button class=" btn btn-outline-danger btn-lg me-auto rounded-pill" id="button_seeLess" type="button" <?php if ($_SESSION['limit'] == 5) : ?> style="display: none;" <?php endif;  ?>>See Less</button>
+    </div>
+  </section>
 
   <footer>
     <div class=" row">
@@ -91,7 +130,7 @@ $posts = getPosts($limit);
           <button type="button" class="btn-close" id="close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <!-- Comments Disini -->
+          <!-- Komentar-->
         </div>
         <hr>
         <div class="mb-5">

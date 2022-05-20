@@ -77,7 +77,7 @@ $(() => {
     $("#post_id").val($(this).data("id"));
 
     // Ajax untuk Menampilkan Komentar
-    showComments($(this).data("id"));
+    getComments($(this).data("id"));
 
     // Trigger Menutup Komentar
     $("#close").on("click", function () {
@@ -101,7 +101,7 @@ $(() => {
       success: function (data) {
         $("#comment_form")[0].reset();
         $("#parent_comment_id").val("0");
-        showComments($("#post_id").val());
+        getComments($("#post_id").val());
       },
       error: function (errorMessage) {
         alert(errorMessage);
@@ -117,7 +117,7 @@ $(() => {
   });
 
   // Fungsi untuk Menampilkan Komentar
-  function showComments(post_id) {
+  function getComments(post_id) {
     $.ajax({
       url: "async_home.php",
       method: "POST",
@@ -130,4 +130,38 @@ $(() => {
       },
     });
   }
+
+  // Trigger See More
+  $("#button_seeMore").on("click", function () {
+    $.ajax({
+      url: "async_home.php",
+      method: "POST",
+      data: { seeMore: true },
+      crossDomain: true,
+      success: function (data) {
+        console.log(data);
+        document.location.reload();
+      },
+      error: function (errorMessage) {
+        console.log(errorMessage);
+      },
+    });
+  });
+
+  // Trigger See Less
+  $("#button_seeLess").on("click", function () {
+    $.ajax({
+      url: "async_home.php",
+      method: "POST",
+      data: { seeLess: true },
+      crossDomain: true,
+      success: function (data) {
+        console.log(data);
+        document.location.reload();
+      },
+      error: function (errorMessage) {
+        console.log(errorMessage);
+      },
+    });
+  });
 });

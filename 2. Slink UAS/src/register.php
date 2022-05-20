@@ -83,8 +83,12 @@ if (isset($_POST["register"])) {
                                             </div>
                                         </div>
 
-                                        <div class="d-flex justify-content-center mt-2 mb-3">
+                                        <div class="d-flex justify-content-center mt-2">
                                             <p>Sudah Punya Akun? <a href="./login.php" class="text-decoration-none">Login</a></p>
+                                        </div>
+
+                                        <div class="d-flex justify-content-center mb-3">
+                                            <p>Belum Verifikasi Akun? <a href="./verifikasi.php" class="text-decoration-none">Verifikasi</a></p>
                                         </div>
 
                                         <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">

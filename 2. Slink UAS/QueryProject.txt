@@ -279,19 +279,25 @@ IN limitTemp int
 )
 
 BEGIN
-SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi FROM posts INNER JOIN users ON posts.user_id = users.id ORDER BY waktu_aksi DESC LIMIT limitTemp;
+SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi FROM posts INNER JOIN users ON posts.user_id = users.id ORDER BY posts.waktu_aksi DESC LIMIT limitTemp;
 END//
 
 DELIMITER ;
 
--- Store Procedure untuk Menampilkan Posts Berdasarkan Keyword
+-- Store Procedure untuk Menampilkan Posts Berdasarkan Keyword(BUG)
 DELIMITER //
 CREATE PROCEDURE getPostsByKeyword(
-IN limitTemp int
+IN limitTemp int,
+IN keyword varchar(255)
 )
 
 BEGIN
-SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi FROM posts INNER JOIN users ON posts.user_id = users.id ORDER BY waktu_aksi DESC LIMIT limitTemp;
+SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi FROM posts INNER JOIN users ON posts.user_id = users.id WHERE posts.judul LIKE "'%"+keyword+"%'" OR posts.deskripsi LIKE "'%"+keyword+"%'"  OR users.username LIKE "'%"+keyword+"%'" ORDER BY posts.waktu_aksi DESC LIMIT limitTemp;
 END//
 
 DELIMITER ;
+
+CALL getPostsByKeyword(5, "Tutorial");
+
+
+

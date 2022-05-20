@@ -7,7 +7,7 @@ use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
 
 // Create a Transport object
-$transport = Transport::fromDsn('smtp://akuntumbals032@gmail.com:nicumanakuntumbal02@smtp.gmail.com:857');
+$transport = Transport::fromDsn('smtp://akuntumbals032@gmail.com:nbixqxcyulvtelpu@smtp.gmail.com:465');
 
 // Create a Mailer object
 $mailer = new Mailer($transport);
@@ -22,14 +22,12 @@ $email->from('akuntumbals032@gmail.com');
 $email->to('rdsuryamp@gmail.com');
 
 // Set a "subject"
-$email->subject('Demo message using the Symfony Mailer library.');
-
-// Set the plain-text "Body"
-$email->text('This is the plain text body of the message.\nThanks,\nAdmin');
+$email->subject('Kode OTP Verifikasi Akun Slink');
 
 // Set HTML "Body"
-$email->html('This is the HTML version of the message.');
-
+$email->html('<h3>Selamat Bergabung Menjadi Bagian Dari Keluarga Besar Slink...</h3>
+<h4>0834342242</h4>
+<h5>Silahkan Masukan Kode Berikut Ke Halaman Verifikasi</h5>');
 
 // Send the message
 $mailer->send($email);
