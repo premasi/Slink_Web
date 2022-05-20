@@ -1,5 +1,5 @@
 Ongoing Fitur Baru:
-- [ ] Verifikasi Aktifasi Akun With OTP + Email
+- [x] Verifikasi Aktifasi Akun With OTP + Email (Pakein Akun Resmi Slink)
 - [ ] Recovery Password
 - [x] Komentar
 - [x] Like
