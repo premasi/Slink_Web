@@ -10,6 +10,7 @@ $(() => {
     $("#judul").val("");
     $("#deskripsi").val("");
     $("#link").val("");
+    $("#cat_title").val("");
   });
 
   // Sesuaikan Modal Form untuk Keperluan Update Data
@@ -33,6 +34,7 @@ $(() => {
         $("#judul").val(data.judul);
         $("#deskripsi").val(data.deskripsi);
         $("#link").val(data.link);
+        $("#cat_title").val(data.post_cat);
       },
     });
   });

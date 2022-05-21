@@ -55,6 +55,7 @@ function createPost($data)
   $deskripsi = htmlspecialchars($data["deskripsi"]);
   $link = htmlspecialchars($data["link"]);
   $user_id = (int)htmlspecialchars($data["user_id"]);
+  $cat_title = htmlspecialchars($data["cat_title"]);
 
   // Cek Field Diisi atau Tidak... Menghindari Inputan Berupa Whitespace(' ')
   if (ctype_space($judul) || ctype_space($deskripsi) || ctype_space($link)) {
@@ -75,7 +76,7 @@ function createPost($data)
   }
 
   // Query Insert Data ke DB
-  $query = "INSERT INTO posts VALUES (NULL,'$judul','$deskripsi', '$link', NOW(), '$user_id')";
+  $query = "INSERT INTO posts VALUES (NULL,'$judul','$deskripsi', '$link', NOW(), '$user_id', '$cat_title')";
 
   // Eksekusi Query
   mysqli_query($conn, $query) or die(mysqli_error($conn));
@@ -195,15 +196,15 @@ function sendOTP($email)
     mysqli_query($conn, $query) or die(mysqli_error($conn));
 
     // Pengiriman Email
-    $transport = Transport::fromDsn('smtp://email:apppassword@smtp.gmail.com:465');
+    $transport = Transport::fromDsn('smtp://slinkweb012@gmail.com:ssyzcescdkvaurtt@smtp.gmail.com:465');
     $mailer = new Mailer($transport);
     $emailUser = (new Email());
-    $emailUser->from('email pengirim');
+    $emailUser->from('slinkweb012@gmail.com');
     $emailUser->to($email);
     $emailUser->subject('Kode OTP Verifikasi Akun Slink');
     $emailUser->html('<h3>Selamat Bergabung Menjadi Bagian Dari Keluarga Besar Slink...</h3>
 <h4>' . $otp . '</h4>
-<h5>Silahkan Masukan Kode Berikut Ke Halaman <a href="http://localhost/Slink_Web/src/verifikasi.php">Verifikasi</a></h5>');
+<h5>Silahkan Masukan Kode Berikut Ke Halaman <a href="http://localhost/Slink_Web/2. Slink UAS/src/verifikasi.php">Verifikasi</a></h5>');
     $mailer->send($emailUser);
 
     return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
@@ -365,7 +366,7 @@ function register($data)
   // $password = password_hash($password, PASSWORD_DEFAULT);
 
   // Query Insert Data
-  $query = "INSERT INTO users VALUES(NULL, '$nama', '$email', '$username', '$password', NOW(), NULL, '0')";
+  $query = "INSERT INTO users VALUES(NULL, '$nama', NULL,'$email', '$username', '$password', NOW(), NULL, '0')";
 
   // Eksekusi Query
   mysqli_query($conn, $query) or die(mysqli_error($conn));

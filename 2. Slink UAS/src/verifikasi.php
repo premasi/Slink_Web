@@ -2,6 +2,7 @@
 // Import Function
 require "function.php";
 
+
 if (isset($_POST['getOtp'])) {
     $otpStatus = sendOTP($_POST['email']);
 }

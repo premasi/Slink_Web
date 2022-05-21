@@ -115,6 +115,7 @@ if (isset($_POST["submit_search"])) {
               <div class="card-body">
                 <h5 class="card-title"><?= $post['judul']; ?></h5>
                 <p class="card-text"><?= $post['deskripsi']; ?></p>
+                <p class="card-text">Category : <?= $post['post_cat']; ?></p>
                 <div class="row">
                   <a class="btn btn-primary col-5" href="<?= $post['link']; ?>" target="_blank">Go Link</a>
                   <div class="col-1"></div>
@@ -149,6 +150,10 @@ if (isset($_POST["submit_search"])) {
                 <div class="form-floating">
                   <textarea class="form-control form-control-sm" id="deskripsi" name="deskripsi" placeholder="Deskripsi" required></textarea>
                   <label for="deskripsi">Deskripsi</label>
+                </div>
+                <div class="form-floating">
+                  <input type="text" class="form-control form-control-sm" id="cat_title" name="cat_title" placeholder="Link" required />
+                  <label for="link">Category</label>
                 </div>
                 <div class="form-floating">
                   <input type="text" class="form-control form-control-sm" id="link" name="link" placeholder="Link" required />
