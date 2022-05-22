@@ -37,10 +37,30 @@ function getPosts($limit)
   return queryGetData($query);
 }
 
+// Fungsi Ambil Data Posts Sesuai User(CMS)
+function getPostsByUser($user_id)
+{
+  // Query
+  $query = "CALL getPostsByUser($user_id)";
+
+  // Eksekusi Query
+  return queryGetData($query);
+}
+
+//Fungsi Ambil Data Posts Sesuai Category
+function getPostsByCategory($cat_id)
+{
+  // Query
+  $query = "CALL getPostsByCategory($cat_id)";
+
+  // Eksekusi Query
+  return queryGetData($query);
+}
+
 // Fungsi Cari Data Post
 function searchPosts($limit, $keyword)
 {
-  $query = "SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi FROM posts INNER JOIN users ON posts.user_id = users.id WHERE posts.judul LIKE '%$keyword%' OR posts.deskripsi LIKE '%$keyword%'  OR users.username LIKE '%$keyword%' ORDER BY posts.waktu_aksi DESC LIMIT $limit";
+  $query = "SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi, category.nama FROM posts INNER JOIN users ON posts.user_id = users.id INNER JOIN category ON posts.cat_id = category.id WHERE posts.judul LIKE '%$keyword%' OR posts.deskripsi LIKE '%$keyword%'  OR users.username LIKE '%$keyword%' ORDER BY posts.waktu_aksi DESC LIMIT $limit";
 
   return queryGetData($query);
 }
@@ -55,7 +75,7 @@ function createPost($data)
   $deskripsi = htmlspecialchars($data["deskripsi"]);
   $link = htmlspecialchars($data["link"]);
   $user_id = (int)htmlspecialchars($data["user_id"]);
-  $cat_title = htmlspecialchars($data["cat_title"]);
+  $cat_nama = htmlspecialchars($data["category"]);
 
   // Cek Field Diisi atau Tidak... Menghindari Inputan Berupa Whitespace(' ')
   if (ctype_space($judul) || ctype_space($deskripsi) || ctype_space($link)) {
@@ -75,17 +95,34 @@ function createPost($data)
     exit;
   }
 
-  // Query Insert Data ke DB
-  $query = "INSERT INTO posts VALUES (NULL,'$judul','$deskripsi', '$link', NOW(), '$user_id', '$cat_title')";
 
-  // Eksekusi Query
+  // Cek Category Sudah Ada Atau Belum
+  if ($cek = queryGetData("SELECT * FROM category WHERE nama = '$cat_nama'")) {
+    $cat_id = $cek[0]['id'];
+    $query = "INSERT INTO posts VALUES (NULL,'$judul','$deskripsi', '$link', NOW(), '$user_id', '$cat_id')";
+    mysqli_query($conn, $query) or die(mysqli_error($conn));
+    // Jika Berhasil
+    return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+      <strong>Post Berhasil Dibuat!</strong> Ayo Buat Lebih Banyak Post
+      <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>"];
+    exit;
+  }
+
+  // Jika Category Belum Ada
+  $query = "INSERT INTO category VALUES(NULL, '$cat_nama')";
   mysqli_query($conn, $query) or die(mysqli_error($conn));
+  $cek = queryGetData("SELECT * FROM category WHERE nama = '$cat_nama'");
+  $cat_id = $cek[0]['id'];
+  $query2 = "INSERT INTO posts VALUES (NULL,'$judul','$deskripsi', '$link', NOW(), '$user_id', '$cat_id')";
+  mysqli_query($conn, $query2) or die(mysqli_error($conn));
 
   // Jika Berhasil
   return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
         <strong>Post Berhasil Dibuat!</strong> Ayo Buat Lebih Banyak Post
         <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
       </div>"];
+  exit;
 }
 
 // Fungsi Update Data Post
@@ -98,6 +135,7 @@ function updatePost($data)
   $judul = htmlspecialchars($data["judul"]);
   $deskripsi = htmlspecialchars($data["deskripsi"]);
   $link = htmlspecialchars($data["link"]);
+  $cat_nama = htmlspecialchars($data["category"]);
 
   // Cek Field Diisi atau Tidak... Menghindari Inputan Berupa Whitespace(' ')
   if (ctype_space($judul) || ctype_space($deskripsi) || ctype_space($link)) {
@@ -117,17 +155,33 @@ function updatePost($data)
     exit;
   }
 
-  // Query Update
-  $query = "UPDATE posts SET judul = '$judul', deskripsi = '$deskripsi', link = '$link', waktu_aksi = NOW() WHERE id = $id";
+  // Cek Category Sudah Ada Atau Belum
+  if ($cek = queryGetData("SELECT * FROM category WHERE nama = '$cat_nama'")) {
+    $cat_id = $cek[0]['id'];
+    $query = "UPDATE posts SET judul = '$judul', deskripsi = '$deskripsi', link = '$link', waktu_aksi = NOW(), cat_id = '$cat_id' WHERE id = $id";
+    mysqli_query($conn, $query) or die(mysqli_error($conn));
+    // Jika Berhasil
+    return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+    <strong>Post Berhasil Diupdate!</strong> Ayo Buat Post Sesempurna Mungkin
+    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>"];
+    exit;
+  }
 
-  // Eksekusi Query
+  // Jika Category Belum Ada
+  $query = "INSERT INTO category VALUES(NULL, '$cat_nama')";
   mysqli_query($conn, $query) or die(mysqli_error($conn));
+  $cek = queryGetData("SELECT * FROM category WHERE nama = '$cat_nama'");
+  $cat_id = $cek[0]['id'];
+  $query2 = "UPDATE posts SET judul = '$judul', deskripsi = '$deskripsi', link = '$link', waktu_aksi = NOW(), cat_id = '$cat_id' WHERE id = $id";
+  mysqli_query($conn, $query2) or die(mysqli_error($conn));
 
   // Jika Berhasil
   return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
-        <strong>Post Berhasil Diupdate!</strong> Ayo Buat Post Sesempurna Mungkin
-        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-      </div>"];
+    <strong>Post Berhasil Diupdate!</strong> Ayo Buat Post Sesempurna Mungkin
+    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+  </div>"];
+  exit;
 }
 
 
@@ -157,7 +211,132 @@ function searchPostsPrivate($keyword, $user_id)
   return queryGetData($query);
 }
 
-// Fungsi Kirim Email untuk OTP
+// Fungsi Kirim Email
+function sendMail($email, $subject, $html)
+{
+  $transport = Transport::fromDsn('smtp://slinkweb012@gmail.com:ssyzcescdkvaurtt@smtp.gmail.com:465');
+  $mailer = new Mailer($transport);
+  $emailSend = (new Email());
+  $emailSend->from('slinkweb012@gmail.com');
+  $emailSend->to($email);
+  $emailSend->subject($subject);
+  $emailSend->html($html);
+  $mailer->send($emailSend);
+}
+
+// Fungsi Kirim Recovery Password Link
+function sendRecovery($email)
+{
+  $email = htmlspecialchars($email);
+
+  // Cek Email Valid atau Tidak
+  if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+    return ["error_emailVal" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+          <strong>Email Tidak Valid!</strong> Silahkan Gunakan Email yang Benar
+          <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+        </div>"];
+    exit;
+  }
+
+  // Cek User Ada atau Tidak
+  if ($cek = queryGetData("SELECT * FROM users WHERE email = '$email'")) {
+
+    // Hash Email
+    $key = hash('sha256', $cek[0]['username']);
+
+    // Pengiriman Email
+    $subject = "Recovery Password Akun Slink";
+    $html = '<h3>Tekan Tombol atau Akses Link Dibawah untun Melakukan</h3>
+    <button type="button"><a href="http://localhost/Slink_Web/2.%20Slink%20UAS/src/recovery.php?key=' . $key . '"></a>Go</button>
+    <h5>Silahkan Masuk Ke Halaman <a href="http://localhost/Slink_Web/2.%20Slink%20UAS/src/recovery.php?key=' . $key . '">Recovery</a></h5>';
+    sendMail($email, $subject, $html);
+
+    return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+    <strong>Email Recovery Berhasil Dikirim!</strong> Silahkan Akses Link untuk Recovery Password yang Sudah Dikirimkan Ke Email
+    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+  </div>"];
+    exit;
+  }
+
+  // Saat User Tidak Ada
+  return ["error_user" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+      <strong>Akun Dengan Email Tersebut Tidak Ditemukan!</strong> Silahkan Gunakan Email yang Terdaftar pada Akun yang Telah Registrasi
+      <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+  exit;
+}
+
+// Fungsi Recovery Password
+function recovery($data, $key)
+{
+  global $conn;
+
+  $username = htmlspecialchars($data['username']);
+  $password = htmlspecialchars(mysqli_real_escape_string($conn, $data['password']));
+  $passwordCon = htmlspecialchars(mysqli_real_escape_string($conn, $data['passwordCon']));
+
+  // Cek Field Diisi atau Tidak... Menghindari Inputan Berupa Whitespace(' ')
+  if (ctype_space($username) || ctype_space($password) || ctype_space($passwordCon)) {
+    return ["error_space" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+          <strong>Isi Field Dengan Benar!</strong> Jangan Isi Field dengan whitespace/spasi Saja
+          <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+        </div>"];
+    exit;
+  }
+
+  // Cek Username Ada atau Tidak
+  if ($cek = queryGetData("SELECT * FROM users WHERE username = '$username'")) {
+
+    // Cek Username Cocok dengan Recovery Email Key
+    if ($key == hash('sha256', $username)) {
+
+      // Cek Apakah Password Kurang dari 8 Karakter atau Tidak
+      if (strlen($password) < 8) {
+        return ["error_pass" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Password Tidak Boleh Kurang Dari 8 Karakter!</strong> Silahkan Tambah Karakter untuk Password
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+        exit;
+      }
+
+      // Cek Apakah Konfirmasi Password Benar
+      if ($password !== $passwordCon) {
+        return ["error_passCon" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Konfirmasi Password Salah!</strong> Silahkan Masukan Password yang Sudah diisi Di Field Sebelumnya
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+        exit;
+      }
+
+      // Hash Password
+      $hashformat = "2y$10$";
+      $salt = "willyoumarrymeyeahjust";
+      $hash_and_salt = $hashformat . $salt;
+      $password = crypt($password, $hash_and_salt);
+
+      // Ganti Password
+      $query = "UPDATE users SET password = '$password' WHERE username = '$username'";
+      mysqli_query($conn, $query) or die(mysqli_error($conn));
+      return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+      <strong>Password Berhasil Diperbaharui!</strong>
+      <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>"];
+    }
+
+    return ["error_key" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Recovery Tidak Bisa Dilakukan!</strong> Gunakan Username Akun yang Tertaut Dengan Email Penerima Link Recovery
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+    exit;
+  }
+  return ["error_user" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+      <strong>Akun Tidak Ditemukan!</strong> Masukan Username Akun yang Benar dan Sesuai Email
+      <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>"];
+  exit;
+}
+
+// Fungsi Kirim  OTP
 function sendOTP($email)
 {
   global $conn;
@@ -196,16 +375,13 @@ function sendOTP($email)
     mysqli_query($conn, $query) or die(mysqli_error($conn));
 
     // Pengiriman Email
-    $transport = Transport::fromDsn('smtp://slinkweb012@gmail.com:ssyzcescdkvaurtt@smtp.gmail.com:465');
-    $mailer = new Mailer($transport);
-    $emailUser = (new Email());
-    $emailUser->from('slinkweb012@gmail.com');
-    $emailUser->to($email);
-    $emailUser->subject('Kode OTP Verifikasi Akun Slink');
-    $emailUser->html('<h3>Selamat Bergabung Menjadi Bagian Dari Keluarga Besar Slink...</h3>
-<h4>' . $otp . '</h4>
-<h5>Silahkan Masukan Kode Berikut Ke Halaman <a href="http://localhost/Slink_Web/2. Slink UAS/src/verifikasi.php">Verifikasi</a></h5>');
-    $mailer->send($emailUser);
+    $subject = "Kode OTP Verifikasi Akun Slink";
+    $html = '<h3>Selamat Bergabung Menjadi Bagian Dari Keluarga Besar Slink...</h3>
+    <h4>' . $otp . '</h4>
+    <h5>Silahkan Masukan Kode Berikut Ke Halaman <a href="http://localhost/Slink_Web/2.%20Slink%20UAS/src/verifikasi.php">Verifikasi</a></h5>';
+    sendMail($email, $subject, $html);
+
+
 
     return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
     <strong>OTP Berhasil Dikirim!</strong> Silahkan verifikasi Akun Menggunakan <strong>Email</strong>, dan Kode <strong>OTP</strong> yang Sudah Dikirim ke Email
@@ -273,6 +449,12 @@ function verifikasi($data)
       </div>"];
       exit;
     }
+
+    return ["error_otp" => "<div class='alert alert-warning alert-dismissible fade show' role='alert'>
+    <strong>Email dan Kode OTP Tidak Cocok!</strong> Silahkan Masukan Kode OTP yang Benar
+    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>"];
+    exit;
   }
 
   // Saat User Tidak Ada
@@ -349,11 +531,6 @@ function register($data)
         <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
       </div>"];
     exit;
-    echo "<script>
-        alert('Konfirmasi Password Salah!');
-        </script>
-        ";
-    return false;
   }
 
   //Menencrypt password pengguna
@@ -366,7 +543,7 @@ function register($data)
   // $password = password_hash($password, PASSWORD_DEFAULT);
 
   // Query Insert Data
-  $query = "INSERT INTO users VALUES(NULL, '$nama', NULL,'$email', '$username', '$password', NOW(), NULL, '0')";
+  $query = "INSERT INTO users VALUES(NULL, '$nama', NULL, '$email', '$username', '$password', NOW(), NULL, '0')";
 
   // Eksekusi Query
   mysqli_query($conn, $query) or die(mysqli_error($conn));
@@ -384,8 +561,8 @@ function register($data)
 // Fungsi Login
 function login($data)
 {
-  $username = $data["username"];
-  $password = $data["password"];
+  $username = htmlspecialchars($data["username"]);
+  $password = htmlspecialchars($data["password"]);
 
   // Cek Username
   if ($cek = queryGetData("SELECT * FROM users WHERE username = '$username'")) {
@@ -393,24 +570,39 @@ function login($data)
     // Cek Password
     if (password_verify($password, $cek[0]["password"])) {
 
+      // Cek User Verifikasi atau Belum
+      if ($cek[0]['verified'] != 1) {
+        return ["error_verified" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Akun Belum Terverifikasi!</strong> Silahkan <a href='./verifikasi.php'>Verifikasi</a> Terlebih Dahulu
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+        </div>"];
+        exit;
+      }
+
       // Set Session
       $_SESSION["login"] = true;
       $_SESSION["user_id"] = $cek[0]["id"];
 
       if (isset($data['remember'])) {
-        setcookie('user_id', $cek['id'], time() + 250);
-        setcookie('key', hash('sha256', $cek['username']), time() + 250);
+        setcookie('user_id', $cek[0]['id'], time() + 250);
+        setcookie('key', hash('sha256', $cek['0']['username']), time() + 250);
       }
 
       header("Location: home.php");
       exit();
     }
+
     return ["error" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
         <strong>Username atau Password Salah!</strong>
         <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
       </div>"];
     exit;
   }
+  return ["error" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+      <strong>Username atau Password Salah!</strong>
+      <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>"];
+  exit;
 }
 
 // Fungsi Logout

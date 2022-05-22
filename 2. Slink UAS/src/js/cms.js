@@ -10,7 +10,7 @@ $(() => {
     $("#judul").val("");
     $("#deskripsi").val("");
     $("#link").val("");
-    $("#cat_title").val("");
+    $("#category").val("");
   });
 
   // Sesuaikan Modal Form untuk Keperluan Update Data
@@ -20,7 +20,6 @@ $(() => {
     $("#modal_button").attr("name", "submit_updatePost");
     $("#modal_button").html("Update");
 
-    console.log(id);
     // AJAX untuk Get Data Mahasiswa Sesuai Id Tertentu
     $.ajax({
       url: "async_cms.php",
@@ -29,12 +28,19 @@ $(() => {
       dataType: "JSON",
       crossDomain: true,
       success: function (data) {
+        console.log(data);
         // Inisialisasi Form dalam Modal untuk di Update
-        $("#id").val(data.id);
-        $("#judul").val(data.judul);
-        $("#deskripsi").val(data.deskripsi);
-        $("#link").val(data.link);
-        $("#cat_title").val(data.post_cat);
+        $("#id").val(data.post.id);
+        $("#judul").val(data.post.judul);
+        $("#deskripsi").val(data.post.deskripsi);
+        $("#link").val(data.post.link);
+        $("#category").val(data.post.nama);
+        let list_cat = ``;
+        data.category.map((cat) => {
+          list_cat += `<option value="${cat.nama}"></option>`;
+          console.log(list_cat);
+        });
+        $("#list_category").html(list_cat);
       },
     });
   });

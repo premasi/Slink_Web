@@ -6,7 +6,7 @@ USE slink;
 CREATE TABLE users(
 id int primary key auto_increment,
 nama varchar(255),
-foto text,
+foto varchar(255),
 email varchar(255) unique,
 username varchar(255) unique,
 password varchar(255),
@@ -17,7 +17,10 @@ verified bool default 0
 
 CREATE VIEW profile AS SELECT id, nama, username, email, bio, waktu_bergabung FROM users;
 
-create table category (cat_id int(11) primary key auto_increment, cat_title varchar(255));
+CREATE TABLE category(
+id int primary key auto_increment,
+nama varchar(255)
+);
 
 CREATE TABLE posts(
 id int primary key auto_increment,
@@ -26,8 +29,9 @@ deskripsi varchar(255),
 link varchar(255),
 waktu_aksi datetime default current_timestamp(),
 user_id int,
-post_cat varchar(255),
-FOREIGN KEY(user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE
+cat_id int,
+FOREIGN KEY(user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+FOREIGN KEY(cat_id) REFERENCES category(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE comments(
@@ -58,8 +62,6 @@ FOREIGN KEY(user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
 FOREIGN KEY(follower_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
 CONSTRAINT Composite_Unique unique(user_id, follower_id)
 );
-
-
 
 CREATE TABLE bookmarks(
 post_id int,
@@ -191,7 +193,7 @@ IN userId int
 )
 
 BEGIN
-SELECT * FROM posts WHERE user_id = userId;
+SELECT posts.id, posts.judul, posts.deskripsi, posts.link, posts.waktu_aksi, category.nama FROM posts INNER JOIN category ON posts.cat_id = category.id WHERE posts.id IN((SELECT post_id FROM bookmark WHERE user_id = userId)) ORDER BY posts.waktu_aksi DESC;
 END//
 
 DELIMITER ;
@@ -220,7 +222,7 @@ IN userId int
 )
 
 BEGIN
-SELECT posts.id, posts.judul, posts.deskripsi, posts.link,  users.username, posts.waktu_aksi FROM posts INNER JOIN users ON posts.user_id = users.id WHERE posts.user_id  IN((SELECT user_id FROM follows WHERE follower_id = userId UNION SELECT follower_id FROM follows WHERE user_id = userId ));
+SELECT posts.id, posts.judul, posts.deskripsi, posts.link,  users.username, posts.waktu_aksi , category.nameFROM posts INNER JOIN users ON posts.user_id = users.id INNER JOIN category ON posts.cat_id = category.id WHERE posts.user_id  IN((SELECT user_id FROM follows WHERE follower_id = userId UNION SELECT follower_id FROM follows WHERE user_id = userId ));
 END//
 
 DELIMITER ;
@@ -252,25 +254,46 @@ IN limitTemp int
 )
 
 BEGIN
-SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi FROM posts INNER JOIN users ON posts.user_id = users.id ORDER BY posts.waktu_aksi DESC LIMIT limitTemp;
+SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi, category.nama FROM posts INNER JOIN users ON posts.user_id = users.id INNER JOIN category ON posts.cat_id = category.id ORDER BY posts.waktu_aksi DESC LIMIT limitTemp;
 END//
 
 DELIMITER ;
 
--- Store Procedure untuk Menampilkan Posts Berdasarkan Keyword(BUG)
+-- Store Procedure untuk Menampilkan Post Berdasarkan Id
 DELIMITER //
-CREATE PROCEDURE getPostsByKeyword(
-IN limitTemp int,
-IN keyword varchar(255)
+CREATE PROCEDURE getPostById(
+IN idTemp int
 )
 
 BEGIN
-SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi FROM posts INNER JOIN users ON posts.user_id = users.id WHERE posts.judul LIKE "'%"+keyword+"%'" OR posts.deskripsi LIKE "'%"+keyword+"%'"  OR users.username LIKE "'%"+keyword+"%'" ORDER BY posts.waktu_aksi DESC LIMIT limitTemp;
+SELECT posts.id, posts.judul, posts.deskripsi, posts.link, posts.waktu_aksi, category.nama FROM posts INNER JOIN category ON posts.cat_id = category.id WHERE posts.id = idTemp;
 END//
 
 DELIMITER ;
 
-CALL getPostsByKeyword(5, "Tutorial");
+-- Store Procedure untuk Menampilkan Post Berdasarkan Id
+DELIMITER //
+CREATE PROCEDURE getPostsByUser(
+IN idTemp int
+)
+
+BEGIN
+SELECT posts.id, posts.judul, posts.deskripsi, posts.link, posts.waktu_aksi, category.nama FROM posts INNER JOIN category ON posts.cat_id = category.id WHERE posts.user_id = idTemp ORDER BY posts.waktu_aksi DESC;
+END//
+
+DELIMITER ;
+
+-- Store Procedure untuk Menampilkan Post Berdasarkan Category
+DELIMITER //
+CREATE PROCEDURE getPostsByCategory(
+IN catId int
+)
+
+BEGIN
+SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi, category.nama FROM posts INNER JOIN users ON posts.user_id = users.id INNER JOIN category ON posts.cat_id = category.id WHERE posts.cat_id = catId ORDER BY posts.waktu_aksi;
+END//
+
+DELIMITER ;
 
 
 

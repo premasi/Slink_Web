@@ -38,12 +38,15 @@ if (isset($_GET["delete_id"])) {
 }
 
 // Ambil Data Post untuk Ditampilkan
-$posts = queryGetData("SELECT * FROM posts WHERE user_id = $user_id");
+$posts = getPostsByUser($user_id);
 
 // Ambil Data Post Sesuai Keyword Pencarian
 if (isset($_POST["submit_search"])) {
   $posts = searchPostsPrivate($_POST["keyword"], $user_id);
 }
+
+// Ambil Data Category
+$category = queryGetData("SELECT * FROM category");
 ?>
 
 <!DOCTYPE html>
@@ -62,7 +65,7 @@ if (isset($_POST["submit_search"])) {
 </head>
 
 <body>
-  <div class="animasi3">
+  <header class="animasi3">
     <nav class="navbar navbar-expand-sm" style="background-color: #6aa5a9;">
       <div class="container-fluid">
         <a class="navbar-brand" href="./home.php"><img src="../Foto/logo.png" alt=""></a>
@@ -74,9 +77,9 @@ if (isset($_POST["submit_search"])) {
         <h3>Log Out</h3>
       </a>
     </nav>
-  </div>
+  </header>
 
-  <div class="animasi3">
+  <main class="animasi3">
     <main class="container shadow p-3 mb-5 bg-body rounded m-auto mt-5">
       <div class="row mb-2 d-flex">
         <!-- Tombol Trigger Modal untuk Insert/Tambah Data -->
@@ -87,6 +90,7 @@ if (isset($_POST["submit_search"])) {
           <?php if (isset($postStatus["error_space"])) echo $postStatus["error_space"] ?>
           <?php if (isset($postStatus["error_link"])) echo $postStatus["error_link"] ?>
           <?php if (isset($postStatus["success"])) echo $postStatus["success"] ?>
+          <?php if (isset($postStatus["test"])) echo $postStatus["test"] ?>
         </div>
       </div>
 
@@ -113,9 +117,12 @@ if (isset($_POST["submit_search"])) {
           <div class="col-sm-4 mb-3">
             <div class="card">
               <div class="card-body">
+                <div class="row mb-3">
+                  <h7 class="col-8"><?= $post['waktu_aksi']; ?></h7>
+                  <h7 class="col-4 text-center"><?= $post['nama']; ?></h7>
+                </div>
                 <h5 class="card-title"><?= $post['judul']; ?></h5>
                 <p class="card-text"><?= $post['deskripsi']; ?></p>
-                <p class="card-text">Category : <?= $post['post_cat']; ?></p>
                 <div class="row">
                   <a class="btn btn-primary col-5" href="<?= $post['link']; ?>" target="_blank">Go Link</a>
                   <div class="col-1"></div>
@@ -143,19 +150,23 @@ if (isset($_POST["submit_search"])) {
               <input type="hidden" name="id" id="id">
               <input type="hidden" name="user_id" value="<?= $_SESSION['user_id'] ?>">
               <div class="modal-body">
-                <div class="form-floating">
+                <div class="form-floating mb-2">
                   <input type="text" class="form-control form-control-sm" id="judul" name="judul" placeholder="Judul" required />
                   <label for="judul">Judul</label>
                 </div>
-                <div class="form-floating">
+                <div class="form-floating mb-2">
                   <textarea class="form-control form-control-sm" id="deskripsi" name="deskripsi" placeholder="Deskripsi" required></textarea>
                   <label for="deskripsi">Deskripsi</label>
                 </div>
-                <div class="form-floating">
-                  <input type="text" class="form-control form-control-sm" id="cat_title" name="cat_title" placeholder="Link" required />
-                  <label for="link">Category</label>
-                </div>
-                <div class="form-floating">
+
+                <input type="text" list="list_category" id="category" name="category" placeholder="Pilih Category..." class="form-control mb-2" />
+                <datalist id="list_category">
+                  <?php foreach ($category as $cat) : ?>
+                    <option value="<?= $cat['nama']; ?>"></option>
+                  <?php endforeach; ?>
+                </datalist>
+
+                <div class="form-floating mb-2">
                   <input type="text" class="form-control form-control-sm" id="link" name="link" placeholder="Link" required />
                   <label for="link">Link</label>
                 </div>
@@ -168,17 +179,17 @@ if (isset($_POST["submit_search"])) {
           </div>
         </div>
       </div>
-  </div>
+      </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-  <script src="js/cms.js"></script>
-  <footer>
-    <div class="row">
-      <div class="col-lg-12 text-center mt-5">
-        <p><small>Copyright &copy; Slink 2022</small></p>
-      </div>>
-    </div>
-  </footer>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+      <script src="js/cms.js"></script>
+      <footer>
+        <div class="row">
+          <div class="col-lg-12 text-center mt-5">
+            <p><small>Copyright &copy; Slink 2022</small></p>
+          </div>>
+        </div>
+      </footer>
 </body>
 
 </html>

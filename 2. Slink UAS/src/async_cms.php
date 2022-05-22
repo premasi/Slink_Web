@@ -10,7 +10,13 @@ require 'function.php';
 if (isset($_POST["id"])) {
     $id = $_POST['id'];
 
-    $post =  queryGetData("SELECT * FROM posts WHERE id = $id");
+    $post =  queryGetData("CALL getPostById($id)");
+    $category = queryGetData("SELECT nama FROM category");
 
-    echo json_encode($post[0]);
+    $data = [
+        'post' => $post[0],
+        'category' => $category
+    ];
+
+    echo json_encode($data);
 }

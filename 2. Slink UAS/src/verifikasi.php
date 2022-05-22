@@ -2,11 +2,18 @@
 // Import Function
 require "function.php";
 
+// Redirect Ke Halaman Login
+if (isset($_SESSION["login"])) {
+    header("Location: home.php");
+    exit();
+}
 
+// Trigger Request OTP
 if (isset($_POST['getOtp'])) {
     $otpStatus = sendOTP($_POST['email']);
 }
 
+// Trigger Verifikasi
 if (isset($_POST['submit_verifikasi'])) {
     $verifikasiStatus = verifikasi($_POST);
 }
@@ -21,12 +28,11 @@ if (isset($_POST['submit_verifikasi'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
-    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <title>Slink | Verifikasi</title>
 </head>
 
 <body>
-    <section class="container shadow p-3 mb-5 bg-body rounded m-auto mt-5 w-75">
+    <main class="container shadow p-3 mb-5 bg-body rounded m-auto mt-5 w-75">
         <h4 class="text-center mb-5">Verifikasi</h4>
         <div class="w-50 m-auto">
             <p class="alert alert-warning">Silahkan Masukan <strong>Email</strong> dan Kode <strong>OTP</strong> yang Masuk Ke Email tersebut untuk Melakukan Verifikasi Terhadap Akun Anda...</p>
@@ -39,6 +45,7 @@ if (isset($_POST['submit_verifikasi'])) {
             <?php if (isset($verifikasiStatus['error_user'])) echo $verifikasiStatus['error_user'];  ?>
             <?php if (isset($verifikasiStatus['error_verified'])) echo $verifikasiStatus['error_verified'];  ?>
             <?php if (isset($verifikasiStatus['error_space'])) echo $verifikasiStatus['error_space'];  ?>
+            <?php if (isset($verifikasiStatus['error_otp'])) echo $verifikasiStatus['error_otp'];  ?>
             <?php if (isset($verifikasiStatus['success'])) echo $verifikasiStatus['success'];  ?>
             <form action="" method="POST">
                 <div class="form-floating mb-1">
@@ -56,9 +63,18 @@ if (isset($_POST['submit_verifikasi'])) {
                 </div>
             </form>
         </div>
-    </section>
+        <h6 class="my-4 text-center">Ayo <a href="login.php" class="text-decoration-none">Login!</a></h3>
+    </main>
+    <footer>
+        <div class="row">
+            <div class="col-lg-12 text-center mt-5">
+                <p><small>Copyright &copy; Slink 2022</small></p>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script src="./js/verifikasi.js"></script>
 </body>
 
 </html>

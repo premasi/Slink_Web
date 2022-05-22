@@ -47,10 +47,12 @@ if (isset($_POST["login"])) {
   <title>Slink | Login</title>
 </head>
 
-<body <div class="container">
+<body>
   <!--awal login-->
-  <div class="animasi">
+  <main class="animasi">
     <div class="login border">
+      <?php if (isset($login["error"])) echo $login["error"] ?>
+      <?php if (isset($login["error_verified"])) echo $login["error_verified"] ?>
       <center><img src="../Foto/logo.png" alt="Logo_slink" class="logo1"></center>
       <h1 class="h3 mb-3 fw-normal">Login</h1>
       <form action="" method="POST">
@@ -73,10 +75,11 @@ if (isset($_POST["login"])) {
       </form>
     </div>
     <center>
-      <hr class="my-4">Belum Punya Akun? <a href="register.php">Register</a> Sekarang</h3>
-      <?php if (isset($login["error"])) echo $login["error"] ?>
+      <h3 class="my-4">Belum Punya Akun? <a href="register.php">Register</a> Sekarang</h3>
+      <h3 class="my-4">Belum Verifikasi? <a href="verifikasi.php">Verifikasi</a> Sekarang</h3>
+      <h3 class="my-4"><a href="sendRecovery.php">Lupa Password?</a></h3>
     </center>
-  </div>
+  </main>
   <!--akhir login-->
   </div>
   <footer>

@@ -23,7 +23,7 @@ if (isset($_POST["register"])) {
 
 <body>
 
-    <section class="vh-100" style="background-color: #eee;">
+    <main class="vh-100" style="background-color: #eee;">
         <div class="container h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-lg-12 col-xl-11">
@@ -96,6 +96,15 @@ if (isset($_POST["register"])) {
                                         </div>
 
                                     </form>
+                                    <footer>
+                                        <div class="row">
+                                            <div class="col-lg-12 text-center mt-5">
+                                                <p><small>Copyright &copy; Slink 2022</small></p>
+                                            </div>
+                                            <!-- /.col-lg-12 -->
+                                        </div>
+                                        <!-- /.row -->
+                                    </footer>
 
                                 </div>
                                 <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
@@ -109,7 +118,16 @@ if (isset($_POST["register"])) {
                 </div>
             </div>
         </div>
-    </section>
+    </main>
+    <footer>
+        <div class="row">
+            <div class="col-lg-12 text-center mt-5">
+                <p><small>Copyright &copy; Slink 2022</small></p>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 
