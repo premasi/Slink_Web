@@ -65,12 +65,11 @@ if (isset($_POST['submit_category'])) {
       <div class="container-fluid">
         <a class="navbar-brand" href="./home.php"><img src="../Foto/logo.png" alt="" /></a>
       </div>
-      <a class="navbar-brand p-2 text-white" href="./cms.php">
-        <h3>Cms</h3>
-      </a>
-      <a class="navbar-brand p-2 text-white" id="logout" id="logout" name='logout' href="./home.php?logout=<?= true ?>">
-        <h3>Log Out</h3>
-      </a>
+      <a class="navbar-brand p-2 text-white" href="./cms.php"><img src="../Foto/link.png" alt="" height="50px" />
+                </a>
+                <a class="navbar-brand p-2 text-white" id="logout" id="logout" name='logout' href="./home.php?logout=<?= true ?>">
+                    <img src="../Foto/exit.png" alt="" height="50px" />
+                </a>
     </nav>
   </header>
 
