@@ -99,7 +99,7 @@ if (isset($_POST['submit_category'])) {
         <?php foreach ($posts as $post) : ?>
           <div class="media border p-3 mb-3 shadow w-75 m-auto">
             <div class="media-body">
-              <h2><?= $post['judul']; ?></h2>
+              <h2><a style="text-decoration: none;color:black" href="posts.php?p_id=<?= $post['id']; ?>"><?= $post['judul']; ?></a><h2>
               <div class="d-flex">
                 <h5 class=""><span style="color: #45625D;">by</span><?= " " . $post["username"]; ?></h5>
                 <h5 class="mx-4"><?= $post['waktu_aksi']; ?></h5>
