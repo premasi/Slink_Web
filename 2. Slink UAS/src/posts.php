@@ -100,7 +100,6 @@ if (isset($_GET['p_id'])) {
 
                                             <a class="btn shadow mb-3" href="<?= $post["link"] ?>" style="background-color:#6aa5a9; color: white;" target="_blank">Go Link</a><br>
                                             <i <?php if (checkPostLiked($row['id'], $post['id'])) : ?> class="bi bi-heart-fill text-danger fs-5 mx-1 like_button" <?php else : ?> class="bi bi-heart fs-5 mx-1 like_button" <?php endif ?> data-id="<?= $post["id"] ?>"></i>
-                                            <i class="bi bi-chat fs-5 mx-1 comment_button" data-bs-toggle="modal" data-bs-target="#modal_form" data-id="<?= $post['id'] ?>"></i>
                                             <i <?php if (checkPostBookmarked($row['id'], $post['id'])) : ?> class="bi bi-bookmark-fill text-primary fs-5 mx-1 bookmark_button" <?php else : ?> class="bi bi-bookmark fs-5 mx-1 bookmark_button" <?php endif ?> data-id="<?= $post["id"] ?>"></i>
                                             <br>
 
@@ -146,23 +145,23 @@ if (isset($_GET['p_id'])) {
                                     <button type="submit" name="create_comment" class="btn btn-primary mb-5">Submit</button>
                                 </form>
 
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="d-flex flex-start">
-                                            <?php
-                                            // show comment berdasarkan post
-                                            $query = "SELECT * FROM comments WHERE post_id = $temp";
-                                            $select_comment = mysqli_query($conn, $query);
+                                <?php
+                                // show comment berdasarkan post
+                                $query = "SELECT * FROM comments WHERE post_id = $temp";
+                                $select_comment = mysqli_query($conn, $query);
 
-                                            while ($row = mysqli_fetch_assoc($select_comment)) {
-                                                $user_id = $row['user_id'];
+                                while ($row = mysqli_fetch_assoc($select_comment)) {
+                                    $user_id = $row['user_id'];
 
-                                                $query_username = "SELECT * FROM users WHERE id = $user_id";
-                                                $send_user = mysqli_query($conn, $query_username);
+                                    $query_username = "SELECT * FROM users WHERE id = $user_id";
+                                    $send_user = mysqli_query($conn, $query_username);
 
-                                                while ($row2 = mysqli_fetch_assoc($send_user)) {
+                                    while ($row2 = mysqli_fetch_assoc($send_user)) {
 
-                                            ?>
+                                ?>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="d-flex flex-start">
                                                     <img class="rounded-circle shadow-1-strong me-3" src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(10).webp" alt="avatar" width="65" height="65" />
                                                     <div class="flex-grow-1 flex-shrink-1">
                                                         <div>
@@ -176,15 +175,18 @@ if (isset($_GET['p_id'])) {
                                                             </p>
                                                         </div>
                                                     </div>
+                                                </div>    
+                                            <?php
+
+                                        }
+                                    }
+
+                                            ?>
+                                                
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                        <?php
 
-                                                }
-                                            }
 
-                        ?>
                             </div>
                         </div>
                     </div>
