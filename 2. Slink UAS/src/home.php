@@ -65,11 +65,12 @@ if (isset($_POST['submit_category'])) {
       <div class="container-fluid">
         <a class="navbar-brand" href="./home.php"><img src="../Foto/logo.png" alt="" /></a>
       </div>
+      <a class="navbar-brand p-2 text-white" href="./profil1.php"><img src="../Foto/user.png" alt="" height="50px" />
       <a class="navbar-brand p-2 text-white" href="./cms.php"><img src="../Foto/link.png" alt="" height="50px" />
-                </a>
-                <a class="navbar-brand p-2 text-white" id="logout" id="logout" name='logout' href="./home.php?logout=<?= true ?>">
-                    <img src="../Foto/exit.png" alt="" height="50px" />
-                </a>
+      </a>
+      <a class="navbar-brand p-2 text-white" id="logout" id="logout" name='logout' href="./home.php?logout=<?= true ?>">
+        <img src="../Foto/exit.png" alt="" height="50px" />
+      </a>
     </nav>
   </header>
 
@@ -98,19 +99,20 @@ if (isset($_POST['submit_category'])) {
         <?php foreach ($posts as $post) : ?>
           <div class="media border p-3 mb-3 shadow w-75 m-auto">
             <div class="media-body">
-              <h2><a style="text-decoration: none;color:black" href="posts.php?p_id=<?= $post['id']; ?>"><?= $post['judul']; ?></a><h2>
-              <div class="d-flex">
-                <h5 class=""><span style="color: #45625D;">by</span><?= " " . $post["username"]; ?></h5>
-                <h5 class="mx-4"><?= $post['waktu_aksi']; ?></h5>
-              </div>
-              <a class="btn col-3 mt-1 mb-1 shadow" href="<?= $post["link"] ?>" style="background-color:#6aa5a9; color: white;" target="_blank">Go Link</a>
-              <p class="mt-1 mb-1"><?= $post['deskripsi']; ?></p>
-              <i <?php if (checkPostLiked($user_id, $post['id'])) : ?> class="bi bi-heart-fill text-danger fs-5 mx-1 like_button" <?php else : ?> class="bi bi-heart fs-5 mx-1 like_button" <?php endif ?> data-id="<?= $post["id"] ?>"></i>
-              <i class="bi bi-chat fs-5 mx-1 comment_button" data-bs-toggle="modal" data-bs-target="#modal_form" data-id="<?= $post['id'] ?>"></i>
-              <i <?php if (checkPostBookmarked($user_id, $post['id'])) : ?> class="bi bi-bookmark-fill text-primary fs-5 mx-1 bookmark_button" <?php else : ?> class="bi bi-bookmark fs-5 mx-1 bookmark_button" <?php endif ?> data-id="<?= $post["id"] ?>"></i>
-              <i class="float-end fs-5 fw-normal"><?= $post['nama']; ?></i>
-              <br>
-              <span class="likes"><?= getPostLikes($post['id']); ?> Likes</span>
+              <h2><a style="text-decoration: none;color:black" href="posts.php?p_id=<?= $post['id']; ?>"><?= $post['judul']; ?></a>
+                <h2>
+                  <div class="d-flex">
+                    <h5 class=""><span style="color: #45625D;">by</span><?= " " . $post["username"]; ?></h5>
+                    <h5 class="mx-4"><?= $post['waktu_aksi']; ?></h5>
+                  </div>
+                  <a class="btn col-3 mt-1 mb-1 shadow" href="<?= $post["link"] ?>" style="background-color:#6aa5a9; color: white;" target="_blank">Go Link</a>
+                  <p class="mt-1 mb-1"><?= $post['deskripsi']; ?></p>
+                  <i <?php if (checkPostLiked($user_id, $post['id'])) : ?> class="bi bi-heart-fill text-danger fs-5 mx-1 like_button" <?php else : ?> class="bi bi-heart fs-5 mx-1 like_button" <?php endif ?> data-id="<?= $post["id"] ?>"></i>
+                  <i class="bi bi-chat fs-5 mx-1 comment_button" data-bs-toggle="modal" data-bs-target="#modal_form" data-id="<?= $post['id'] ?>"></i>
+                  <i <?php if (checkPostBookmarked($user_id, $post['id'])) : ?> class="bi bi-bookmark-fill text-primary fs-5 mx-1 bookmark_button" <?php else : ?> class="bi bi-bookmark fs-5 mx-1 bookmark_button" <?php endif ?> data-id="<?= $post["id"] ?>"></i>
+                  <i class="float-end fs-5 fw-normal"><?= $post['nama']; ?></i>
+                  <br>
+                  <span class="likes"><?= getPostLikes($post['id']); ?> Likes</span>
             </div>
           </div>
 

@@ -40,6 +40,7 @@ if (isset($_GET['p_id'])) {
                 <div class="container-fluid">
                     <a class="navbar-brand" href="./home.php"><img src="../Foto/logo.png" alt="" /></a>
                 </div>
+                <a class="navbar-brand p-2 text-white" href="./profil1.php"><img src="../Foto/user.png" alt="" height="50px" />
                 <a class="navbar-brand p-2 text-white" href="./cms.php"><img src="../Foto/link.png" alt="" height="50px" />
                 </a>
                 <a class="navbar-brand p-2 text-white" id="logout" id="logout" name='logout' href="./home.php?logout=<?= true ?>">

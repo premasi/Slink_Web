@@ -1,6 +1,9 @@
 <!doctype html>
 <html lang="en">
 
+<?php require "./function.php"; 
+?>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -33,6 +36,22 @@
                 </ul>
                 </ul>
                 <img src="../Foto/raka.jpg" class="rounded-circle me-3" width="40px">
+
+                <?php 
+                $user_id = $_SESSION['user_id'];
+                $query = "SELECT * FROM users WHERE id = $user_id";
+                $select_user = mysqli_query($conn, $query);
+
+                while($row = mysqli_fetch_assoc($select_user)){
+                    $id = $row['id'];
+                    $nama = $row['nama'];
+                    $foto = $row['foto'];
+                    $email = $row['email'];
+                    
+                }
+                
+                
+                ?>
                 <a class="nav-link me-5" href="./home.php">Raka Guntara</a>
 
                 <!-- <button class=" btn " type=" button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
@@ -57,15 +76,15 @@
                             <br>
                             <span>
                                 <div class="row">
-                                    <div class="col">
+                                    <!-- <div class="col">
                                         Followrs<br> 9999
-                                    </div>
+                                    </div> -->
                                     <div class="col">
                                         Post <br> 9999
                                     </div>
-                                    <div class="col">
+                                    <!-- <div class="col">
                                         Like <br> 9999
-                                    </div>
+                                    </div> -->
                                 </div>
                             </span>
                         </div>
