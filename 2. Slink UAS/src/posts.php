@@ -149,12 +149,13 @@ if (isset($_GET['p_id'])) {
                                     $send_user = mysqli_query($conn, $query_username);
 
                                     while ($row2 = mysqli_fetch_assoc($send_user)) {
+                                        $foto = $row2['foto'];
 
                                 ?>
                                         <div class="row">
                                             <div class="col">
                                                 <div class="d-flex flex-start">
-                                                    <img class="rounded-circle shadow-1-strong me-3" src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(10).webp" alt="avatar" width="65" height="65" />
+                                                    <img class="rounded-circle shadow-1-strong me-3" src="../Foto/<?php echo $foto;?>" alt="avatar" width="65" height="65" />
                                                     <div class="flex-grow-1 flex-shrink-1">
                                                         <div>
                                                             <div class="d-flex justify-content-between align-items-center">
