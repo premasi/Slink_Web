@@ -15,7 +15,7 @@ bio text,
 verified bool default 0
 );
 
-CREATE VIEW profile AS SELECT id, nama, username, email, bio, waktu_bergabung FROM users;
+CREATE VIEW profile AS SELECT id, nama, username, email, bio, foto, waktu_bergabung FROM users;
 
 CREATE TABLE category(
 id int primary key auto_increment,
@@ -222,7 +222,7 @@ IN userId int
 )
 
 BEGIN
-SELECT posts.id, posts.judul, posts.deskripsi, posts.link,  users.username, posts.waktu_aksi , category.nameFROM posts INNER JOIN users ON posts.user_id = users.id INNER JOIN category ON posts.cat_id = category.id WHERE posts.user_id  IN((SELECT user_id FROM follows WHERE follower_id = userId UNION SELECT follower_id FROM follows WHERE user_id = userId ));
+SELECT posts.id, posts.judul, posts.deskripsi, posts.link,  users.username, posts.waktu_aksi , category.name FROM posts INNER JOIN users ON posts.user_id = users.id INNER JOIN category ON posts.cat_id = category.id WHERE posts.user_id  IN((SELECT user_id FROM follows WHERE follower_id = userId UNION SELECT follower_id FROM follows WHERE user_id = userId ));
 END//
 
 DELIMITER ;
