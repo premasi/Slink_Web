@@ -66,13 +66,9 @@ $category = queryGetData("SELECT * FROM category");
 
 <body>
   <header class="animasi3">
-    <nav class="navbar navbar-expand-sm" style="background-color: #6aa5a9;">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="./home.php"><img src="../Foto/logo.png" alt=""></a>
-      </div>
-      <a class="navbar-brand p-2 text-white" href="./cms.php">
-        <h3>Cms</h3>
-      </a>
+  <?php 
+  include("./include/navbar.php");
+  ?>
       <a class="navbar-brand p-2 text-white" href="./cms.php?logout=<?= true ?>" id="logout">
         <h3>Log Out</h3>
       </a>
