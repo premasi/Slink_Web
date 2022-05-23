@@ -23,77 +23,105 @@ ob_start();
     <?php
     $user_id = $_SESSION['user_id'];
 
-    $query = "SELECT * FROM users WHERE id = $user_id";
-    $get_profile = mysqli_query($conn, $query);
+    if (isset($user_id)) {
 
-    while ($row = mysqli_fetch_assoc($get_profile)) {
-        $nama = $row['nama'];
-        $username = $row['username'];
-        $foto = $row['foto'];
-        $email = $row['email'];
-        $bio = $row['bio'];
-        $date = $row['waktu_bergabung'];
+        $query = "SELECT * FROM users WHERE id = $user_id";
+        $get_profile = mysqli_query($conn, $query);
 
-        if ($foto == "" || empty($foto) || $foto == null) {
-            $tag = "<img class='rounded-circle mt-5' width='150px' src='../Foto/user.png'><span class=' font-weight-bold'>$foto</span>";
-        } else {
-            $tag = "<img class='rounded-circle mt-5' width='150px' src='../Foto/$foto'><span class=' font-weight-bold'>$foto</span>";
+        while ($row = mysqli_fetch_array($get_profile)) {
+            $nama = $row['nama'];
+            $username = $row['username'];
+            $foto = $row['foto'];
+            $email = $row['email'];
+            $bio = $row['bio'];
+            $date = $row['waktu_bergabung'];
+
+            if ($foto == "" || empty($foto) || $foto == null) {
+                $tag = "<img class='rounded-circle mt-5' width='150px' src='../Foto/user.png'><span class=' font-weight-bold'>$foto</span>";
+            } else {
+                $tag = "<img class='rounded-circle mt-5' width='150px' src='../Foto/$foto'><span class=' font-weight-bold'>$foto</span>";
+            }
         }
-    }
 
 
     ?>
 
-    <!-- Query update -->
+        <!-- Query update -->
     <?php
-    if (isset($_POST['update_prof'])) {
-        global $conn;
-        $name = $_POST['name'];
-        $username = $_POST['username'];
-        $email = $_POST['email'];
-        $bio = $_POST['bio'];
+        if (isset($_POST['update_prof'])) {
+            $name = $_POST['name'];
+            $username = $_POST['username'];
+            $email = $_POST['email'];
+            $bio = $_POST['bio'];
 
-        $query = "UPDATE users SET nama = '{$name}', ";
-        $query .= "username = '{$username}', ";
-        $query .= "email = '{$email}', ";
-        $query .= "bio = '{$bio}' WHERE id = $user_id ";
+            $foto = $_FILES['image']['name'];
+            $foto_temp = $_FILES['image']['tmp_name'];
 
-        $update_user = mysqli_query($conn, $query);
+            $query = "UPDATE users SET nama = '{$name}', ";
+            $query .= "username = '{$username}', ";
+            $query .= "email = '{$email}', ";
+            $query .= "foto = '{$foto}', ";
+            $query .= "bio = '{$bio}' WHERE id = $user_id ";
 
-        if(!$update_user){
-            die(mysqli_error($conn));
+            move_uploaded_file($foto_temp, "../Foto/$foto");
+
+            if(empty($foto)){
+                $query = "SELECT * FROM users WHERE id = $user_id ";
+
+                $select_image = mysqli_query($conn,$query);
+
+                while ($row = mysqli_fetch_array($select_image)){
+
+                    $foto = $row['foto'];
+                }
+
+                if(!$select_image){
+                    die("Query".mysqli_error($conn));
+                }
+           }
+
+            $update_user = mysqli_query($conn, $query);
+
+            if (!$update_user) {
+                die(mysqli_error($conn));
+            } 
+
+            header("location: profil1.php");
         }
     }
-
     ?>
 
 
     <!-- profil -->
     <div class="container-xl ">
-        <form class="profil " action="" method="post">
+        <form class="profil " action="" method="post" enctype="multipart/form-data">
             <div class="container rounded bg-white ms-5 mt-5 mb-5">
                 <div class="row">
                     <div class="col-md-3 border-right">
                         <div class="d-flex flex-column align-items-center text-center p-3 py-5 shadow-sm p-3 mb-5 bg-body rounded">
                             <!-- Foto -->
                             <?php echo $tag; ?>
+                            <div class="mb-3">
+                                <label for="formFileSm" class="form-label">Your Avatar</label>
+                                <input class="form-control form-control-sm" name="image" id="formFileSm" type="file">
+                            </div>
                             <br>
                             <span>
                                 <div class="row">
                                     <!-- <div class="col">
                                         Followrs<br> 9999
                                     </div> -->
-                                    <?php 
+                                    <?php
                                     //count jumlah post berdasarkan user_id
                                     $query = "SELECT * FROM posts WHERE user_id = $user_id";
                                     $count_post = mysqli_query($conn, $query);
 
                                     $count = mysqli_num_rows($count_post);
 
-                                    
+
                                     ?>
                                     <div class="col">
-                                        Post <br> <?php echo $count;?>
+                                        Post <br> <?php echo $count; ?>
                                     </div>
                                     <!-- <div class="col">
                                         Like <br> 9999

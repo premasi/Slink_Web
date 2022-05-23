@@ -32,7 +32,7 @@
                             if($foto == "" || empty($foto) || $foto == null){
                                 echo "<img src='../Foto/user.png' class='rounded-circle me-3' width='40px'>";                                
                             } else {
-                                echo "<img src='{$foto}' class='rounded-circle me-3' width='40px'>";
+                                echo "<img src='../Foto/{$foto}' class='rounded-circle me-3' width='40px'>";
                             }
                         
                         ?>                        
