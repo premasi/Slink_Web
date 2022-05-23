@@ -140,7 +140,7 @@ ob_start();
                                 <br><br>
                                 <div class=" col-md-12">
                                     <input class="btn btn-success profile-button" name="update_prof" type="submit" value="Save Profile">
-                                    <button type="button" class="btn btn-outline-danger mx-3">Logout</button>
+                                    <a class="btn btn-outline-danger mx-3" href="./cms.php?logout=<?= true ?>" id="logout">Logout</a>
                                 </div>
 
                             </div>
