@@ -3,6 +3,7 @@
 
 <?php
 require "./function.php";
+ob_start();
 ?>
 
 <head>
@@ -45,18 +46,23 @@ require "./function.php";
 
     <!-- Query update -->
     <?php
-    if (isset($_POST['save_profile'])) {
+    if (isset($_POST['update_prof'])) {
+        global $conn;
         $name = $_POST['name'];
         $username = $_POST['username'];
         $email = $_POST['email'];
         $bio = $_POST['bio'];
 
-        $query = "UPDATE users SET name = '{$name}', ";
-        $query .= "SET username = '{$username}', ";
-        $query .= "SET email = '{$email}', ";
-        $query .= "SET bio = '{$bio}' WHERE id = $user_id ";
+        $query = "UPDATE users SET nama = '{$name}', ";
+        $query .= "username = '{$username}', ";
+        $query .= "email = '{$email}', ";
+        $query .= "bio = '{$bio}' WHERE id = $user_id ";
 
         $update_user = mysqli_query($conn, $query);
+
+        if(!$update_user){
+            die(mysqli_error($conn));
+        }
     }
 
     ?>
@@ -93,16 +99,25 @@ require "./function.php";
                                 <h4 class="text-right">Profile Settings</h4>
                             </div>
                             <div class="row mt-2">
-                                <div class="col-md-12"><label class="labels">Name</label><input type="text" class="form-control" name="name" placeholder="full name" value="<?php echo $nama; ?>"></div>
+                                <div class="col-md-12">
+                                    <label class="labels">Name</label>
+                                    <input type="text" class="form-control" name="name" placeholder="full name" value="<?php echo $nama; ?>">
+                                </div>
                             </div>
                             <div class="row mt-2">
-                                <div class="col-md-12"><label class="labels">Username</label><input type="text" name="username" class="form-control" placeholder="enter your email" value="<?php echo $username; ?>"></div>
-                                <div class="col-md-12"><label class="labels">Email </label><input type="text" name="email" class="form-control" placeholder="enter address line " value="<?php echo $email; ?>"></div>
+                                <div class="col-md-12">
+                                    <label class="labels">Username</label>
+                                    <input type="text" name="username" class="form-control" placeholder="enter your email" value="<?php echo $username; ?>">
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="labels">Email </label>
+                                    <input type="email" name="email" class="form-control" placeholder="enter address line " value="<?php echo $email; ?>">
+                                </div>
                             </div>
                             <div class="row mt-2">
                                 <label for="floatingTextarea">Bio</label>
-                                <div class="col-md-12"><textarea class="form-control" name="bio" placeholder="Leave a comment here" id="floatingTextarea"><?php echo $bio; ?></textarea>
-
+                                <div class="col-md-12">
+                                    <textarea class="form-control" name="bio" placeholder="Leave a comment here" id="floatingTextarea"><?php echo $bio; ?></textarea>
                                 </div>
                             </div>
                             <div class="mt-5 text-center"></div>
@@ -115,7 +130,7 @@ require "./function.php";
                                 <span class="fs-3"><?php echo $date; ?></span>
                                 <br><br>
                                 <div class=" col-md-12">
-                                    <button class="btn btn-success profile-button" name="save_profile" type="submit" style="">Save Profile</button>
+                                    <input class="btn btn-success profile-button" name="update_prof" type="submit" value="Save Profile">
                                     <button type="button" class="btn btn-outline-danger mx-3">Logout</button>
                                 </div>
 
