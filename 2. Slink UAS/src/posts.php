@@ -152,7 +152,7 @@ if (isset($_GET['p_id'])) {
                                         $foto = $row2['foto'];
 
                                 ?>
-                                        <div class="row">
+                                        <div class="row mt-3 mb-3">
                                             <div class="col">
                                                 <div class="d-flex flex-start">
                                                     <img class="rounded-circle shadow-1-strong me-3" src="../Foto/<?php echo $foto;?>" alt="avatar" width="65" height="65" />
