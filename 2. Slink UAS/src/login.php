@@ -34,65 +34,78 @@ if (isset($_POST["login"])) {
 <html lang="en">
 
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-  <link rel="stylesheet" href="../css/style2.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap" rel="stylesheet">
-  <title>Slink | Login</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/style2.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap" rel="stylesheet">
+    <title>Slink | Login</title>
 </head>
 
 <body>
-  <!--awal login-->
-  <main class="animasi">
-    <div class="login border">
-      <?php if (isset($login["error"])) echo $login["error"] ?>
-      <?php if (isset($login["error_verified"])) echo $login["error_verified"] ?>
-      <center><img src="../Foto/logo.png" alt="Logo_slink" class="logo1"></center>
-      <h1 class="h3 mb-3 fw-normal">Login</h1>
-      <form action="" method="POST">
-        <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="username" name="username" placeholder="Username" required />
-          <label for="username">Username</label>
-        </div>
-        <div class="form-floating mb-2">
-          <input type="password" class="form-control" id="password" name="password" placeholder="Password" required />
-          <label for="password">Password</label>
-        </div>
-        <div class="form-check">
-          <input type="checkbox" name="remember" class="form-check-input" id="remember">
-          <label for="remember" class="form-check-label">Remember Me</label>
-        </div>
-        <div class="d-grid gap-2 col-6 mx-auto">
-          <br />
-          <button class="btn " id="login" name="login" type="submit">Login</button>
-        </div>
-      </form>
-    </div>
-    <center>
-      <h3 class="my-4">Belum Punya Akun? <a href="register.php">Register</a> Sekarang</h3>
-      <h3 class="my-4">Belum Verifikasi? <a href="verifikasi.php">Verifikasi</a> Sekarang</h3>
-      <h3 class="my-4"><a href="sendRecovery.php">Lupa Password?</a></h3>
-    </center>
-  </main>
-  <!--akhir login-->
-  </div>
-  <footer>
-    <div class="row">
-      <div class="col-lg-12 text-center mt-5">
-        <p><small>Copyright &copy; Slink 2022</small></p>
-      </div>
-      <!-- /.col-lg-12 -->
-    </div>
-    <!-- /.row -->
-  </footer>
+    <!--awal login-->
+    <main class="animasi">
+        <div class="login border shadow p-3 mb-5 bg-body rounded-5 position-relative">
+            <?php if (isset($login["error"])) echo $login["error"] ?>
+            <?php if (isset($login["error_verified"])) echo $login["error_verified"] ?>
+            <center><img src="../Foto/logo.png" alt="Logo_slink" class="logo1"></center>
+            <h1 class="h3 mb-3 fw-normal">Login</h1>
+            <form action="" method="POST">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Username"
+                        required />
+                    <label class="
+                    fw-normal" for="username">Username</label>
+                </div>
+                <div class="form-floating mb-2">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password"
+                        required />
+                    <label class="
+                    fw-normal" for="password">Password</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" name="remember" class="form-check-input" id="remember">
+                    <label for="remember" class="form-check-label">Remember Me</label>
+                </div>
+                <a href="sendRecovery.php" class=" position-relative " style="font-size: 11px;">Lupa
+                    Password?</a>
+                <div class="d-grid gap-2 col-6 mx-auto">
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+                    <br />
+                    <button class="btn " id="login" name="login" type="submit">Login</button>
+                </div>
+            </form>
+        </div>
+        <center>
+            <h5 class="my-3 fs-6 mb-2" style="font-size: 13px;">Belum Punya Akun? <a href="register.php">Register</a>
+                Sekarang
+            </h5>
+            <h5 class="my-3 fs-6" style="font-size: 13px;">Belum Verifikasi? <a href=" verifikasi.php">Verifikasi</a>
+                Sekarang</h5>
+
+        </center>
+    </main>
+    <!--akhir login-->
+    </div>
+    <footer>
+        <div class="row">
+            <div class="col-lg-12 text-center mt-4">
+                <p><small>Copyright &copy; Slink 2022</small></p>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+    </script>
 </body>
 
 </html>
