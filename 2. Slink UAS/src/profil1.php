@@ -83,8 +83,17 @@ ob_start();
                                     <!-- <div class="col">
                                         Followrs<br> 9999
                                     </div> -->
+                                    <?php 
+                                    //count jumlah post berdasarkan user_id
+                                    $query = "SELECT * FROM posts WHERE user_id = $user_id";
+                                    $count_post = mysqli_query($conn, $query);
+
+                                    $count = mysqli_num_rows($count_post);
+
+                                    
+                                    ?>
                                     <div class="col">
-                                        Post <br> 9999
+                                        Post <br> <?php echo $count;?>
                                     </div>
                                     <!-- <div class="col">
                                         Like <br> 9999
