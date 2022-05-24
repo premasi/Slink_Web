@@ -73,9 +73,10 @@ if (isset($_POST['submit_category'])) {
 
     <div class="d-flex justify-content-center mt-5 fs-2 fw-bolder">
         <p class="pe-2">Find out your</p>
-        <p class="px-3 text-white rounded rounded-5" style="background-color: #6aa5a9;">Link</p>
+        <p class="px-3 text-white rounded rounded-5" style="background-color: #6aa5a9;">Link</p><p class="pe-2">&nbspin Here</p>
+        
     </div>
-    <div class=" d-flex justify-content-center mb-5 fs-2 fw-bolder">in Here
+    <div class=" d-flex justify-content-center mb-5 fs-2 fw-bolder">
     </div>
 
     <main class="row">
