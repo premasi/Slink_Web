@@ -151,11 +151,17 @@ if (isset($_GET['p_id'])) {
                                     while ($row2 = mysqli_fetch_assoc($send_user)) {
                                         $foto = $row2['foto'];
 
+                                        if ($foto == "" || empty($foto) || $foto == null) {
+                                            $tag = "<img class='rounded-circle shadow-1-strong me-3' src='../Foto/user.png' alt='avatar' width='65' height='65' />";
+                                        } else {
+                                            $tag = "<img class='rounded-circle shadow-1-strong me-3' src='../Foto/$foto' alt='avatar' width='65' height='65' />";
+                                        }
+
                                 ?>
                                         <div class="row mt-3 mb-3">
                                             <div class="col">
                                                 <div class="d-flex flex-start">
-                                                    <img class="rounded-circle shadow-1-strong me-3" src="../Foto/<?php echo $foto;?>" alt="avatar" width="65" height="65" />
+                                                    <?php echo $tag;?>
                                                     <div class="flex-grow-1 flex-shrink-1">
                                                         <div>
                                                             <div class="d-flex justify-content-between align-items-center">
