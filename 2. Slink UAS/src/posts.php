@@ -35,10 +35,10 @@ if (isset($_GET['p_id'])) {
     <body>
 
         <!-- Navigation -->
-        <?php 
+        <?php
         include("./include/navbar.php");
-        
-        
+
+
         ?>
 
         <!-- Page Content -->
@@ -144,6 +144,7 @@ if (isset($_GET['p_id'])) {
 
                                 while ($row = mysqli_fetch_assoc($select_comment)) {
                                     $user_id = $row['user_id'];
+                                    $com_id = $row['id'];
 
                                     $query_username = "SELECT * FROM users WHERE id = $user_id";
                                     $send_user = mysqli_query($conn, $query_username);
@@ -161,17 +162,60 @@ if (isset($_GET['p_id'])) {
                                         <div class="row mt-3 mb-3">
                                             <div class="col">
                                                 <div class="d-flex flex-start">
-                                                    <?php echo $tag;?>
+                                                    <?php echo $tag; ?>
                                                     <div class="flex-grow-1 flex-shrink-1">
                                                         <div>
                                                             <div class="d-flex justify-content-between align-items-center">
                                                                 <p class="mb-1">
                                                                     <?php echo $row2['username']; ?> <span class="small">- <?php echo $row['waktu_komentar']; ?></span>
                                                                 </p>
+                                                                <a href="" onclick=""><i class="fas fa-reply fa-xs" ></i><span class="small"> Reply</span></a>
                                                             </div>
                                                             <p class="small mb-0">
                                                                 <?php echo $row['komentar']; ?>
                                                             </p>
+                                                        </div>
+
+                                                        <div class="d-flex flex-start mt-4">
+
+                                                            <!-- reply comments query -->
+                                                            <?php
+                                                            if (isset($com_id)) {
+
+                                                                if (isset($_POST['reply_submit'])) {
+                                                                    $comment_author = $_SESSION['user_id'];
+                                                                    $temp;
+                                                                    $reply_content = $_POST['reply_content'];
+
+                                                                    $query = "INSERT INTO comments VALUES (null, '{$reply_content}', $temp, $comment_author,  $com_id, now()) ";
+                                                                    $send_reply = mysqli_query($conn, $query);
+
+                                                                    if (!$send_reply) {
+                                                                        die(mysqli_error($conn));
+                                                                    }
+                                                                }
+                                                            }
+
+
+                                                            ?>
+
+
+                                                            <a class="me-3" href="#">
+                                                                <img class="rounded-circle shadow-1-strong" src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(11).webp" alt="avatar" width="65" height="65" />
+                                                            </a>
+                                                            <div class="flex-grow-1 flex-shrink-1">
+                                                                <div>
+                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                        <p class="mb-1">
+                                                                            Simona Disa <span class="small">- 3 hours ago</span>
+                                                                        </p>
+                                                                    </div>
+                                                                    <p class="small mb-0">
+                                                                        letters, as opposed to using 'Content here, content here',
+                                                                        making it look like readable English.
+                                                                    </p>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -203,6 +247,53 @@ if (isset($_GET['p_id'])) {
                 </div>
             </div>
         </footer>
+
+
+        <!-- Reply comment form -->
+        <div class="flex-grow-1 flex-shrink-1">
+            <form action="" method="post">
+                <div class="input-group mb-3">
+                    <textarea type="text" class="form-control" placeholder="Your Reply" name="reply_content"></textarea>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-primary" type="submit" name="reply_submit">Button</button>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Modal Form-->
+        <div class="modal fade" id="modal_form" tabindex="-1" aria-labelledby="modal_form" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal_label">Komentar</h5>
+                        <div id="message"></div>
+                        <button type="button" class="btn-close" id="close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Komentar-->
+                    </div>
+                    <hr>
+                    <div class="mb-5">
+                        <form action="" method="POST" id="comment_form">
+                            <input type="hidden" name="user_id" value="<?= $user_id ?>">
+                            <input type="hidden" name="post_id" id="post_id">
+                            <input type="hidden" name="parent_comment_id" id="parent_comment_id" value="0">
+                            <input type="hidden" name="submit_comment">
+                            <div class="row mb-2 mx-1">
+                                <div class="col-8">
+                                    <textarea class="form-control form-control-sm" id="comment" name="comment" placeholder="Tulis comment..." required></textarea>
+                                </div>
+                                <div class="col-3">
+                                    <button type="submit" class="btn btn-outline-primary" name="button_submit_comment">Comment</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
         <script src="js/home.js"></script>
