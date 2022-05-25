@@ -238,11 +238,12 @@ BEGIN
 DECLARE count_likes int;
 DECLARE count_follower int;
 DECLARE count_following int;
+DECLARE count_posts int;
 SELECT COUNT(id) INTO count_follower FROM users WHERE id IN((SELECT follower_id FROM follows WHERE user_id = userId));
 SELECT COUNT(id) INTO count_following FROM users WHERE id IN((SELECT user_id FROM follows WHERE follower_id = userId));
 SELECT COUNT(likes.post_id) INTO count_likes FROM users LEFT JOIN posts ON posts.user_id = users.id LEFT JOIN likes ON likes.post_id = posts.id WHERE users.id = userId;
-SELECT * FROM posts WHERE user_id  IN((SELECT user_id FROM follows WHERE follower_id = userId UNION SELECT follower_id FROM follows WHERE user_id = userId ));
-SELECT *, count_follower, count_following, count_likes FROM profile WHERE id = userId; 
+SELECT COUNT(id) INTO count_posts FROM posts WHERE user_id = userId;
+SELECT *, count_follower, count_following, count_likes, count_posts FROM profile WHERE id = userId; 
 END//
 
 DELIMITER ;
@@ -266,7 +267,7 @@ IN idTemp int
 )
 
 BEGIN
-SELECT posts.id, posts.judul, posts.deskripsi, posts.link, posts.waktu_aksi, category.nama FROM posts INNER JOIN category ON posts.cat_id = category.id WHERE posts.id = idTemp;
+SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, users.foto , posts.waktu_aksi, category.nama FROM posts INNER JOIN users ON posts.user_id = users.id INNER JOIN category ON posts.cat_id = category.id WHERE posts.id = idTemp ;
 END//
 
 DELIMITER ;
@@ -283,6 +284,16 @@ END//
 
 DELIMITER ;
 
+-- Store Procedure untuk Menampilkan Category
+DELIMITER //
+CREATE PROCEDURE getCategory()
+
+BEGIN
+SELECT * FROM category;
+END//
+
+DELIMITER ;
+
 -- Store Procedure untuk Menampilkan Post Berdasarkan Category
 DELIMITER //
 CREATE PROCEDURE getPostsByCategory(
@@ -294,6 +305,5 @@ SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, posts
 END//
 
 DELIMITER ;
-
 
 

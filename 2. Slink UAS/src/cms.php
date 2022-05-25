@@ -66,12 +66,12 @@ $category = queryGetData("SELECT * FROM category");
 
 <body>
   <header class="animasi3">
-  <?php 
-  include("./include/navbar.php");
-  ?>
-      <a class="navbar-brand p-2 text-white" href="./cms.php?logout=<?= true ?>" id="logout">
-        <h3>Log Out</h3>
-      </a>
+    <?php
+    include("./include/navbar.php");
+    ?>
+    <a class="navbar-brand p-2 text-white" href="./cms.php?logout=<?= true ?>" id="logout">
+      <h3>Log Out</h3>
+    </a>
     </nav>
   </header>
 
@@ -107,7 +107,10 @@ $category = queryGetData("SELECT * FROM category");
       <!-- Card Menampilkan Data-->
       <section class="row" id="list_posts">
         <?php if (count($posts) == 0) : ?>
-          <h3 class="d-flex justify-content-center">Posts Tidak Ditemukan</h3>
+          <div class="d-flex justify-content-center mt-4"><img src="../Foto/kosong.png" alt=""></div>
+          <center>
+            <h3 class="">Posts Tidak Ditemukan</h3>
+          </center>
         <?php endif; ?>
         <?php foreach ($posts as $post) : ?>
           <div class="col-sm-4 mb-3">

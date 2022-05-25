@@ -20,10 +20,10 @@
   <div class="animasi2">
     <nav class="navbar navbar-expand">
       <div class="container-fluid">
-        <a class="navbar-brand" href="index.php"><img src="./Foto/logo.png" alt="" width="120"/></a>
+        <a class="navbar-brand" href="index.php"><img src="./Foto/logo.png" alt="" /></a>
       </div>
-      <a class="navbar-brand p-2" href="./src/login.php"><button type="button" class="btn btn-light shadow-lg border-secondary" style="border-color: #45625d">Login</button></a>
-      <a class="navbar-brand p-2" href="./src/register.php"><button type="button" class="btn shadow-lg text-white border-secondary" style="border-color: #45625d; background-color: #6aa5a9;">Register</button></a>
+      <a class="navbar-brand p-2" href="./src/login.php"><button type="button" class="btn btn-light shadow" style="border-color: #45625d">Login</button></a>
+      <a class="navbar-brand p-2" href="./src/register.php"><button type="button" class="btn shadow text-white" style="border-color: #45625d; background-color: #6aa5a9;">Register</button></a>
     </nav>
   </div>
   <div class="animasi">
@@ -60,9 +60,9 @@
       <h4 class="text-center pt-5 text-white">Our Developer</h4>
       <div class="row">
         <div class="col-md-4 p-5">
-          <div class="card rounded-5 user-card ">
+          <div class="card user-card">
             <div class="card-block shadow ">
-              <div class="user-image d-flex justify-content-center mt-5 ">
+              <div class="user-image d-flex justify-content-center mt-5">
                 <img src="./Foto/dhafin.jpg" width="100" height="100" class="img-radius shadow" alt="User-Profile-Image" />
               </div>
               <h6 class="f-w-600 mt-5 mb-5 m-t-25 m-b-10 text-center">Dhafin Taufiqi</h6>

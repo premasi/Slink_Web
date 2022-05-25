@@ -47,6 +47,16 @@ function getPostsByUser($user_id)
   return queryGetData($query);
 }
 
+// Fungsi Ambil Data Category
+function getCategory()
+{
+  // Query
+  $query = "CALL getCategory()";
+
+  // Eksekusi Query
+  return queryGetData($query);
+}
+
 //Fungsi Ambil Data Posts Sesuai Category
 function getPostsByCategory($cat_id)
 {
@@ -89,7 +99,7 @@ function createPost($data)
   // Cek Link
   if (filter_var($link, FILTER_VALIDATE_URL) === false) {
     return ["error_link" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
-        <strong>Isi Field Dengan Benar!</strong> Jangan Isi Field dengan whitespace/spasi Saja
+        <strong>URL Tidak Valid!</strong> Silahkan Masukan URL Dengan Format yang Benar Http/Https/Localhost DLL
         <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
       </div>"];
     exit;
@@ -149,7 +159,7 @@ function updatePost($data)
   // Cek Link
   if (filter_var($link, FILTER_VALIDATE_URL) === false) {
     return ["error_link" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
-        <strong>Isi Field Dengan Benar!</strong> Jangan Isi Field dengan whitespace/spasi Saja
+        <strong>URL Tidak Valid!</strong> Silahkan Masukan URL Dengan Format yang Benar Http/Https/Localhost DLL 
         <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
       </div>"];
     exit;
@@ -724,18 +734,90 @@ function getCommentReply($conn, $post_id, $parent_comment_id = 0, $bdkey = 0, $m
       <div class="card w-50 mb-4  ' . $bd . '" style="margin-left: ' . $marginLeft . 'px">
         <div class="card-body">
           <div class="row justify-content-between">
-            <h5 class="col-4">' . $comment['username'] . '</h5>
+          <h5 class="col-4">' . $comment['username'] . '</h5>
             <h5 class="col-4">' . $comment['waktu_komentar'] . '</h5>
           </div>
           <div class="mt-4">
-            <p>' . $comment['komentar'] . '</p>
+          <p>' . $comment['komentar'] . '</p>
           </div>
           <div class="d-flex justify-content-end">
-            <button type="button" name="reply" class="btn btn-primary text-white reply" id="' . $comment['id'] . '">Reply</button>
+          <button type="button" name="reply" class="btn btn-primary text-white reply" id="' . $comment['id'] . '">Reply</button>
           </div>
         </div>
-      </div>';
+        </div>';
       $comments .= getCommentReply($conn, $post_id, $comment["id"], $bdkey, $marginLeft);
+    }
+  }
+  return $comments;
+}
+
+function getCommentsPost($post_id)
+{
+  global $conn;
+
+  $query = "SELECT comments.id, users.id AS user_id, users.username, users.foto, comments.komentar, comments.waktu_komentar FROM comments INNER JOIN users ON comments.user_id = users.id WHERE comments.post_id = $post_id AND comments.parent_comment_id = 0 ORDER BY comments.waktu_komentar ASC";
+  $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
+  $comments = '';
+  while ($comment = mysqli_fetch_assoc($result)) {
+    $comments .= '
+                                    <div class="mb-3">
+                                        <div class="d-flex flex-start">
+                                            <img class="rounded-circle shadow-1-strong me-3" src="../Foto/' . $comment['foto'] . '" alt="avatar" width="65" height="65" />
+                                            <div class="flex-grow-1 flex-shrink-1">
+                                                <div>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <p class="mb-1">
+                                                            ' . $comment['username'] . ' <span class="small">- ' . $comment['waktu_komentar'] . '</span>
+                                                        </p>
+                                                    </div>
+                                                    <p class="small mb-0">
+                                                        ' . $comment['komentar'] . '
+                                                    </p>
+                                                    <button type="button" name="reply" class="btn btn-primary btn-sm text-white reply" id="' . $comment['id'] . '">Reply</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ';
+    $comments .= getCommentReplyPost($conn, $post_id, $comment["id"]);
+  }
+  echo $comments;
+}
+
+function getCommentReplyPost($conn, $post_id, $parent_comment_id = 0, $marginLeft = 0)
+{
+  $comments = '';
+  $query = "SELECT comments.id, users.id AS user_id, users.username, users.foto, comments.komentar, comments.waktu_komentar FROM comments INNER JOIN users ON comments.user_id = users.id WHERE comments.post_id = $post_id AND parent_comment_id = '" . $parent_comment_id . "' ";
+  $result = mysqli_query($conn, $query);
+  $count = mysqli_num_rows($result);
+
+  if ($parent_comment_id == 0) {
+    $marginLeft = 0;
+  } else {
+    $marginLeft = $marginLeft + 80;
+  }
+  if ($count > 0) {
+    while ($comment = mysqli_fetch_assoc($result)) {
+      $comments .= '
+      <div class="mb-3" style="margin-left: ' . $marginLeft . 'px">
+                                        <div class="d-flex flex-start">
+                                            <img class="rounded-circle shadow-1-strong me-3" src="../Foto/' . $comment['foto'] . '" alt="avatar" width="65" height="65" />
+                                            <div class="flex-grow-1 flex-shrink-1">
+                                                <div>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <p class="mb-1">
+                                                            ' . $comment['username'] . ' <span class="small">- ' . $comment['waktu_komentar'] . '</span>
+                                                        </p>
+                                                    </div>
+                                                    <p class="small mb-0">
+                                                        ' . $comment['komentar'] . '
+                                                    </p>
+                                                    <button type="button" name="reply" class="btn btn-primary btn-sm text-white reply" id="' . $comment['id'] . '">Reply</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>';
+      $comments .= getCommentReplyPost($conn, $post_id, $comment["id"],  $marginLeft);
     }
   }
   return $comments;
@@ -771,4 +853,68 @@ function createComment($data)
         <strong>comment Berhasil Dibuat!</strong>
         <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
       </div>"];
+}
+
+function getProfile($user_id)
+{
+  // Query
+  $query = "CALL getProfile($user_id)";
+
+  // Eksekusi Query
+  return queryGetData($query);
+}
+
+function updateProfile($data, $img, $user_id)
+{
+  global $conn;
+
+  $nama = $data['nama'];
+  $username = $data['username'];
+  $bio = $data['bio'];
+
+  // Cek Field Diisi atau Tidak... Menghindari Inputan Berupa Whitespace(' ')
+  if (ctype_space($nama) ||  ctype_space($username) || ctype_space($bio)) {
+    return ["error_space" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+          <strong>Isi Field Dengan Benar!</strong> Jangan Isi Field dengan whitespace/spasi Saja
+          <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+        </div>"];
+    exit;
+  }
+
+
+  // Cek Username Digunakan atau Belum
+  if (queryGetData("SELECT * FROM users WHERE username = '$username' AND id != $user_id")) {
+    return ["error_username" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+          <strong>Username Sudah Digunakan!</strong> Silahkan Gunakan Username Lain
+          <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+        </div>"];
+    exit;
+  }
+
+  $foto = $img['image']['name'];
+  $foto_temp = $img['image']['tmp_name'];
+
+  // Jika Tidak Update Foto Maka Gunakan Foto yang Sudah Ada
+  if (empty($foto)) {
+    $profile = getProfile($user_id);
+    $foto = $profile[0]['foto'];
+  }
+
+  $query = "UPDATE users SET nama = '{$nama}', ";
+  $query .= "username = '{$username}', ";
+  $query .= "foto = '{$foto}', ";
+  $query .= "bio = '{$bio}' WHERE id = $user_id ";
+
+  mysqli_query($conn, $query) or die(mysqli_error($conn));
+
+  move_uploaded_file($foto_temp, "../Foto/$foto");
+
+
+  // Cek Berhasil atau Tidak
+  header("location: profile.php");
+  // return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+  //   <strong>Profile Berhasil di Update!</strong>
+  //   <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+  // </div>"];
+  // exit;
 }
