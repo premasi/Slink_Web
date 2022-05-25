@@ -26,7 +26,7 @@ if (isset($_POST["register"])) {
     <main class="vh-100" style="background-color: #eee;">
         <div class="container h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-lg-12 col-xl-11">
+                <div class="col-lg-12 col-xl-11 mt-5">
                     <div class="card text-black" style="border-radius: 25px;">
                         <div class="card-body p-md-5">
                             <div class="row justify-content-center">
@@ -38,7 +38,7 @@ if (isset($_POST["register"])) {
 
                                     <form class="mx-1 mx-md-4" action="" method="post">
 
-                                        <div class="d-flex flex-row align-items-center mb-4">
+                                        <div class="d-flex flex-row align-items-center mb-1">
                                             <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0 form-group">
                                                 <input type="text" name="nama" id="nama" class="form-control" required />
@@ -46,7 +46,7 @@ if (isset($_POST["register"])) {
                                             </div>
                                         </div>
 
-                                        <div class="d-flex flex-row align-items-center mb-4">
+                                        <div class="d-flex flex-row align-items-center mb-1">
                                             <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0 form-group">
                                                 <input type="text" name="username" id="username" class="form-control" required />
@@ -55,7 +55,7 @@ if (isset($_POST["register"])) {
                                             </div>
                                         </div>
 
-                                        <div class="d-flex flex-row align-items-center mb-4">
+                                        <div class="d-flex flex-row align-items-center mb-1">
                                             <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0">
                                                 <input type="email" name="email" id="email" class="form-control" require />
@@ -65,7 +65,7 @@ if (isset($_POST["register"])) {
                                             </div>
                                         </div>
 
-                                        <div class="d-flex flex-row align-items-center mb-4">
+                                        <div class="d-flex flex-row align-items-center mb-1">
                                             <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0">
                                                 <input type="password" name="password" id="password" class="form-control" require />
@@ -74,7 +74,7 @@ if (isset($_POST["register"])) {
                                             </div>
                                         </div>
 
-                                        <div class="d-flex flex-row align-items-center mb-4">
+                                        <div class="d-flex flex-row align-items-center mb-1">
                                             <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0">
                                                 <input type="password" name="passwordCon" id="passwordCon" class="form-control" require />
@@ -83,11 +83,11 @@ if (isset($_POST["register"])) {
                                             </div>
                                         </div>
 
-                                        <div class="d-flex justify-content-center mt-2">
+                                        <div class="d-flex justify-content-center mt-1">
                                             <p>Sudah Punya Akun? <a href="./login.php" class="text-decoration-none">Login</a></p>
                                         </div>
 
-                                        <div class="d-flex justify-content-center mb-3">
+                                        <div class="d-flex justify-content-center mb-1">
                                             <p>Belum Verifikasi Akun? <a href="./verifikasi.php" class="text-decoration-none">Verifikasi</a></p>
                                         </div>
 
@@ -107,27 +107,28 @@ if (isset($_POST["register"])) {
                                     </footer>
 
                                 </div>
-                                <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+                                <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2 md-5">
 
-                                    <img src="../Foto/register.png" class="img-fluid" alt="https://pngtree.com/so/Cartoon">
+                                    <img src="../Foto/regis.png" class="img-fluid" alt="https://pngtree.com/so/Cartoon">
 
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </main>
-    <footer>
+                    <footer>
         <div class="row">
-            <div class="col-lg-12 text-center mt-5">
+            <div class="col-lg-12 text-center mt-3 md-2">
                 <p><small>Copyright &copy; Slink 2022</small></p>
             </div>
             <!-- /.col-lg-12 -->
         </div>
         <!-- /.row -->
     </footer>
+                </div>
+            </div>
+        </div>
+    </main>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 

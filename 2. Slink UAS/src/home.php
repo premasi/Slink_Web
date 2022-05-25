@@ -73,7 +73,7 @@ if (isset($_POST['submit_category'])) {
 
     <div class="d-flex justify-content-center mt-5 fs-2 fw-bolder">
         <p class="pe-2">Find out your</p>
-        <p class="px-3 text-white rounded rounded-5" style="background-color: #6aa5a9;">Link</p><p class="pe-2">&nbspin Here</p>
+        <p class="px-3 text-white rounded rounded-5" style="background-color: #7EC384;">Link</p><p class="pe-2">&nbspin Here</p>
         
     </div>
     <div class=" d-flex justify-content-center mb-5 fs-2 fw-bolder">
@@ -100,7 +100,8 @@ if (isset($_POST['submit_category'])) {
             <!-- Posts Terbaru -->
             <div class="row" id="new_posts">
                 <?php if (count($posts) == 0) : ?>
-                <h3 class="d-flex justify-content-center mt-4">Posts Tidak Ditemukan</h3>
+                <div class="d-flex justify-content-center mt-4"><img src="../Foto/kosong.png" alt=""></div>
+                <center><h3 class="">Posts Tidak Ditemukan</h3></center>
                 <?php endif; ?>
                 <?php foreach ($posts as $post) : ?>
                 <div class="media border p-3 mb-3 shadow w-75 m-auto">

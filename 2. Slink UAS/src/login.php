@@ -49,7 +49,17 @@ if (isset($_POST["login"])) {
 </head>
 
 <body>
-    <!--awal login-->
+
+<main class="vh-100" style="background-color: #eee;">
+        <div class="container h-100 ">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-lg-12 col-xl-11  ">
+                    <div class="card text-black my-5" style="border-radius: 25px;">
+                        <div class="card-body p-md-5">
+
+<div class="row justify-content-center">
+      <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+           <!--awal login-->
     <main class="animasi">
         <div class="login border shadow p-3 mb-5 bg-body rounded-5 position-relative">
             <?php if (isset($login["error"])) echo $login["error"] ?>
@@ -92,17 +102,28 @@ if (isset($_POST["login"])) {
         </center>
     </main>
     <!--akhir login-->
-    </div>
-    <footer>
+  </div>
+  <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2 md-5">
+
+  <img src="../Foto/login.png" alt="" width="550px">
+  </div>
+</div>
+   
+
+                    </div>
+                    <footer>
         <div class="row">
-            <div class="col-lg-12 text-center mt-4">
+            <div class="col-lg-12 text-center ">
                 <p><small>Copyright &copy; Slink 2022</small></p>
             </div>
             <!-- /.col-lg-12 -->
         </div>
         <!-- /.row -->
     </footer>
-
+                </div>
+            </div>
+        </div>
+    </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
     </script>
