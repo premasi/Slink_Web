@@ -22,8 +22,8 @@
       <div class="container-fluid">
         <a class="navbar-brand" href="index.php"><img src="./Foto/logo.png" alt="" width="120"/></a>
       </div>
-      <a class="navbar-brand p-2" href="./src/login.php"><button type="button" class="btn btn-light shadow-lg border-light" style="border-color: #45625d">Login</button></a>
-      <a class="navbar-brand p-2" href="./src/register.php"><button type="button" class="btn shadow-lg text-white border-light" style="border-color: #45625d; background-color: #6aa5a9;">Register</button></a>
+      <a class="navbar-brand p-2" href="./src/login.php"><button type="button" class="btn btn-light shadow-lg border-secondary" style="border-color: #45625d">Login</button></a>
+      <a class="navbar-brand p-2" href="./src/register.php"><button type="button" class="btn shadow-lg text-white border-secondary" style="border-color: #45625d; background-color: #6aa5a9;">Register</button></a>
     </nav>
   </div>
   <div class="animasi">
