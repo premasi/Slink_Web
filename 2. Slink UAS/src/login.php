@@ -50,7 +50,7 @@ if (isset($_POST["login"])) {
 
 <body>
 
-<main class="vh-100" style="background-color: #eee;">
+<main class="vh-100" style="background-color: #A2D2D4;">
         <div class="container h-100 ">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-lg-12 col-xl-11  ">
@@ -58,10 +58,10 @@ if (isset($_POST["login"])) {
                         <div class="card-body p-md-5">
 
 <div class="row justify-content-center">
-      <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+      <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1 p-5">
            <!--awal login-->
     <main class="animasi">
-        <div class="login border shadow p-3 mb-5 bg-body rounded-5 position-relative">
+        <div class="login border shadow p-3 mb-1 bg-body rounded-5 position-relative">
             <?php if (isset($login["error"])) echo $login["error"] ?>
             <?php if (isset($login["error_verified"])) echo $login["error_verified"] ?>
             <center><img src="../Foto/logo.png" alt="Logo_slink" class="logo1"></center>
@@ -103,7 +103,7 @@ if (isset($_POST["login"])) {
     </main>
     <!--akhir login-->
   </div>
-  <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2 md-5">
+  <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2 md-1">
 
   <img src="../Foto/login.png" alt="" width="550px">
   </div>
@@ -114,7 +114,7 @@ if (isset($_POST["login"])) {
                     <footer>
         <div class="row">
             <div class="col-lg-12 text-center ">
-                <p><small>Copyright &copy; Slink 2022</small></p>
+                <p class="pb-5"><small>Copyright &copy; Slink 2022</small></p>
             </div>
             <!-- /.col-lg-12 -->
         </div>
