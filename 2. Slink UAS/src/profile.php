@@ -30,6 +30,17 @@ if (isset($user_id)) {
     if (isset($_POST['update_prof'])) {
         $profileStatus = updateProfile($_POST, $_FILES, $user_id);
     }
+
+    if(isset($_POST['delete'])){
+        $query = "DELETE FROM users WHERE id = $user_id";
+        $delete_account = mysqli_query($conn, $query);
+
+        if(!$delete_account){
+            die(mysqli_error($conn));
+        }
+
+        header("location: ../index.php");
+    }
 }
 
 
@@ -123,7 +134,8 @@ if (isset($user_id)) {
                                 <br><br>
                                 <div class=" col-md-12">
                                     <button class="btn btn-success profile-button" name="update_prof" type="submit">Save Profile</button>
-                                    <a class="btn btn-outline-danger mx-3" href="./cms.php?logout=<?= true ?>" id="logout">Logout</a>
+                                    <a class="btn btn-outline-secondary mx-3" href="./cms.php?logout=<?= true ?>" id="logout">Logout</a>
+                                    <button class="btn btn-danger profile-button" name="delete" type="submit">Delete Account</button>
                                 </div>
 
                             </div>

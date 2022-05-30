@@ -44,11 +44,24 @@ if (isset($_GET['post_id'])) {
             <!-- Posts-->
             <div id="post">
                 <?php foreach ($posts as $post) : ?>
+
+                    <?php
+                    $foto = $post['foto'];
+
+                    if ($foto == "" || empty($foto) || $foto == null) {
+                        $tag = "<img class='rounded-circle shadow-1-strong me-3' src='../Foto/user.png' alt='avatar' width='65' height='65' />";
+                    } else {
+                        $tag = "<img class='rounded-circle shadow-1-strong me-3' src='../Foto/$foto' alt='avatar' width='65' height='65' />";
+                    }
+
+
+                    ?>
+
                     <div class="media border pl-3 pt-3 pb-3 pr-5 mb-3 shadow">
                         <div class='card'>
                             <div class="media-body p-5 mr-5">
                                 <h2><?= $post['judul']; ?></h2>
-                                <img src="../Foto/<?= $post['foto'] ?>" alt="image" class="mr-3 mt-3 rounded-circle" style="width:65px; height: 65px;">
+                                <?= $tag ?>
                                 <div class="media-body">
                                     <h4><?= $post['username']; ?><small> - <small><?= $post['waktu_aksi']; ?></small></small></h4>
                                     <p><?= $post['deskripsi']; ?></p>

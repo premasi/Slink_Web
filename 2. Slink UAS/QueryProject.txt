@@ -306,4 +306,12 @@ END//
 
 DELIMITER ;
 
-
+DELIMITER //
+create or replace trigger delete_account after delete on users for each row
+begin
+declare u_id int;
+select id into u_id from users where id = old.id;
+delete from posts where user_id = u_id;
+delete from comments where user_id = u_id;
+delete from likes where user_id = u_id;
+end //
