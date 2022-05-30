@@ -39,7 +39,7 @@ if (isset($user_id)) {
             die(mysqli_error($conn));
         }
 
-        header("location: ../index.php");
+        header("location: ./delete_page.php");
     }
 }
 
