@@ -1,0 +1,342 @@
+-- Skema Database:
+CREATE DATABASE slink;
+
+USE slink;
+
+CREATE TABLE users(
+id int primary key auto_increment,
+nama varchar(255),
+foto varchar(255),
+email varchar(255) unique,
+username varchar(255) unique,
+password varchar(255),
+waktu_bergabung datetime default current_timestamp(),
+bio text,
+verified bool default 0
+);
+
+CREATE VIEW profile AS SELECT id, nama, username, email, bio, foto, waktu_bergabung FROM users;
+
+CREATE TABLE category(
+id int primary key auto_increment,
+nama varchar(255)
+);
+
+CREATE TABLE posts(
+id int primary key auto_increment,
+judul varchar(255),
+deskripsi varchar(255),
+link varchar(255),
+waktu_aksi datetime default current_timestamp(),
+user_id int,
+cat_id int,
+FOREIGN KEY(user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+FOREIGN KEY(cat_id) REFERENCES category(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE comments(
+id int primary key auto_increment,
+komentar text,
+post_id int,
+user_id int,
+parent_comment_id int,
+waktu_komentar datetime default current_timestamp(),
+FOREIGN KEY(user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+FOREIGN KEY(post_id) REFERENCES posts(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE likes(
+post_id int,
+user_id int,
+FOREIGN KEY(user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+FOREIGN KEY(post_id) REFERENCES posts(id) ON UPDATE CASCADE ON DELETE CASCADE,
+CONSTRAINT Composite_Unique unique(post_id, user_id)
+);
+
+
+CREATE TABLE follows(
+user_id int,
+follower_id int,
+FOREIGN KEY(user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+FOREIGN KEY(follower_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+CONSTRAINT Composite_Unique unique(user_id, follower_id)
+);
+
+CREATE TABLE bookmarks(
+post_id int,
+user_id int,
+FOREIGN KEY(user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+FOREIGN KEY(post_id) REFERENCES posts(id) ON UPDATE CASCADE ON DELETE CASCADE,
+CONSTRAINT Composite_Unique unique(post_id, user_id)
+);
+
+
+CREATE TABLE otp(
+email varchar(255),
+otp_code varchar(6)
+);
+
+INSERT INTO otp VALUES("rdsuryamp@upi.edu", 202342);
+
+-- Trigger Tabel otp untuk Verifikasi di Tabel users
+DELIMITER //
+CREATE TRIGGER deleteOtp
+BEFORE DELETE ON otp
+FOR EACH ROW
+
+BEGIN
+UPDATE users SET verified = 1 WHERE email = OLD.email;
+END//
+
+DELIMITER ;
+
+-- Fungsi Menghitung Like Suatu Post
+DELIMITER //
+CREATE FUNCTION getPostLikes(postId INT)
+RETURNS int
+BEGIN
+
+DECLARE likes_temp int; 
+SELECT COUNT(*) INTO likes_temp FROM likes WHERE post_id = postId; 
+RETURN likes_temp;
+
+END//
+DELIMITER ;
+
+-- Fungsi Cek apakah Post Sudah di Like
+DELIMITER //
+CREATE FUNCTION checkPostLiked(userId INT ,postId INT)
+RETURNS tinyint
+BEGIN
+
+DECLARE status int;
+DECLARE row_temp int;
+SELECT COUNT(*) INTO row_temp FROM likes WHERE post_id = postId AND user_id = userId ; 
+IF row_temp = 0 THEN SET status = 0;
+ELSE SET status = 1;
+END IF; 
+RETURN status;
+
+END//
+DELIMITER ;
+
+-- Store Procedure untuk Get Follower(user_id, count post, count follower, count following)
+DELIMITER //
+CREATE PROCEDURE getFollowers(
+IN userId int
+)
+
+BEGIN
+SELECT users.id AS user_id, users.username, users.foto, COUNT(posts.id) AS jml_post, COUNT(likes.user_id) AS jml_like FROM users LEFT JOIN posts ON posts.user_id = users.id LEFT JOIN likes ON likes.post_id = posts.id WHERE users.id IN((SELECT follower_id FROM follows WHERE user_id = userId)) GROUP BY users.id;
+END//
+
+DELIMITER ;
+
+-- Fungsi Cek Follower Apakah Sudah di Following
+DELIMITER //
+CREATE FUNCTION checkFollows(userId INT ,followerId INT)
+RETURNS tinyint
+BEGIN
+
+DECLARE status int;
+DECLARE row_temp int;
+SELECT COUNT(*) INTO status FROM follows WHERE user_id = userId AND follower_id = followerId; 
+IF row_temp = 0 THEN SET status = 0;
+ELSEIF row_temp = 1 THEN SET status = 1;
+END IF; 
+RETURN status;
+
+END//
+DELIMITER ;
+
+-- Store Procedure untuk Get Following(user_id, count post, count follower, count following)
+DELIMITER //
+CREATE PROCEDURE getFollowings(
+IN userId int
+)
+
+BEGIN
+SELECT users.id AS user_id, users.username, users.foto, COUNT(posts.id) AS jml_post, COUNT(likes.user_id) AS jml_like FROM users LEFT JOIN posts ON posts.user_id = users.id LEFT JOIN likes ON likes.post_id = posts.id WHERE users.id IN((SELECT user_id FROM follows WHERE follower_id = userId)) GROUP BY users.id;
+END//
+
+DELIMITER ;
+
+-- Store Procedure untuk Menampilkan Follower yang Belum di Following
+DELIMITER //
+CREATE PROCEDURE getFollowerNotFollowing(
+IN userId int
+)
+
+BEGIN
+SELECT users.id AS user_id, users.username, COUNT(posts.id) AS jml_post, COUNT(likes.user_id) AS jml_like FROM users LEFT JOIN posts ON posts.user_id = users.id LEFT JOIN likes ON likes.post_id = posts.id WHERE users.id IN((SELECT follower_id FROM follows WHERE user_id = userId EXCEPT SELECT user_id FROM follows WHERE follower_id = userId )) GROUP BY users.id;
+END//
+
+DELIMITER ;
+
+-- Store Procedure untuk Rekomendasi User yang Diifollow oleh Follower dan Followin menggunakan Set Operation
+DELIMITER //
+CREATE PROCEDURE getRekFollows(
+IN userId int
+)
+
+BEGIN
+SELECT users.id AS user_id, users.username, users.foto, COUNT(posts.id) AS jml_post, COUNT(likes.user_id) AS jml_like FROM users LEFT JOIN posts ON posts.user_id = users.id LEFT JOIN likes ON likes.post_id = posts.id WHERE users.id IN((SELECT user_id FROM follows WHERE follower_id IN ((SELECT follower_id FROM follows WHERE user_id = userId ) ) UNION SELECT user_id FROM follows WHERE follower_id IN ((SELECT user_id FROM follows WHERE follower_id = userId)))) AND users.id NOT IN(userId) GROUP BY users.id;
+END//
+
+DELIMITER ;
+
+-- Store Procedure untuk Menampilkan Get Bookmark
+DELIMITER //
+CREATE PROCEDURE getBookmarks(
+IN userId int
+)
+
+BEGIN
+SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi, category.nama FROM posts INNER JOIN users ON posts.user_id = users.id INNER JOIN category ON posts.cat_id = category.id WHERE posts.id IN((SELECT post_id FROM bookmarks WHERE user_id = userId)) ORDER BY posts.waktu_aksi DESC;
+END//
+
+DELIMITER ;
+
+-- Fungsi Cek apakah Post Sudah di Bookmark
+DELIMITER //
+CREATE FUNCTION checkPostBookmarked(userId INT ,postId INT)
+RETURNS tinyint
+BEGIN
+
+DECLARE status int;
+DECLARE row_temp int;
+SELECT COUNT(*) INTO row_temp FROM bookmarks WHERE post_id = postId AND user_id = userId ; 
+IF row_temp = 0 THEN SET status = 0;
+ELSE SET status = 1;
+END IF; 
+RETURN status;
+
+END//
+DELIMITER ;
+
+-- Store Procedure untuk Menampilkan Post Milik Teman(Follower dan Following)
+DELIMITER //
+CREATE PROCEDURE getPostsByFollows(
+IN userId int
+)
+
+BEGIN
+SELECT posts.id, posts.judul, posts.deskripsi, posts.link,  users.username, posts.waktu_aksi , category.nama FROM posts INNER JOIN users ON posts.user_id = users.id INNER JOIN category ON posts.cat_id = category.id WHERE posts.user_id  IN((SELECT user_id FROM follows WHERE follower_id = userId UNION SELECT follower_id FROM follows WHERE user_id = userId ));
+END//
+
+DELIMITER ;
+
+-- Store Procedure untuk Menampilkan Profile
+DELIMITER //
+CREATE PROCEDURE getProfile(
+IN userId int
+)
+
+BEGIN
+
+DECLARE count_likes int;
+DECLARE count_follower int;
+DECLARE count_following int;
+DECLARE count_posts int;
+SELECT COUNT(id) INTO count_follower FROM users WHERE id IN((SELECT follower_id FROM follows WHERE user_id = userId));
+SELECT COUNT(id) INTO count_following FROM users WHERE id IN((SELECT user_id FROM follows WHERE follower_id = userId));
+SELECT COUNT(likes.post_id) INTO count_likes FROM users LEFT JOIN posts ON posts.user_id = users.id LEFT JOIN likes ON likes.post_id = posts.id WHERE users.id = userId;
+SELECT COUNT(id) INTO count_posts FROM posts WHERE user_id = userId;
+SELECT *, count_follower, count_following, count_likes, count_posts FROM profile WHERE id = userId; 
+END//
+
+DELIMITER ;
+
+-- Store Procedure untuk Menampilkan Semua Posts(pake limit buat nanti ada see more)
+DELIMITER //
+CREATE PROCEDURE getPosts(
+IN limitTemp int
+)
+
+BEGIN
+SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi, category.nama FROM posts INNER JOIN users ON posts.user_id = users.id INNER JOIN category ON posts.cat_id = category.id ORDER BY posts.waktu_aksi DESC LIMIT limitTemp;
+END//
+
+DELIMITER ;
+
+-- Store Procedure untuk Menampilkan 10 Posts Terbaik Berdasarkan Like
+DELIMITER //
+CREATE PROCEDURE getTopPosts()
+
+BEGIN
+SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi, category.nama FROM posts INNER JOIN users ON posts.user_id = users.id INNER JOIN category ON posts.cat_id = category.id ORDER BY getPostLikes(posts.id) DESC LIMIT 10;
+END//
+
+DELIMITER ;
+
+-- Store Procedure untuk Menampilkan Post Berdasarkan Id
+DELIMITER //
+CREATE PROCEDURE getPostById(
+IN idTemp int
+)
+
+BEGIN
+SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, users.foto , posts.waktu_aksi, category.nama FROM posts INNER JOIN users ON posts.user_id = users.id INNER JOIN category ON posts.cat_id = category.id WHERE posts.id = idTemp ;
+END//
+
+DELIMITER ;
+
+-- Store Procedure untuk Menampilkan Post Berdasarkan User
+DELIMITER //
+CREATE PROCEDURE getPostsByUser(
+IN idTemp int
+)
+
+BEGIN
+SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi, category.nama FROM posts INNER JOIN users ON posts.user_id = users.id INNER JOIN category ON posts.cat_id = category.id WHERE posts.user_id = idTemp ORDER BY posts.waktu_aksi DESC;
+END//
+
+DELIMITER ;
+
+-- Store Procedure untuk Menampilkan Category
+DELIMITER //
+CREATE PROCEDURE getCategory()
+
+BEGIN
+SELECT * FROM category;
+END//
+
+DELIMITER ;
+
+-- Store Procedure untuk Menampilkan Post Berdasarkan Category
+DELIMITER //
+CREATE PROCEDURE getPostsByCategory(
+IN catId int
+)
+
+BEGIN
+SELECT posts.id, posts.judul, posts.deskripsi, posts.link, users.username, posts.waktu_aksi, category.nama FROM posts INNER JOIN users ON posts.user_id = users.id INNER JOIN category ON posts.cat_id = category.id WHERE posts.cat_id = catId ORDER BY posts.waktu_aksi DESC ;
+END//
+
+DELIMITER ;
+
+// Trigger Hapus Akun
+DELIMITER //
+create or replace trigger delete_account after delete on users for each row
+begin
+declare u_id int;
+select id into u_id from users where id = old.id;
+delete from posts where user_id = u_id;
+delete from comments where user_id = u_id;
+delete from likes where user_id = u_id;
+end //
+DELIMITER ;
+
+-- Store Procedure untuk Menampilkan Komentar
+DELIMITER //
+CREATE PROCEDURE getComments(
+IN postId int,
+IN parentId int
+)
+
+BEGIN
+SELECT comments.id, users.id AS user_id, users.username, users.foto, comments.komentar, comments.waktu_komentar FROM comments INNER JOIN users ON comments.user_id = users.id WHERE comments.post_id = postId AND comments.parent_comment_id = parentId ORDER BY comments.waktu_komentar DESC;
+END//
+
+DELIMITER ;
