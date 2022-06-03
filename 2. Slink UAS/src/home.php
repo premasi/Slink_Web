@@ -1,6 +1,6 @@
 <?php
 // Import Function
-require "function.php";
+require "./function.php";
 
 // Session untuk Limit Data Posts
 if (!isset($_SESSION['limit'])) {
@@ -85,6 +85,12 @@ if (isset($_POST['submit_category'])) {
     <p class="pe-2">&nbspin Here</p>
   </div>
 
+  <div class="d-flex justify-content-center mt-5 fs-2 fw-bolder">
+    <p class="pe-2" style="font-size: 20px;">Look for </p>
+    <a href="./most_liked_post.php" class="pe-2" style="font-size: 20px;text-decoration:none;">Most liked</a>
+    <p class="pe-2" style="font-size: 20px;">Post </p>
+  </div>
+
   <main class="row">
     <section class="container m-auto mt-3 p-3 w-50">
       <!-- Form dan Tombol Cari -->
@@ -146,8 +152,8 @@ if (isset($_POST['submit_category'])) {
 
   <!-- Carousel untuk Rekomendasi Follow dari Para Follower dan Following  -->
   <div class="d-flex justify-content-center mt-5 fs-2 fw-bolder">
-    <p class="pe-2">Teman Mu Juga</p>
-    <p class="px-3 text-white rounded rounded-5" style="background-color: #7EC384;">Follow</p>
+    <p class="px-3 text-white rounded rounded-5" style="background-color: #7EC384;">Followed</p>
+    <p class="pe-2">&nbsp By Your Friends</p>
   </div>
   <div class="owl-carousel owl-theme mt-5">
     <?php include("./include/rek_follows.php"); ?>
@@ -156,7 +162,7 @@ if (isset($_POST['submit_category'])) {
   <!-- Carousel untuk Rekomendasi Follow dari Para Follower dan Following  -->
   <div class="d-flex justify-content-center mt-5 fs-2 fw-bolder">
     <p class="px-3 text-white rounded rounded-5" style="background-color: #7EC384;">Posts</p>
-    <p class="pe-2">&nbsp Milik Teman Mu</p>
+    <p class="pe-2">&nbsp From Your Friends</p>
   </div>
   <div class="owl-carousel owl-theme mt-5">
     <?php include("./include/follows_posts.php"); ?>
