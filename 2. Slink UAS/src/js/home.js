@@ -27,7 +27,6 @@ $(() => {
     let post_id = $(this).data("id");
     let clicked_btn = $(this);
 
-    alert(post_id);
 
     // Menentukan Aksi yang Dilakukan User
     if (clicked_btn.hasClass("bi bi-heart")) {
