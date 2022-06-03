@@ -41,7 +41,8 @@ if (isset($_POST['submit_category'])) {
 }
 
 // Ambil data post sesuai like terbanyak
-$query = "SELECT a.*, b.post_id, count(b.user_id) FROM posts AS a INNER JOIN likes AS b WHERE b.post_id = a.id GROUP BY b.post_id ORDER BY count(b.user_id) DESC";
+//$query = "SELECT a.*, b.post_id, count(b.user_id) FROM posts AS a INNER JOIN likes AS b WHERE b.post_id = a.id GROUP BY b.post_id ORDER BY count(b.user_id) DESC";
+$query = "SELECT a.*, b.post_id, count(b.user_id), DENSE_RANK() OVER (ORDER BY COUNT(b.user_id) DESC) rank FROM posts AS a INNER JOIN likes AS b WHERE b.post_id = a.id GROUP BY b.post_id ORDER BY rank ASC";
 $posts = queryGetData($query);
 
 ?>
