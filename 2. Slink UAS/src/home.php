@@ -68,6 +68,12 @@ if (isset($_POST['submit_category'])) {
     ?>
   </header>
 
+  <div class="d-flex justify-content-center mt-5 fs-2 fw-bolder">
+    <p class="pe-2">Top</p>
+    <p class="px-3 text-white rounded rounded-5" style="background-color: #7EC384;">Link</p>
+    <p class="pe-2">&nbspin Here</p>
+  </div>
+
   <!-- Carousel untuk Top-10 Post -->
   <div class="owl-carousel owl-theme mt-5">
     <?php include("./include/top_posts.php"); ?>

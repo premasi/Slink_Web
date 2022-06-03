@@ -325,6 +325,8 @@ select id into u_id from users where id = old.id;
 delete from posts where user_id = u_id;
 delete from comments where user_id = u_id;
 delete from likes where user_id = u_id;
+delete from bookmarks where user_id = u_id;
+delete from follows where user_id = u_id;
 end //
 DELIMITER ;
 
