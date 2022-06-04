@@ -17,6 +17,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="./bookmarks.php">Bookmarks</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="./leaderboard.php">Leaderboard</a>
+                            </li>
                         </ul>
                         </ul>
                         <?php
