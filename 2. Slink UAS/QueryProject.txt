@@ -344,7 +344,7 @@ END//
 DELIMITER ;
 
 
-
+DELIMITER
 -- buat view Rank
 CREATE VIEW rankLikes as SELECT users.id as user_id, count(likes.post_id), ROW_NUMBER() OVER (ORDER BY count(likes.post_id) DESC) as Rank FROM users LEFT JOIN posts ON posts.user_id = users.id LEFT JOIN likes ON likes.post_id = posts.id GROUP BY users.id;
 CREATE VIEW rankposts as SELECT id,user_id , count(id) as jml_post, ROW_NUMBER() OVER (ORDER BY jml_post DESC) as Rank FROM posts GROUP BY user_id;
@@ -352,9 +352,10 @@ CREATE VIEW rankFollow as SELECT user_id, COUNT(follower_id) as jml_followers, R
 CREATE VIEW rankBm as SELECT users.id as user_id,bookmarks.post_id, COUNT(bookmarks.post_id) as jml_bm, ROW_NUMBER() OVER (ORDER BY jml_bm DESC) as Rank  FROM users LEFT JOIN posts ON posts.user_id = users.id LEFT JOIN bookmarks ON bookmarks.post_id = posts.id GROUP BY users.id;
 CREATE VIEW rankcm as SELECT users.id as user_id,comments.post_id, COUNT(comments.post_id) as jml_cm, ROW_NUMBER() OVER (ORDER BY jml_cm DESC) as Rank  FROM users LEFT JOIN posts ON posts.user_id = users.id LEFT JOIN comments ON comments.post_id = posts.id GROUP BY users.id;
 
+DELIMITER;
 -- Store Procedure untuk menampilkan urutan users sesuai rank
 
-DELIMITER//
+DELIMITER //
 CREATE PROCEDURE leaderboard(
 IN userId int
 )
@@ -384,6 +385,6 @@ SELECT COUNT(bookmarks.post_id) INTO count_bookmark FROM users LEFT JOIN posts O
 SELECT COUNT(comments.post_id) INTO count_comments FROM users LEFT JOIN posts ON posts.user_id = users.id LEFT JOIN comments ON comments.post_id = posts.id WHERE users.id = userId;
 
 SELECT id, username, foto, count_follower, count_likes, count_posts, count_bookmark, count_comments, rank_like, rank_posts, rank_follow, rank_bm, rank_cm FROM Profile WHERE id = userId; 
-END//
+END //
 
 DELIMITER;
