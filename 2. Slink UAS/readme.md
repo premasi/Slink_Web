@@ -7,3 +7,4 @@
 - [x] Tombol Bookmark
 - [ ] Nampilin Bookmark
 - [ ] Friend(Follower&Following) + Rekomendasi Post
+- [x] Leaderboard
