@@ -1139,3 +1139,12 @@ function getRekFollows($user_id)
 
   return queryGetData($query);
 }
+function leaderboard($user_id)
+{
+  // Query
+  $query = "CALL leaderboard($user_id)";
+
+  
+  // Eksekusi Query
+  return queryGetData($query);
+}
