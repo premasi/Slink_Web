@@ -10,7 +10,7 @@ use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
 
 // Koneksi ke DB
-$conn = mysqli_connect("localhost", "root", "", "slink");
+$conn = mysqli_connect("localhost", "root", "", "slink_web");
 
 // Fungsi Read/Get Data
 function queryGetData($query)
