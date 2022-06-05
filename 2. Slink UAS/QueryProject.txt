@@ -1,7 +1,7 @@
 -- Skema Database:
-CREATE DATABASE slink;
+CREATE DATABASE slink_web;
 
-USE slink;
+USE slink_web;
 
 CREATE TABLE users(
 id int primary key auto_increment,
