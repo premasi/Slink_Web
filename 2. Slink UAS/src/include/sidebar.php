@@ -43,7 +43,7 @@ if (isset($_POST["submit_chat"])) {
 
                 <form action="home.php" method="post">
                     <div class="input-group mt-3">
-                        <input type="text" name="text" class="form-control" id="inputPassword2" placeholder="Input your text">
+                        <input type="text" name="text" class="form-control" id="inputPassword2" placeholder="Write Something...">
                         <div class="input-group-btn">
                             <button type="submit" name="submit_chat" class="btn btn-primary">Send</button>
                         </div>
