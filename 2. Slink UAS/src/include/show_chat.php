@@ -15,7 +15,7 @@ $posts = queryGetData($query);
 
                     <div class="ps-container ps-theme-default ps-active-y" id="chat-content" style="overflow-y: scroll !important; height:400px !important;">
                         <div class="media media-chat">
-                            <div class="media-body">
+                            <div class="media-body p-1">
                                 <?php if (count($posts) == 0) : ?>
                                     <small class="d-flex justify-content-center mt-4">There is no discussion today :(</small>
                                 <?php endif; ?>
