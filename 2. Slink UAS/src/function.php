@@ -1144,7 +1144,29 @@ function leaderboard($user_id)
   // Query
   $query = "CALL leaderboard($user_id)";
 
-  
+
   // Eksekusi Query
   return queryGetData($query);
+}
+
+function createChat($data)
+{
+  global $conn;
+
+  // Pass Data ke Var untuk Diproses 
+  $text = htmlspecialchars($data["text"]);
+  $user_id = $_SESSION['user_id'];
+
+    // Cek Field Diisi atau Tidak... Menghindari Inputan Berupa Whitespace(' ')
+    if (ctype_space($text) || empty($text) || $text == NULL) {
+      return ["error_space" => "<script type='text/javascript'>Write Something?;</script>"];
+      exit;
+    }
+
+  // Jika Category Belum Ada
+  $query = "INSERT INTO chatall VALUES(NULL, '{$text}', $user_id, now()) ";
+  mysqli_query($conn, $query) or die(mysqli_error($conn));
+
+  
+
 }

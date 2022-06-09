@@ -386,3 +386,17 @@ SELECT id, username, foto, count_follower, count_likes, count_posts, count_bookm
 END //
 
 DELIMITER ;
+
+-- table chat all
+create table  chatall (id int(11) primary key auto_increment,
+content varchar(255),
+user_id int(11),
+tanggal_kirim date,
+foreign key(user_id) references users(id));
+
+-- view chat all
+create view showchat AS
+SELECT a.username, b.content, b.tanggal_kirim from users as a inner join chatall as b where a.id = b.user_id;
+
+
+HAHAHAHAHAHAHA ADA BUNYI EROR YA :P
