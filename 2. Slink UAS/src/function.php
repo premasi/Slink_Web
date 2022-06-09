@@ -1133,12 +1133,15 @@ function getFollowings($user_id, $check_id)
   }
 }
 
+// Ambil Data Rekomendasi Follow
 function getRekFollows($user_id)
 {
   $query = "CALL getRekFollows($user_id)";
 
   return queryGetData($query);
 }
+
+// Ambil Data Leaderboard
 function leaderboard($user_id)
 {
   // Query
@@ -1149,6 +1152,7 @@ function leaderboard($user_id)
   return queryGetData($query);
 }
 
+// Membuat Chat di Diskusi
 function createChat($data)
 {
   global $conn;
@@ -1157,16 +1161,13 @@ function createChat($data)
   $text = htmlspecialchars($data["text"]);
   $user_id = $_SESSION['user_id'];
 
-    // Cek Field Diisi atau Tidak... Menghindari Inputan Berupa Whitespace(' ')
-    if (ctype_space($text) || empty($text) || $text == NULL) {
-      return ["error_space" => "<script type='text/javascript'>Write Something?;</script>"];
-      exit;
-    }
+  // Cek Field Diisi atau Tidak... Menghindari Inputan Berupa Whitespace(' ')
+  if (ctype_space($text) || empty($text) || $text == NULL) {
+    return ["error_space" => "<script type='text/javascript'>Write Something?;</script>"];
+    exit;
+  }
 
   // Jika Category Belum Ada
   $query = "INSERT INTO chatall VALUES(NULL, '{$text}', $user_id, now()) ";
   mysqli_query($conn, $query) or die(mysqli_error($conn));
-
-  
-
 }

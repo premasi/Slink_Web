@@ -9,16 +9,16 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="./home.php">Home</a>
+                                <a class="nav-link text-primary" aria-current="page" href="./home.php">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="./cms.php">Links</a>
+                                <a class="nav-link text-primary" href="./cms.php">Links</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="./bookmarks.php">Bookmarks</a>
+                                <a class="nav-link text-primary" href="./bookmarks.php">Bookmarks</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="./leaderboard.php">Leaderboard</a>
+                                <a class="nav-link text-primary" href="./leaderboard.php">Leaderboard</a>
                             </li>
                         </ul>
                         </ul>

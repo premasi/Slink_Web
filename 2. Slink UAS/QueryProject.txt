@@ -345,11 +345,10 @@ DELIMITER ;
 
 
 -- buat view Rank
-CREATE VIEW rankLikes as SELECT users.id as user_id, count(likes.post_id), ROW_NUMBER() OVER (ORDER BY count(likes.post_id) DESC) as Rank FROM users LEFT JOIN posts ON posts.user_id = users.id LEFT JOIN likes ON likes.post_id = posts.id GROUP BY users.id;
-CREATE VIEW rankposts as SELECT id,user_id , count(id) as jml_post, ROW_NUMBER() OVER (ORDER BY jml_post DESC) as Rank FROM posts GROUP BY user_id;
-CREATE VIEW rankFollow as SELECT user_id, COUNT(follower_id) as jml_followers, ROW_NUMBER() OVER (ORDER BY jml_followers) as rank FROM follows GROUP BY user_id;
-CREATE VIEW rankBm as SELECT users.id as user_id,bookmarks.post_id, COUNT(bookmarks.post_id) as jml_bm, ROW_NUMBER() OVER (ORDER BY jml_bm DESC) as Rank  FROM users LEFT JOIN posts ON posts.user_id = users.id LEFT JOIN bookmarks ON bookmarks.post_id = posts.id GROUP BY users.id;
-CREATE VIEW rankcm as SELECT users.id as user_id,comments.post_id, COUNT(comments.post_id) as jml_cm, ROW_NUMBER() OVER (ORDER BY jml_cm DESC) as Rank  FROM users LEFT JOIN posts ON posts.user_id = users.id LEFT JOIN comments ON comments.post_id = posts.id GROUP BY users.id;
+CREATE VIEW rankLikes as SELECT users.id as user_id, count(likes.post_id), RANK() OVER (ORDER BY count(likes.post_id) DESC) as rank FROM users LEFT JOIN posts ON posts.user_id = users.id LEFT JOIN likes ON likes.post_id = posts.id GROUP BY users.id;
+CREATE VIEW rankposts as SELECT id,user_id , count(id) as jml_post, DENSE_RANK() OVER (ORDER BY jml_post DESC) as rank FROM posts GROUP BY user_id;
+CREATE VIEW rankFollow as SELECT user_id, COUNT(follower_id) as jml_followers, RANK() OVER (ORDER BY jml_followers DESC) as rank FROM follows GROUP BY user_id;
+CREATE VIEW rankcm as SELECT users.id AS user_id, COUNT(comments.komentar) AS jml_cm, DENSE_RANK() OVER(ORDER BY jml_cm DESC) AS rank FROM users LEFT JOIN posts ON posts.user_id = users.id LEFT JOIN comments ON comments.post_id = posts.id GROUP BY users.id;
 
 
 -- Store Procedure untuk menampilkan urutan users sesuai rank
@@ -364,25 +363,21 @@ DECLARE count_likes int;
 DECLARE count_follower int;
 DECLARE count_posts int;
 DECLARE count_comments int;
-DECLARE count_bookmark int;
 DECLARE rank_like int;
 DECLARE rank_posts int;
 DECLARE rank_follow int;
-DECLARE rank_bm int;
 DECLARE rank_cm int;
 
 SELECT rank INTO rank_like FROM ranklikes WHERE user_id = userId;
 SELECT rank INTO rank_posts FROM rankposts WHERE user_id = userId;
 SELECT rank INTO rank_follow FROM rankfollow WHERE user_id = userId;
-SELECT rank INTO rank_bm FROM rankBm WHERE user_id = userId;
 SELECT rank INTO rank_cm FROM rankcm WHERE user_id = userId;
 SELECT COUNT(id) INTO count_follower FROM users WHERE id IN((SELECT follower_id FROM follows WHERE user_id = userId));
 SELECT COUNT(likes.post_id) INTO count_likes FROM users LEFT JOIN posts ON posts.user_id = users.id LEFT JOIN likes ON likes.post_id = posts.id WHERE users.id = userId;
 SELECT COUNT(id) INTO count_posts FROM posts WHERE user_id = userId;
-SELECT COUNT(bookmarks.post_id) INTO count_bookmark FROM users LEFT JOIN posts ON posts.user_id = users.id LEFT JOIN bookmarks ON bookmarks.post_id = posts.id WHERE users.id = userId;
 SELECT COUNT(comments.post_id) INTO count_comments FROM users LEFT JOIN posts ON posts.user_id = users.id LEFT JOIN comments ON comments.post_id = posts.id WHERE users.id = userId;
 
-SELECT id, username, foto, count_follower, count_likes, count_posts, count_bookmark, count_comments, rank_like, rank_posts, rank_follow, rank_bm, rank_cm FROM Profile WHERE id = userId; 
+SELECT id, username, foto, count_follower, count_likes, count_posts, count_comments, rank_like, rank_posts, rank_follow, rank_cm FROM Profile WHERE id = userId; 
 END //
 
 DELIMITER ;
@@ -391,8 +386,8 @@ DELIMITER ;
 create table  chatall (id int(11) primary key auto_increment,
 content varchar(255),
 user_id int(11),
-tanggal_kirim date,
-foreign key(user_id) references users(id));
+tanggal_kirim datetime,
+foreign key(user_id) references users(id) on update cascade on delete cascade);
 
 -- view chat all
 create view showchat AS

@@ -7,8 +7,6 @@ if (!isset($_SESSION["login"])) {
     exit;
 }
 
-ob_start();
-
 if (isset($_GET['username'])) {
     $username = $_GET['username'];
     $user = queryGetData("SELECT id FROM users WHERE username ='$username' ");
@@ -17,12 +15,17 @@ if (isset($_GET['username'])) {
 
 $user_id = $_SESSION['user_id'];
 
+if ($this_id == $user_id) {
+    header("location: profile.php");
+    exit;
+}
+
 // Get Data Profile
 if (isset($this_id)) {
 
     $profile = getProfile($this_id);
 
-    $nama = $profile[0]['nama'];
+    $this_nama = $profile[0]['nama'];
     $username = $profile[0]['username'];
     $foto = $profile[0]['foto'];
     $bio = $profile[0]['bio'];
@@ -102,7 +105,7 @@ if (isset($this_id)) {
                                             <h5 class="fw-strong">Nama </h5>
                                         </td>
                                         <td>
-                                            <h5 class="fw-normal">:<?= " " . $nama; ?></h5>
+                                            <h5 class="fw-normal">:<?= " " . $this_nama; ?></h5>
                                         </td>
                                     </tr>
 
@@ -146,19 +149,9 @@ if (isset($this_id)) {
                             <span class="fs-3"><?php echo $date; ?></span>
                             <br><br>
                             <div class=" col-md-12">
-                                <?php $follow_condition = (checkFollows($id, $user_id)) ? "btn btn-outline-danger follow_button" : "btn btn-primary follow_button" ?>
-                                <?php
-                                if(!$user_id === $id){
-                                    $follow_text_condition = (checkFollows($id, $user_id)) ? "Unfollow" : "Follow"; 
-                                ?>
-                                <button class="<?= $follow_condition; ?>" type="button" data-id="<?= $this_id ?>" onclick="document.location.reload()"><?= $follow_text_condition; ?></button>
-                                
-                                <?php
-                                } else {
-                                    echo "<a href='' class='btn btn-primary'>View Profile</a>";
-                                }
-
-                                ?>
+                                <?php $follow_condition = (checkFollows($this_id, $user_id)) ? "btn btn-outline-danger follow_button" : "btn btn-primary follow_button" ?>
+                                <?php $follow_text_condition = (checkFollows($this_id, $user_id)) ? "Unfollow" : "Follow"; ?>
+                                <button class="<?= $follow_condition; ?>" type="button" data-id="<?= $this_id ?>"><?= $follow_text_condition; ?></button>
                             </div>
 
                         </div>

@@ -1,8 +1,6 @@
 <?php
-$query = "SELECT * FROM showchat";
+$query = "SELECT * FROM showchat ORDER BY tanggal_kirim DESC";
 $posts = queryGetData($query);
-
-
 
 ?>
 
@@ -17,11 +15,11 @@ $posts = queryGetData($query);
                         <div class="media media-chat">
                             <div class="media-body p-1">
                                 <?php if (count($posts) == 0) : ?>
-                                    <small class="d-flex justify-content-center mt-4">There is no discussion today :(</small>
+                                    <small class="d-flex justify-content-center mt-4">Belum Ada Diskusi :(</small>
                                 <?php endif; ?>
                                 <?php foreach ($posts as $post) : ?>
-                                <small><a href="./user.php?username=<?php echo $post['username']?>" style="text-decoration: none;"><?php echo $post['username']?></a>&nbsp date: <?php echo $post['tanggal_kirim']?></small>
-                                <p><?php echo $post['content']?></p>
+                                    <small><a target="_blank" href="./user.php?username=<?php echo $post['username'] ?>" style="text-decoration: none;"><?php echo $post['username'] ?></a>&nbsp date: <?php echo $post['tanggal_kirim'] ?></small>
+                                    <p><?php echo $post['content'] ?></p>
                                 <?php endforeach; ?>
                             </div>
                         </div>
