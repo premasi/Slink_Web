@@ -1066,12 +1066,8 @@ function getFollowings($user_id, $check_id)
 // Ambil Data Rekomendasi Follow
 function getRekFollows($user_id)
 {
-  $id = $_SESSION('user_id');
-  if($id === $user_id){
-    
-  } else {
-    $query = "CALL getRekFollows($user_id)";
-  }
+
+  $query = "CALL getRekFollows($user_id)";
 
   return queryGetData($query);
 }

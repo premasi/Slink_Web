@@ -74,9 +74,9 @@ if (isset($_POST['submit_category'])) {
     </div>
 
     <div class="d-flex justify-content-center mt-5 fs-2 fw-bolder">
-        <p class="pe-2">Find out your</p>
+        <p class="pe-2">Temukan</p>
         <p class="px-3 text-white rounded rounded-5" style="background-color: #7EC384;">Link</p>
-        <p class="pe-2">&nbspin Here</p>
+        <p class="pe-2">&nbspterbaru disini</p>
     </div>
 
     <main class="row">

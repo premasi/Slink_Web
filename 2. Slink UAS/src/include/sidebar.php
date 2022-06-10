@@ -14,7 +14,7 @@ if (isset($_POST["submit_chat"])) {
 
     <!-- Blog Categories Well -->
     <div class="well-lg mt-5 border p-5 shadow p-3 mb-5 bg-white rounded w-75">
-        <h4>Categories</h4>
+        <h4>Kategory</h4>
         <div class="row">
             <div class="col-lg-12">
                 <ul class="list-unstyled">
@@ -33,7 +33,7 @@ if (isset($_POST["submit_chat"])) {
 
     <!-- Blog Categories Well -->
     <div class="well-lg mt-5 border p-5 shadow p-3 mb-5 bg-white rounded w-75">
-        <h4>Discussion</h4>
+        <h4>Diskusi</h4>
         <div class="row">
             <div class="col-lg-12">
 
@@ -43,7 +43,7 @@ if (isset($_POST["submit_chat"])) {
 
                 <form action="home.php" method="post">
                     <div class="input-group mt-3">
-                        <input type="text" name="text" class="form-control" id="inputPassword2" placeholder="Write Something...">
+                        <input type="text" name="text" class="form-control" id="inputPassword2" placeholder="Tulis disini...">
                         <div class="input-group-btn">
                             <button type="submit" name="submit_chat" class="btn btn-primary">Send</button>
                         </div>

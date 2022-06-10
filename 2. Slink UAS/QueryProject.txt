@@ -1,4 +1,6 @@
 -- Skema Database:
+DROP DATABASE slink_web;
+
 CREATE DATABASE slink_web;
 
 USE slink_web;
@@ -394,15 +396,8 @@ foreign key(user_id) references users(id) on update cascade on delete cascade);
 create view showchat AS
 SELECT a.username, b.content, b.tanggal_kirim from users as a inner join chatall as b where a.id = b.user_id;
 
--- Procedure + Transaction Transfer Data
-cek username email sendiri
-cek username email target
-cek akun target verified
-cek username pass sendiri
-cek username pass target
-
 DELIMITER //
-CREATE PROCEDURE transfer_data(
+CREATE OR REPLACE PROCEDURE transfer_data(
 IN username_sendiri varchar(255),
 IN email_sendiri varchar(255),
 IN password_sendiri varchar(255),
@@ -473,12 +468,3 @@ END IF;
 END//
 DELIMITER ;
 
--- Uji Coba
-call transfer_data("greys","rdsuryamp@gmail.com","12345678","rak","rakarg@gmail.com","5erasds");
-call transfer_data("greys","rdsuryamp@gmail.com","2yf3FGLvoJBHE","rak","rakarg@gmail.com","5easds");
-call transfer_data("greys","rdsuryamp@gmail.com","2yf3FGLvoJBHE","rak","rakarg@gmai.com","5erasds");
-call transfer_data("greys","rdsuryamp@gmsail.com","2yf3FGLvoJBHE","rak","rakarg@gmail.com","5erasds");
-
-call transfer_data("greys","rdsuryamp@gmail.com","2yf3FGLvoJBHE","rak","rakarg@gmail.com","5erasds");
-
-call transfer_data("dhaf","dhafint@gmail.com","5adafafdfds","rak","rakarg@gmail.com","5erasds");

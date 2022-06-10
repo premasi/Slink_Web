@@ -1,5 +1,4 @@
 <?php
-$date = 
 $query = "SELECT * FROM showchat WHERE date(tanggal_kirim) = date(now()) ";
 $posts = queryGetData($query);
 
@@ -16,7 +15,7 @@ $posts = queryGetData($query);
                         <div class="media media-chat">
                             <div class="media-body p-1">
                                 <?php if (count($posts) == 0) : ?>
-                                    <small class="d-flex justify-content-center mt-4">Belum Ada Diskusi :(</small>
+                                    <small class="d-flex justify-content-center mt-4">Belum ada diskusi :(</small>
                                 <?php endif; ?>
                                 <?php foreach ($posts as $post) : ?>
                                     <small><a target="_blank" href="./user.php?username=<?php echo $post['username'] ?>" style="text-decoration: none;"><?php echo $post['username'] ?></a>&nbsp date: <?php echo $post['tanggal_kirim'] ?></small>

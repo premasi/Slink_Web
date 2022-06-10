@@ -7,8 +7,8 @@ $follows_posts = getPostsByFollows($user_id);
 <?php if (sizeof($follows_posts) > 0) : ?>
 
     <div class="d-flex justify-content-center mt-5 fs-2 fw-bolder">
-        <p class="px-3 text-white rounded rounded-5" style="background-color: #7EC384;">Posts</p>
-        <p class="pe-2">&nbsp From Your Friends</p>
+        <p class="px-3 text-white rounded rounded-5" style="background-color: #7EC384;">Link</p>
+        <p class="pe-2">&nbsp milik temanmu</p>
     </div>
 
     <div class="owl-carousel owl-theme mt-5">

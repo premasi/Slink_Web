@@ -6,8 +6,8 @@ $rekFollows = getRekFollows($user_id);
 <?php if (sizeof($rekFollows) > 0) :  ?>
 
     <div class="d-flex justify-content-center mt-5 fs-2 fw-bolder">
-        <p class="px-3 text-white rounded rounded-5" style="background-color: #7EC384;">Followed</p>
-        <p class="pe-2">&nbsp By Your Friends</p>
+        <p class="px-3 text-white rounded rounded-5" style="background-color: #7EC384;">Diikuti</p>
+        <p class="pe-2">&nbsp oleh Temanmu</p>
     </div>
 
     <div class="owl-carousel owl-theme mt-5">
