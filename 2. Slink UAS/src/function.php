@@ -752,75 +752,6 @@ function checkPostBookmarked($user_id, $post_id)
   }
 }
 
-// function getComments($post_id)
-// {
-//   global $conn;
-
-//   $query = "SELECT comments.id, users.id AS user_id, users.username, comments.komentar, comments.waktu_komentar FROM comments INNER JOIN users ON comments.user_id = users.id WHERE comments.post_id = $post_id AND comments.parent_comment_id = 0 ORDER BY comments.waktu_komentar ASC";
-//   $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
-//   $comments = '';
-//   while ($comment = mysqli_fetch_assoc($result)) {
-//     $comments .= '
-//     <div class="card w-50 mb-4 border-primary">
-//       <div class="card-body">
-//           <div class="row justify-content-between">
-//             <h5 class="col-4">' . $comment['username'] . '</h5>
-//             <h5 class="col-4">' . $comment['waktu_komentar'] . '</h5>
-//           </div>
-//           <div class="mt-4">
-//             <p>' . $comment['komentar'] . '</p>
-//           </div>
-//           <div class="d-flex justify-content-end">
-//             <button type="button" name="reply" class="btn btn-primary text-white reply" id="' . $comment['id'] . '">Reply</button>
-//           </div>
-//         </div>
-// 	  </div>';
-//     $comments .= getCommentReply($conn, $post_id, $comment["id"]);
-//   }
-//   echo $comments;
-// }
-
-// function getCommentReply($conn, $post_id, $parent_comment_id = 0, $bdkey = 0, $marginLeft = 0)
-// {
-//   $comments = '';
-//   $query = "SELECT comments.id, users.id AS user_id, users.username, comments.komentar, comments.waktu_komentar FROM comments INNER JOIN users ON comments.user_id = users.id WHERE comments.post_id = $post_id AND parent_comment_id = '" . $parent_comment_id . "' ";
-//   $result = mysqli_query($conn, $query);
-//   $count = mysqli_num_rows($result);
-//   $bdarr = ['border-primary', 'border-secondary', 'border-success', 'border-danger', 'border-dark', 'border-warning', 'border-info'];
-
-//   if ($parent_comment_id == 0) {
-//     $marginLeft = 0;
-//     $bdkey = 0;
-//   } else {
-//     $marginLeft = $marginLeft + 80;
-//     $bdkey++;
-//     if ($bdkey == 7) {
-//       $bdkey = 0;
-//     }
-//     $bd = $bdarr[$bdkey];
-//   }
-//   if ($count > 0) {
-//     while ($comment = mysqli_fetch_assoc($result)) {
-//       $comments .= '
-//       <div class="card w-50 mb-4  ' . $bd . '" style="margin-left: ' . $marginLeft . 'px">
-//         <div class="card-body">
-//           <div class="row justify-content-between">
-//           <h5 class="col-4">' . $comment['username'] . '</h5>
-//             <h5 class="col-4">' . $comment['waktu_komentar'] . '</h5>
-//           </div>
-//           <div class="mt-4">
-//           <p>' . $comment['komentar'] . '</p>
-//           </div>
-//           <div class="d-flex justify-content-end">
-//           <button type="button" name="reply" class="btn btn-primary text-white reply" id="' . $comment['id'] . '">Reply</button>
-//           </div>
-//         </div>
-//         </div>';
-//       $comments .= getCommentReply($conn, $post_id, $comment["id"], $bdkey, $marginLeft);
-//     }
-//   }
-//   return $comments;
-// }
 
 //Fungsi untuk Ambil Komentar
 function getComments($post_id)
@@ -993,12 +924,11 @@ function updateProfile($data, $img, $user_id)
 
 
   // Cek Berhasil atau Tidak
-  header("location: profile.php");
-  // return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
-  //   <strong>Profile Berhasil di Update!</strong>
-  //   <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-  // </div>"];
-  // exit;
+  return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+    <strong>Profile Berhasil di Update!</strong>
+    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+  </div>"];
+  exit;
 }
 
 // Fungsi untuk Menghapus Akun
@@ -1017,7 +947,7 @@ function deleteAccount($user_id, $text, $validation_text)
     return "<script type ='text/JavaScript'>alert('Akun dihapus')</script>";
     exit;
 
-    header("location: ../index.php");
+    logout();
   } else {
     return  ["error_kalimat" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
     <strong>Kalimat Tidak Sesuai!</strong>
@@ -1170,4 +1100,126 @@ function createChat($data)
   // Jika Category Belum Ada
   $query = "INSERT INTO chatall VALUES(NULL, '{$text}', $user_id, now()) ";
   mysqli_query($conn, $query) or die(mysqli_error($conn));
+}
+
+// Transfer Data ke Akun Lain
+function transferData($data)
+{
+  global $conn;
+
+  // Ambil Data
+  $username_sendiri = htmlspecialchars(stripslashes($data["username_sendiri"]));
+  $password_sendiri = htmlspecialchars(mysqli_real_escape_string($conn, $data["password_sendiri"]));
+  $email_sendiri = htmlspecialchars(stripslashes($data["email_sendiri"]));
+  $username_target = htmlspecialchars(stripslashes($data["username_target"]));
+  $password_target = htmlspecialchars(mysqli_real_escape_string($conn, $data["password_target"]));
+  $email_target = htmlspecialchars(stripslashes($data["email_target"]));
+
+  // Hash Password untuk Pengecekan di DB
+  $hashformat = "2y$10$";
+  $salt = "willyoumarrymeyeahjust";
+  $hash_and_salt = $hashformat . $salt;
+  $password_sendiri = crypt($password_sendiri, $hash_and_salt);
+  $password_target = crypt($password_target, $hash_and_salt);
+
+  // Cek Field Diisi atau Tidak... Menghindari Inputan Berupa Whitespace(' ')
+  if (ctype_space($username_sendiri) || ctype_space($password_sendiri) || ctype_space($email_sendiri) || ctype_space($username_target) || ctype_space($password_target) || ctype_space($email_target)) {
+    return ["error_space" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Isi Field Dengan Benar!</strong> Jangan Isi Field dengan whitespace/spasi Saja
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+    exit;
+  }
+
+  // Cek Username Sendiri Benar Atau Tidak 
+  if (!queryGetData("SELECT * FROM users WHERE username = '$username_sendiri'")) {
+    return ["error_username_sendiri" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Username Tidak Ditemukan!</strong> Silahkan Masukan Username yang Benar
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+    exit;
+  }
+
+  // Cek Username Target Benar Atau Tidak 
+  if (!queryGetData("SELECT * FROM users WHERE username = '$username_target'")) {
+    return ["error_username_target" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Username Tidak Ditemukan!</strong> Silahkan Masukan Username yang Benar
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+    exit;
+  }
+
+  // Cek Username Sendiri dan Target Sama Atau Tidak
+  if ($username_sendiri == $username_target) {
+    return ["error_username_sama" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+    <strong>Username Sama!</strong> Username Sendiri dan Target Tidak Boleh Sama
+    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>"];
+    exit;
+  }
+
+
+  // Cek Email Sendiri Valid atau Tidak
+  if (filter_var($email_sendiri, FILTER_VALIDATE_EMAIL) === false) {
+    return ["error_emailVal_sendiri" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Email Tidak Valid!</strong> Silahkan Gunakan Email yang Benar
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+    exit;
+  }
+
+  // Cek Email Sendiri Ada atau Tidak
+  if (!queryGetData("SELECT * FROM users WHERE email = '$email_sendiri'")) {
+    return ["error_email_sendiri" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Email Tidak Ditemukan!</strong> Silahkan Masukan Email dengan Benar
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+    exit;
+  }
+
+  // Cek Email Target Valid atau Tidak
+  if (filter_var($email_target, FILTER_VALIDATE_EMAIL) === false) {
+    return ["error_emailVal_target" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Email Tidak Valid!</strong> Silahkan Gunakan Email yang Benar
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+    exit;
+  }
+
+  // Cek Email Target Ada atau Tidak
+  if (!queryGetData("SELECT * FROM users WHERE email = '$email_target'")) {
+    return ["error_email_target" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Email Tidak Ditemukan!</strong> Silahkan Masukan Email dengan Benar
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+    exit;
+  }
+
+  // Cek Email Sendiri dan Target Sama Atau Tidak
+  if ($email_sendiri == $email_target) {
+    return ["error_email_sama" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+      <strong>Email Sama!</strong> Email Sendiri dan Target Tidak Boleh Sama
+      <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+    exit;
+  }
+
+  //Query
+  $hasil = queryGetData("CALL transfer_data('$username_sendiri', '$email_sendiri', '$password_sendiri', '$username_target', '$email_target', '$password_target')");
+
+  // Status
+  if ($hasil[0]['status'] == "Berhasil!") {
+    logout();
+    return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+        <strong>Transfer Data Berhasil!</strong>
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+    exit;
+  } else {
+    return ["error_sql" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+      <strong>" . $hasil[0]['status'] . "</strong>
+      <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>"];
+    exit;
+  }
 }

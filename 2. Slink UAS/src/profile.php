@@ -98,7 +98,8 @@ if (isset($user_id)) {
                         <div class="p-3 py-5">
                             <?php if (isset($profileStatus["error_space"])) echo $profileStatus["error_space"] ?>
                             <?php if (isset($profileStatus["error_username"])) echo $profileStatus["error_username"] ?>
-                            <?php if (isset($profileStatus["success"])) echo $profileStatus["success"] ?>
+                            <?php
+                            if (isset($profileStatus["success"])) echo $profileStatus["success"] ?>
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h4 class="text-right">Profile Settings</h4>
                             </div>
@@ -133,7 +134,9 @@ if (isset($user_id)) {
                                     <button class="btn btn-success profile-button" name="update_prof" type="submit">Save Profile</button>
                                     <button class="btn btn-danger profile-button" name="delete" type="submit">Hapus Akun</button>
                                 </div>
-
+                            </div>
+                            <div class="col-md-12 mt-2">
+                                <button class="btn btn-outline-danger profile-button" type="button"><a href="./transfer.php" class="text-reset text-decoration-none">Transfer Data Akun</a></button>
                             </div>
                         </div>
                     </div>

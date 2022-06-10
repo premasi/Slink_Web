@@ -393,5 +393,91 @@ foreign key(user_id) references users(id) on update cascade on delete cascade);
 create view showchat AS
 SELECT a.username, b.content, b.tanggal_kirim from users as a inner join chatall as b where a.id = b.user_id;
 
+-- Procedure + Transaction Transfer Data
+cek username email sendiri
+cek username email target
+cek akun target verified
+cek username pass sendiri
+cek username pass target
 
-HAHAHAHAHAHAHA ADA BUNYI EROR YA :P
+DELIMITER //
+CREATE PROCEDURE transfer_data(
+IN username_sendiri varchar(255),
+IN email_sendiri varchar(255),
+IN password_sendiri varchar(255),
+IN username_target varchar(255),
+IN email_target varchar(255),
+IN password_target varchar(255)
+)
+
+BEGIN
+DECLARE exist_sendiri int;
+DECLARE exist_target int;
+DECLARE isverified int;
+DECLARE auth_sendiri int;
+DECLARE auth_target int;
+
+DECLARE id_sendiri int;
+DECLARE id_target int;
+DECLARE status varchar(255);
+
+START TRANSACTION;
+
+SELECT COUNT(*) INTO auth_sendiri  FROM users WHERE username = username_sendiri AND password = password_sendiri;
+
+IF auth_sendiri != 1 THEN SET status ="Username dan Password Milikmu Tidak Sesuai!";
+	SELECT status;
+	ROLLBACK;
+ELSE
+	SELECT id INTO id_sendiri FROM users WHERE username = username_sendiri AND password = password_sendiri;
+	SELECT COUNT(*) INTO auth_target FROM users WHERE username = username_target AND password=password_target;
+	IF auth_target != 1 THEN SET status="Username dan Password Target Tidak Sesuai!";
+		SELECT status;
+		ROLLBACK;
+	ELSE
+		SELECT verified INTO isverified FROM users WHERE username = username_target;
+		IF isverified != 1 THEN SET status="Akun Target Belum Terverifikasi!";
+			SELECT status;
+			ROLLBACK;
+		ELSE
+			SELECT id INTO id_target FROM users WHERE username = username_target AND password = password_target;
+			SELECT COUNT(*) INTO exist_sendiri FROM users WHERE username = username_sendiri AND email=email_sendiri;
+			IF exist_sendiri != 1 THEN SET status="Username dan Email Milikmu Tidak Sesuai!";
+				SELECT status;
+				ROLLBACK;
+			ELSE
+				SELECT COUNT(*) INTO exist_target FROM users WHERE username = username_target AND email=email_target;
+				IF exist_target !=1 THEN SET status="Username dan Email Target Tidak Sesuai!";
+					SELECT status;
+					ROLLBACK;
+				ELSE
+					UPDATE bookmarks SET user_id = id_target WHERE user_id = id_sendiri;
+					UPDATE chatall SET user_id = id_target WHERE user_id = id_sendiri;
+					UPDATE comments SET user_id = id_target WHERE user_id = id_sendiri;
+					UPDATE follows SET user_id = id_target WHERE user_id = id_sendiri;
+					UPDATE follows SET follower_id = id_target WHERE follower_id = id_sendiri;
+					UPDATE likes SET user_id = id_target WHERE user_id = id_sendiri;
+					UPDATE follows SET user_id = id_target WHERE user_id = id_sendiri;
+					UPDATE posts SET user_id = id_target WHERE user_id = id_sendiri;
+					UPDATE follows SET user_id = id_target WHERE user_id = id_sendiri;
+					DELETE FROM users WHERE id = id_sendiri;
+					SET status = "Berhasil!";
+					COMMIT;
+					SELECT status;
+				END IF;
+			END IF; 
+		END IF;
+	END IF;
+END IF;
+END//
+DELIMITER ;
+
+-- Uji Coba
+call transfer_data("greys","rdsuryamp@gmail.com","12345678","rak","rakarg@gmail.com","5erasds");
+call transfer_data("greys","rdsuryamp@gmail.com","2yf3FGLvoJBHE","rak","rakarg@gmail.com","5easds");
+call transfer_data("greys","rdsuryamp@gmail.com","2yf3FGLvoJBHE","rak","rakarg@gmai.com","5erasds");
+call transfer_data("greys","rdsuryamp@gmsail.com","2yf3FGLvoJBHE","rak","rakarg@gmail.com","5erasds");
+
+call transfer_data("greys","rdsuryamp@gmail.com","2yf3FGLvoJBHE","rak","rakarg@gmail.com","5erasds");
+
+call transfer_data("dhaf","dhafint@gmail.com","5adafafdfds","rak","rakarg@gmail.com","5erasds");
