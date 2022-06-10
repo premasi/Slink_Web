@@ -1,5 +1,6 @@
 <?php
-$query = "SELECT * FROM showchat ORDER BY tanggal_kirim DESC";
+$date = 
+$query = "SELECT * FROM showchat WHERE date(tanggal_kirim) = date(now()) ";
 $posts = queryGetData($query);
 
 ?>
@@ -31,6 +32,14 @@ $posts = queryGetData($query);
                             <div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 2px;"></div>
                         </div>
                     </div>
+
+                    <script>
+                        $(function() {
+                            var wtf = $('#scroll');
+                            var height = wtf[0].scrollHeight;
+                            wtf.scrollTop(height);
+                        });
+                    </script>
 
 
                 </div>

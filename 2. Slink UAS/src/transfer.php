@@ -67,8 +67,8 @@ if (isset($_POST['submit_transfer'])) {
                     <?php if (isset($transfer['error_email_target'])) echo $transfer['error_email_target'];  ?>
                 </div>
             </section>
-            <div class="col-2 m-auto">
-                <button type="submit" id="submit_transfer" name="submit_transfer" class="btn btn-primary mt-3 m-auto">Transfer Data</button>
+            <div class=" d-flex justify-content-center">
+                <button type="submit" id="submit_transfer" name="submit_transfer" class="btn btn-primary mt-3 m-auto ">Transfer Data</button>
             </div>
         </form>
         <h6 class="my-4 text-center">Ayo <a href="profile.php" class="text-decoration-none">Kembali!</a></h3>
