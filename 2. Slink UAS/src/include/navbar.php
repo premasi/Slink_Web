@@ -2,7 +2,8 @@
         <header class="animasi3">
             <nav class="navbar navbar-expand-lg bg-white shadow-sm p-3">
                 <div class="container-fluid">
-                    <a class="navbar-brand ms-5" href="./home.php"><img src="../Foto/logo.png" alt="" width="105" /></a>
+                    <a class="logo navbar-brand ms-5" href="./home.php"><img src="../Foto/logo.png" alt=""
+                            width="105" /></a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -10,17 +11,18 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <a class="nav-link text-secondary" aria-current="page" href="./home.php">Home</a>
+                            <li class="nb nav-item rounded-1 mx-1">
+                                <a class="nav-link " aria-current="page" href="./home.php"
+                                    style="color: #6aa5a9;">Home</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-secondary" href="./cms.php">Links</a>
+                            <li class="nb nav-item rounded-2 mx-1">
+                                <a class="nav-link " href="./cms.php" style="color: #6aa5a9;">Links</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-secondary" href="./bookmarks.php">Bookmarks</a>
+                            <li class="nb nav-item rounded-2 mx-1  ">
+                                <a class="nav-link " href="./bookmarks.php" style="color: #6aa5a9;">Bookmarks</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-secondary" href="./leaderboard.php ">Leaderboard</a>
+                            <li class="nb nav-item rounded-2 mx-1">
+                                <a class="nav-link " href="./leaderboard.php " style="color: #6aa5a9;">Leaderboard</a>
                             </li>
                         </ul>
                         </ul>
@@ -38,7 +40,8 @@
                         }
                         ?>
 
-                        <a class=" nav-link me-5 text-secondary" href="./profile.php"><?php echo $nama; ?></a>
+                        <a class="nb nav-link me-5 rounded-1" href="./profile.php"
+                            style="color: #6aa5a9;"><?php echo $nama; ?></a>
                         <a class="nav-link me-5 text-danger" href="./cms.php?logout=<?= true ?>" id="logout">Log
                             Out</a>
                     </div>
