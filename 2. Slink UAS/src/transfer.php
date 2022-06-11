@@ -23,7 +23,7 @@ if (isset($_POST['submit_transfer'])) {
     <main class="container shadow p-3 mb-5 bg-body rounded m-auto mt-5 w-75">
         <h4 class="text-center mb-5">Transfer Data Akun</h4>
         <p class="alert alert-warning"><strong>Yakin untuk Melakukan Transfer Data?</strong> Setelah Data Pindah Ke Akun Lain, Data Tidak Dapat Kembali dan Akun Ini Akan Dihapus Oleh Sistem</p>
-        <p class="alert alert-info"><strong>Akun Ini</strong> Maksudnya Adalah Akun Saat ini Dimana Datanya Ingin Dipindahkan/DItransfer ke <strong>Akun Target(Pastikan Akun Target Belum Terverifikasi!)</strong></pc>
+        <p class="alert alert-info"><strong>Akun Ini</strong> Maksudnya Adalah Akun Saat ini Dimana Datanya Ingin Dipindahkan/DItransfer ke <strong>Akun Target(Pastikan Akun Target Belum Terverifikasi!)</strong></p>
             <!-- Info Hasil Proses -->
             <?php if (isset($transfer['error_sql'])) echo $transfer['error_sql'];  ?>
             <?php if (isset($transfer['error_email_sama'])) echo $transfer['error_email_sama'];  ?>
