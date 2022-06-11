@@ -432,7 +432,7 @@ ELSE
 		ROLLBACK;
 	ELSE
 		SELECT verified INTO isverified FROM users WHERE username = username_target;
-		IF isverified != 1 THEN SET status="Akun Target Belum Terverifikasi!";
+		IF isverified = 1 THEN SET status="Akun Target Harus Belum Terverifikasi/Baru Register Saja!";
 			SELECT status;
 			ROLLBACK;
 		ELSE
