@@ -37,9 +37,13 @@ if (isset($_POST["sort_comments"])) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../css/style4.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+
     <title>Slink | Leaderboard</title>
 </head>
 
@@ -57,25 +61,40 @@ if (isset($_POST["sort_comments"])) {
         <div class="container">
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-8"><span>
-                            <h1>Top <?= $rankLabel; ?></h1>
-                        </span></div>
-                    <div class="col-sm-4">
-                        <div class="d-flex justify-content-around">
-                            <form action="" method="POST">
-                                <button type="submit" class="btn btn-outline-primary" name="sort_likes">Likes</button>
-                            </form>
-                            <form action="" method="POST">
-                                <button type="submit" class="btn btn-outline-primary" name="sort_followers">Followers</button>
-                            </form>
-                            <form action="" method="POST">
-                                <button type="submit" class="btn btn-outline-primary" name="sort_posts">Posts</button>
-                            </form>
-                            <form action="" method="POST">
-                                <button type="submit" class="btn btn-outline-primary" name="sort_comments">Comments</button>
-                            </form>
+                    <div class="col-sm-8 d-flex justify-content-start">
+                        <h1 class="">Top <?= $rankLabel; ?></h1>
+
+                        <div class="dropdown">
+                            <button class="dropbtn text-dark"><img src="../Foto/arrow.svg" alt=""></button>
+                            <div class="dropdown-content">
+                                <a href="#">
+                                    <form action="" method="POST">
+                                        <button type="submit" class="btn btn-light" name="sort_likes">Likes</button>
+                                    </form>
+                                </a>
+                                <a href="#">
+                                    <form action="" method="POST">
+                                        <button type="submit" class="btn btn-light"
+                                            name="sort_followers">Followers</button>
+                                    </form>
+                                </a>
+                                <a href="#">
+                                    <form action="" method="POST">
+                                        <button type="submit" class="btn btn-light" name="sort_posts">Posts</button>
+                                    </form>
+                                </a>
+                                <a href="#">
+                                    <form action="" method="POST">
+                                        <button type="submit" class="btn btn-light"
+                                            name="sort_comments">Comments</button>
+                                    </form>
+                                </a>
+
+                            </div>
                         </div>
                     </div>
+
+
                 </div>
             </div>
 
@@ -90,7 +109,7 @@ if (isset($_POST["sort_comments"])) {
                     $rank1 = leaderboard($idRank1);
 
                     $foto1 = $rank1[0]['foto'];
-                    if ($foto1 == "" || empty($foto2) || $foto2 == null) {
+                    if ($foto1 == "" || empty($foto1) || $foto1 == null) {
                         $tag1 = "<img class='circle-img mb-2' width='150px' src='../Foto/user.png'><span class=' font-weight-bold'>$foto1</span>";
                     } else {
                         $tag1 = "<img class='circle-img mb-2' width='auto' height='auto'src='../Foto/$foto1'>";
@@ -124,98 +143,101 @@ if (isset($_POST["sort_comments"])) {
 
                 <!-- rank 2 -->
                 <?php if (isset($rank2)) : ?>
-                    <div class="col-sm-4">
-                        <div class="leaderboard-card">
-                            <div class="leaderboard-card__top">
-                                <h3 class="text-center">2</h3>
-                            </div>
-                            <div class="leaderboard-card__body">
-                                <div class="text-center">
-                                    <?php echo $tag2; ?>
-                                    <a href="./user.php?username=<?= $rank2[0]['username'] ?>" target="_blank" class="text-reset text-decoration-none">
-                                        <h5 class="mb-0"><?php echo $rank2[0]['username']; ?></h5>
-                                    </a>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col md-1" style="font-size: 12px;">Likes</div>
-                                        <div class="col md-1" style="font-size: 12px;">Followers</div>
-                                        <div class="col md-1" style="font-size: 12px;">Posts</div>
-                                        <div class="col md-1" style="font-size: 12px;">Comments</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col"><?php echo $rank2[0]['count_likes']; ?></div>
-                                        <div class="col"><?php echo $rank2[0]['count_follower']; ?></div>
-                                        <div class="col"><?php echo $rank2[0]['count_posts']; ?></div>
-                                        <div class="col"><?php echo $rank2[0]['count_comments']; ?></div>
-                                    </div>
+                <div class=" col-sm-4">
+                    <div class="rank leaderboard-card">
+                        <div class="leaderboard-card__top">
+                            <h3 class="text-center">2</h3>
+                        </div>
+                        <div class="leaderboard-card__body">
+                            <div class="text-center">
+                                <?php echo $tag2; ?>
+                                <a href="./user.php?username=<?= $rank2[0]['username'] ?>" target="_blank"
+                                    class="text-reset text-decoration-none">
+                                    <h5 class="mb-0"><?php echo $rank2[0]['username']; ?></h5>
+                                </a>
+                                <hr>
+                                <div class="row">
+                                    <div class="col md-1" style="font-size: 12px;">Likes</div>
+                                    <div class="col md-1" style="font-size: 12px;">Followers</div>
+                                    <div class="col md-1" style="font-size: 12px;">Posts</div>
+                                    <div class="col md-1" style="font-size: 12px;">Comments</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col"><?php echo $rank2[0]['count_likes']; ?></div>
+                                    <div class="col"><?php echo $rank2[0]['count_follower']; ?></div>
+                                    <div class="col"><?php echo $rank2[0]['count_posts']; ?></div>
+                                    <div class="col"><?php echo $rank2[0]['count_comments']; ?></div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
                 <?php endif; ?>
 
                 <!-- rank 1 -->
                 <?php if (isset($rank1)) : ?>
-                    <div class="col-sm-4">
-                        <div class="leaderboard-card leaderboard-card--first">
-                            <div class="leaderboard-card__top">
-                                <h3 class="text-center">1</h3>
-                            </div>
-                            <div class="leaderboard-card__body">
-                                <div class="text-center">
-                                    <?php echo $tag1; ?>
-                                    <a href="./user.php?username=<?= $rank1[0]['username'] ?>" target="_blank" class="text-reset text-decoration-none">
-                                        <h5 class="mb-0"><?php echo $rank1[0]['username']; ?></h5>
-                                    </a>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col md-1" style="font-size: 12px;">Likes</div>
-                                        <div class="col md-1" style="font-size: 12px;">Followers</div>
-                                        <div class="col md-1" style="font-size: 12px;">Posts</div>
-                                        <div class="col md-1" style="font-size: 12px;">Comments</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col"><?php echo $rank1[0]['count_likes']; ?></div>
-                                        <div class="col"><?php echo $rank1[0]['count_follower']; ?></div>
-                                        <div class="col"><?php echo $rank1[0]['count_posts']; ?></div>
-                                        <div class="col"><?php echo $rank1[0]['count_comments']; ?></div>
-                                    </div>
+                <div class=" col-sm-4">
+                    <div class="rank leaderboard-card leaderboard-card--first">
+                        <div class="leaderboard-card__top">
+                            <h3 class="text-center">1</h3>
+                        </div>
+                        <div class="leaderboard-card__body">
+                            <div class="text-center">
+                                <?php echo $tag1; ?>
+                                <a href="./user.php?username=<?= $rank1[0]['username'] ?>" target="_blank"
+                                    class="text-reset text-decoration-none">
+                                    <h5 class="mb-0"><?php echo $rank1[0]['username']; ?></h5>
+                                </a>
+                                <hr>
+                                <div class="row">
+                                    <div class="col md-1" style="font-size: 12px;">Likes</div>
+                                    <div class="col md-1" style="font-size: 12px;">Followers</div>
+                                    <div class="col md-1" style="font-size: 12px;">Posts</div>
+                                    <div class="col md-1" style="font-size: 12px;">Comments</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col"><?php echo $rank1[0]['count_likes']; ?></div>
+                                    <div class="col"><?php echo $rank1[0]['count_follower']; ?></div>
+                                    <div class="col"><?php echo $rank1[0]['count_posts']; ?></div>
+                                    <div class="col"><?php echo $rank1[0]['count_comments']; ?></div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
                 <?php endif; ?>
 
                 <!-- rank 3 -->
                 <?php if (isset($rank3)) : ?>
-                    <div class="col-sm-4">
-                        <div class="leaderboard-card">
-                            <div class="leaderboard-card__top">
-                                <h3 class="text-center">3</h3>
-                            </div>
-                            <div class="leaderboard-card__body">
-                                <div class="text-center">
-                                    <?php echo $tag3; ?>
-                                    <a href="./user.php?username=<?= $rank3[0]['username'] ?>" target="_blank" class="text-reset text-decoration-none">
-                                        <h5 class="mb-0"><?php echo $rank3[0]['username']; ?></h5>
-                                    </a>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col md-1" style="font-size: 12px;">Likes</div>
-                                        <div class="col md-1" style="font-size: 12px;">Followers</div>
-                                        <div class="col md-1" style="font-size: 12px;">Posts</div>
-                                        <div class="col md-1" style="font-size: 12px;">Comments</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col"><?php echo $rank3[0]['count_likes']; ?></div>
-                                        <div class="col"><?php echo $rank3[0]['count_follower']; ?></div>
-                                        <div class="col"><?php echo $rank3[0]['count_posts']; ?></div>
-                                        <div class="col"><?php echo $rank3[0]['count_comments']; ?></div>
-                                    </div>
+                <div class="col-sm-4">
+                    <div class="rank leaderboard-card">
+                        <div class="leaderboard-card__top">
+                            <h3 class="text-center">3</h3>
+                        </div>
+                        <div class="leaderboard-card__body">
+                            <div class="text-center">
+                                <?php echo $tag3; ?>
+                                <a href="./user.php?username=<?= $rank3[0]['username'] ?>" target="_blank"
+                                    class="text-reset text-decoration-none">
+                                    <h5 class="mb-0"><?php echo $rank3[0]['username']; ?></h5>
+                                </a>
+                                <hr>
+                                <div class="row">
+                                    <div class="col md-1" style="font-size: 12px;">Likes</div>
+                                    <div class="col md-1" style="font-size: 12px;">Followers</div>
+                                    <div class="col md-1" style="font-size: 12px;">Posts</div>
+                                    <div class="col md-1" style="font-size: 12px;">Comments</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col"><?php echo $rank3[0]['count_likes']; ?></div>
+                                    <div class="col"><?php echo $rank3[0]['count_follower']; ?></div>
+                                    <div class="col"><?php echo $rank3[0]['count_posts']; ?></div>
+                                    <div class="col"><?php echo $rank3[0]['count_comments']; ?></div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
                 <?php endif; ?>
 
                 <!-- All User -->
@@ -245,7 +267,7 @@ if (isset($_POST["sort_comments"])) {
                         }
                         ?>
                         <?php foreach ($userRankList as $user) : ?>
-                            <?php
+                        <?php
 
 
                             $rank = leaderboard($user["user_id"]);
@@ -266,35 +288,36 @@ if (isset($_POST["sort_comments"])) {
                                 $tag = "<img class='circle-img circle-img--small mr-2' width='auto' height='auto'src='../Foto/$foto'>";
                             }
                             ?>
-                            <?php $followCondition = (checkFollows($user['user_id'], $user_id)) ? "<button type='button' class='btn btn-outline-danger btn-sm follow_button' data-id='" . $user['user_id'] . "'>Unfollow</button>" : "<button type='button' class='btn btn-primary btn-sm follow_button' data-id='" . $user['user_id'] . "'>Follow</button>"; ?>
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <?php echo $tag; ?>
-                                        <div class="user-info__basic">
-                                            <a href="./user.php?username=<?= $username ?>" target="_blank" class="text-reset text-decoration-none">
-                                                <h5 class="mb-0"><?php echo $username; ?></h5>
-                                            </a>
-                                        </div>
+                        <?php $followCondition = (checkFollows($user['user_id'], $user_id)) ? "<button type='button' class='btn btn-outline-danger btn-sm follow_button' data-id='" . $user['user_id'] . "'>Unfollow</button>" : "<button type='button' class='btn btn-primary btn-sm follow_button' data-id='" . $user['user_id'] . "'>Follow</button>"; ?>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <?php echo $tag; ?>
+                                    <div class="user-info__basic">
+                                        <a href="./user.php?username=<?= $username ?>" target="_blank"
+                                            class="text-reset text-decoration-none">
+                                            <h5 class="mb-0"><?php echo $username; ?></h5>
+                                        </a>
                                     </div>
-                                </td>
-                                <div class="d-flex align-items-baseline">
-                                    <td>
-                                        <h4 class="mr-5"><?php echo $count_likes; ?></h4>
-                                    <td>
-                                        <h4 class="mr-1"><?php echo $count_follower; ?></h4>
-                                    </td>
-                                    <td>
-                                        <h4 class="mr-5"><?php echo $count_posts; ?></h4>
-                                    </td>
-                                    <td>
-                                        <h4 class="mr-1"><?php echo $count_comments; ?></h4>
-                                    </td>
-                                    <td>
-                                        <?= $followCondition; ?>
-                                    </td>
                                 </div>
-                            </tr>
+                            </td>
+                            <div class="d-flex align-items-baseline">
+                                <td>
+                                    <h4 class="mr-5"><?php echo $count_likes; ?></h4>
+                                <td>
+                                    <h4 class="mr-1"><?php echo $count_follower; ?></h4>
+                                </td>
+                                <td>
+                                    <h4 class="mr-5"><?php echo $count_posts; ?></h4>
+                                </td>
+                                <td>
+                                    <h4 class="mr-1"><?php echo $count_comments; ?></h4>
+                                </td>
+                                <td>
+                                    <?= $followCondition; ?>
+                                </td>
+                            </div>
+                        </tr>
                         <?php endforeach; ?>
                         <?php
                         ?>
@@ -302,14 +325,18 @@ if (isset($_POST["sort_comments"])) {
                 </table>
             </div>
     </section>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous">
     </script>
 
     <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
+        integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js"
+        integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous">
     </script>
     <script src="js/profile.js"></script>
 
