@@ -64,6 +64,12 @@ border-radius: 8px;
     position:absolute ;
     top: 250px;
 }
+.nb:hover{
+	border-bottom-style: solid;
+  border-color: #6aa5a9;
+	font-weight:20px;
+	
+}
 @import url("https://fonts.googleapis.com/css2?family=Poppins:weight@100;200;300;400;500;600;700;800&display=swap");
 
 

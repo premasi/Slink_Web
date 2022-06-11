@@ -28,3 +28,8 @@ h3:hover {
     opacity: 1;
   }
 }
+.nb:hover{
+  border-bottom-style: solid;
+  border-color: #6aa5a9;
+	font-weight:20px;
+}
