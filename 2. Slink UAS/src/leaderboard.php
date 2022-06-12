@@ -289,7 +289,7 @@ if (isset($_POST["sort_comments"])) {
                             }
                             ?>
                         <?php $followCondition = (checkFollows($user['user_id'], $user_id)) ? "<button type='button' class='btn btn-outline-danger btn-sm follow_button' data-id='" . $user['user_id'] . "'>Unfollow</button>" : "<button type='button' class='btn btn-primary btn-sm follow_button' data-id='" . $user['user_id'] . "'>Follow</button>"; ?>
-                        <tr>
+                        <tr class="rank">
                             <td>
                                 <div class="d-flex align-items-center">
                                     <?php echo $tag; ?>
