@@ -31,16 +31,6 @@ $posts = queryGetData($query);
                             <div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 2px;"></div>
                         </div>
                     </div>
-
-                    <script>
-                        $(function() {
-                            var wtf = $('#scroll');
-                            var height = wtf[0].scrollHeight;
-                            wtf.scrollTop(height);
-                        });
-                    </script>
-
-
                 </div>
             </div>
         </div>

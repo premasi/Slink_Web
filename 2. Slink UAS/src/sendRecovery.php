@@ -22,6 +22,7 @@ if (isset($_POST['submit_reqRecovery'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Slink | Request Recovery Password</title>
 </head>
 
@@ -31,11 +32,68 @@ if (isset($_POST['submit_reqRecovery'])) {
         <div class="w-50 m-auto">
             <p class="alert alert-info"><strong>Silahkan Masukan Email Akun Anda!</strong> Link untuk Recovery atau Ganti Password Akan Dikirim ke Email</p>
             <!-- Info Hasil Proses -->
-            <?php if (isset($reqRecovery['error_emailVal'])) echo $reqRecovery['error_emailVal'];  ?>
-            <?php if (isset($reqRecovery['error_verified'])) echo $reqRecovery['error_verified'];  ?>
-            <?php if (isset($reqRecovery['error_user'])) echo $reqRecovery['error_user'];  ?>
-            <?php if (isset($reqRecovery['error_send'])) echo $reqRecovery['error_send'];  ?>
-            <?php if (isset($reqRecovery['success'])) echo $reqRecovery['success'];  ?>
+            <?php if (isset($reqRecovery["error_emailVal"])) {
+                echo $reqRecovery["error_emailVal"];
+                echo "  <script>
+                        Swal.fire({
+                        icon: 'error',
+                        title: 'Email Tidak Valid!',
+                        text: 'Silahkan Gunakan Email yang Benar/Valid',
+                        confirmButtonText: 'Ulangi',
+                        confirmButtonColor: 'blue',
+                        })
+                        </script>";
+            } ?>
+            <?php if (isset($reqRecovery["error_verified"])) {
+                echo $reqRecovery["error_verified"];
+                echo "  <script>
+                        Swal.fire({
+                        icon: 'warning',
+                        title: 'Akun Belum Terverifikasi!',
+                        html: 'Silahkan Verifikasi Terlebih Dahulu',
+                        confirmButtonText: 'Ulangi',
+                        confirmButtonColor: 'blue',
+                        })
+                        </script>";
+            } ?>
+            <?php if (isset($reqRecovery["error_user"])) {
+                echo $reqRecovery["error_user"];
+                echo "  <script>
+                        Swal.fire({
+                        icon: 'error',
+                        title: 'Akun Dengan Email Tersebut Tidak Ditemukan!',
+                        text: ' Silahkan Gunakan Email yang Terdaftar pada Akun yang Telah Registrasi',
+                        confirmButtonText: 'Ulangi',
+                        confirmButtonColor: 'blue',
+                        })
+                        </script>";
+            } ?>
+            <?php if (isset($reqRecovery["error_send"])) {
+                echo $reqRecovery["error_send"];
+                echo "  <script>
+                        Swal.fire({
+                        icon: 'error',
+                        title: 'Email Gagal Dikirim!',
+                        text: ' Pastikan Koneksi Stabil dan Silahkan Coba Lagi Setelah Beberapa Saat',
+                        confirmButtonText: 'Ulangi',
+                        confirmButtonColor: 'blue',
+                        })
+                        </script>";
+            } ?>
+            <?php if (isset($reqRecovery["success"])) {
+                echo $reqRecovery["success"];
+                echo "  <script>
+                                    Swal.fire({
+                                    icon: 'success',
+                                    title: 'Email Recovery Berhasil Dikirim!',
+                                    html: ' Silahkan Akses Link untuk Recovery Password yang Sudah Dikirimkan Ke Email',
+                                    confirmButtonText: 'OK',
+                                    confirmButtonColor: 'blue',
+                                    })
+                                    </script>";
+            } ?>
+
+
             <form action="" method="POST">
                 <div class="form-floating mb-1">
                     <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>

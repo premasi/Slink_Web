@@ -139,7 +139,7 @@ function createPost($data)
     $query = "INSERT INTO posts VALUES (NULL,'$judul','$deskripsi', '$link', NOW(), '$user_id', '$cat_id')";
     mysqli_query($conn, $query) or die(mysqli_error($conn));
     // Jika Berhasil
-    return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+    return ["success_create" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
       <strong>Post Berhasil Dibuat!</strong> Ayo Buat Lebih Banyak Post
       <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
     </div>"];
@@ -155,7 +155,7 @@ function createPost($data)
   mysqli_query($conn, $query2) or die(mysqli_error($conn));
 
   // Jika Berhasil
-  return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+  return ["success_create" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
         <strong>Post Berhasil Dibuat!</strong> Ayo Buat Lebih Banyak Post
         <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
       </div>"];
@@ -198,7 +198,7 @@ function updatePost($data)
     $query = "UPDATE posts SET judul = '$judul', deskripsi = '$deskripsi', link = '$link', waktu_aksi = NOW(), cat_id = '$cat_id' WHERE id = $id";
     mysqli_query($conn, $query) or die(mysqli_error($conn));
     // Jika Berhasil
-    return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+    return ["success_update" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
     <strong>Post Berhasil Diupdate!</strong> Ayo Buat Post Sesempurna Mungkin
     <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
     </div>"];
@@ -214,7 +214,7 @@ function updatePost($data)
   mysqli_query($conn, $query2) or die(mysqli_error($conn));
 
   // Jika Berhasil
-  return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+  return ["success_update" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
     <strong>Post Berhasil Diupdate!</strong> Ayo Buat Post Sesempurna Mungkin
     <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
   </div>"];
@@ -231,7 +231,7 @@ function deletePost($id)
   mysqli_query($conn, "DELETE FROM posts WHERE id = $id") or die(mysqli_error($conn));
 
   // Jika Berhasil
-  return ["success" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+  return ["success_delete" => "<div class='alert alert-success alert-dismissible fade show' role='alert'>
         <strong>Post Berhasil Dihapus!</strong> Tetap Semangat Bikin Post Ya
         <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
       </div>"];
@@ -401,7 +401,7 @@ function sendOTP($email)
   // Cek Email Valid atau Tidak
   if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
     return ["error_emailVal" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
-          <strong>Email Tidak Valid!</strong> Silahkan Gunakan Email yang Benar
+          <strong>Email Tidak Valid!</strong> Silahkan Gunakan Email yang Benar/Valid
           <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
         </div>"];
     exit;
@@ -413,7 +413,7 @@ function sendOTP($email)
     // Cek Status User Verified atau Belum
     if ($cek[0]['verified'] == 1) {
       return ["error_verified" => "<div class='alert alert-warning alert-dismissible fade show' role='alert'>
-      <strong>Akun Sudah Terverifikasi!</strong> Silahkan Login
+      <strong>Akun Sudah Terverifikasi!</strong> Silahkan Langsung Saja Login
       <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
       </div>"];
       exit;
@@ -441,7 +441,7 @@ function sendOTP($email)
     // Cek Email Terkirim atau Tidak
     if (!isset($status["send"])) {
       return ["error_send" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
-    <strong>Email Gagal Dikirim!</strong> Silahkan Coba Lagi Setelah Beberapa Saat
+    <strong>Email Gagal Dikirim!</strong> Pastikan Koneksi Stabil dan Silahkan Coba Lagi Setelah Beberapa Saat
     <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
     </div>"];
       exit;
@@ -515,7 +515,7 @@ function verifikasi($data)
     }
 
     return ["error_otp" => "<div class='alert alert-warning alert-dismissible fade show' role='alert'>
-    <strong>Email dan Kode OTP Tidak Cocok!</strong> Silahkan Masukan Kode OTP yang Benar
+    <strong>Email dan Kode OTP Tidak Cocok!</strong> Silahkan Masukan Kode OTP yang Tertera Pada Email Terkait
     <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
     </div>"];
     exit;
@@ -904,6 +904,15 @@ function updateProfile($data, $img, $user_id)
     exit;
   }
 
+  // Cek Username Menggunakan Space atau Tidak
+  if ($username == trim($username) && strpos($username, " ") !== false) {
+    return ["error_space2" => "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+      <strong>Username Dilarang Menggunakan Space!</strong> Jangan Isi Field Username dengan Space
+      <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>"];
+    exit;
+  }
+
   $foto = $img['image']['name'];
   $foto_temp = $img['image']['tmp_name'];
 
@@ -944,8 +953,17 @@ function deleteAccount($user_id, $text, $validation_text)
       die(mysqli_error($conn));
     }
 
-    return "<script type ='text/JavaScript'>alert('Akun dihapus')</script>";
-    exit;
+
+    echo "
+    <script>
+    Swal.fire({
+      icon: 'success',
+      title: 'Akun Terhapus',
+      confirmButtonText: 'OK',
+      showCloseButton: true,
+    })
+    </script>
+    ";
 
     logout();
   } else {
@@ -1223,4 +1241,11 @@ function transferData($data)
       </div>"];
     exit;
   }
+}
+
+function getUsers()
+{
+  $query = "SELECT id, username FROM users";
+
+  return queryGetData($query);
 }

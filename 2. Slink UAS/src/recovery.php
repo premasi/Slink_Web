@@ -24,6 +24,7 @@ if (isset($_POST['submit_recovery'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Slink | Recovery Password</title>
 </head>
 
@@ -33,12 +34,79 @@ if (isset($_POST['submit_recovery'])) {
         <div class="w-50 m-auto">
             <p class="alert alert-info">Silahkan Masukan Username Akun & Password Baru</p>
             <!-- Info Hasil Proses -->
-            <?php if (isset($recovery['error_user'])) echo $recovery['error_user'];  ?>
-            <?php if (isset($recovery['error_key'])) echo $recovery['error_key'];  ?>
-            <?php if (isset($recovery['error_pass'])) echo $recovery['error_pass'];  ?>
-            <?php if (isset($recovery['error_passCon'])) echo $recovery['error_passCon'];  ?>
-            <?php if (isset($recovery['error_space'])) echo $recovery['error_space'];  ?>
-            <?php if (isset($recovery['success'])) echo $recovery['success'];  ?>
+            <?php if (isset($recovery["error_user"])) {
+                echo $recovery["error_user"];
+                echo "  <script>
+                                    Swal.fire({
+                                    icon: 'error',
+                                    title: 'Akun Tidak Ditemukan!',
+                                    text: 'Masukan Username Akun yang Benar dan Sesuai Email',
+                                    confirmButtonText: 'Ulangi',
+                                    confirmButtonColor: 'blue',
+                                    })
+                                    </script>";
+            } ?>
+            <?php if (isset($recovery["error_key"])) {
+                echo $recovery["error_key"];
+                echo "  <script>
+                                    Swal.fire({
+                                    icon: 'error',
+                                    title: 'Recovery Tidak Bisa Dilakukan!',
+                                    text: 'Gunakan Username Akun yang Tertaut Dengan Email Penerima Link Recovery',
+                                    confirmButtonText: 'Ulangi',
+                                    confirmButtonColor: 'blue',
+                                    })
+                                    </script>";
+            } ?>
+            <?php if (isset($recovery["error_pass"])) {
+                echo $recovery["error_pass"];
+                echo "  <script>
+                                    Swal.fire({
+                                    icon: 'error',
+                                    title: 'Password Tidak Boleh Kurang Dari 8 Karakter!',
+                                    text: '  Silahkan Tambah Karakter untuk Password',
+                                    confirmButtonText: 'Ulangi',
+                                    confirmButtonColor: 'blue',
+                                    })
+                                    </script>";
+            } ?>
+            <?php if (isset($recovery["error_passCon"])) {
+                echo $recovery["error_passCon"];
+                echo "  <script>
+                                    Swal.fire({
+                                    icon: 'error',
+                                    title: 'Konfirmasi Password Salah!',
+                                    text: ' Silahkan Masukan Password yang Sudah diisi Di Field Sebelumnya',
+                                    confirmButtonText: 'Ulangi',
+                                    confirmButtonColor: 'blue',
+                                    })
+                                    </script>";
+            } ?>
+            <?php if (isset($recovery["error_space"])) {
+                echo $recovery["error_space"];
+                echo "  <script>
+                                    Swal.fire({
+                                    icon: 'error',
+                                    title: 'Isi Field Dengan Benar!',
+                                    text: ' Jangan Isi Field dengan whitespace/spasi Saja',
+                                    confirmButtonText: 'Ulangi',
+                                    confirmButtonColor: 'blue',
+                                    })
+                                    </script>";
+            } ?>
+            <?php if (isset($recovery["success"])) {
+                echo $recovery["success"];
+                echo "  <script>
+                                    Swal.fire({
+                                    icon: 'success',
+                                    title: 'Password Berhasil Diperbaharui!',
+                                    html: 'Silahkan Login dan Kembali Aktif Menggunakan Slink',
+                                    confirmButtonText: 'OK',
+                                    confirmButtonColor: 'blue',
+                                    })
+                                    </script>";
+            } ?>
+
             <form action="" method="POST">
                 <div class="form-floating mb-1">
                     <input type="text" class="form-control" id="username" name="username" placeholder="name@example.com" required>

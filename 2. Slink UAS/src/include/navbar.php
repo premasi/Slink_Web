@@ -2,18 +2,14 @@
         <header class="animasi3">
             <nav class="navbar navbar-expand-lg bg-white shadow-sm p-3">
                 <div class="container-fluid">
-                    <a class="logo navbar-brand ms-5" href="./home.php"><img src="../Foto/logo.png" alt=""
-                            width="105" /></a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                    <a class="logo navbar-brand ms-5" href="./home.php"><img src="../Foto/logo.png" alt="" width="105" /></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nb nav-item rounded-1 mx-1">
-                                <a class="nav-link " aria-current="page" href="./home.php"
-                                    style="color: #6aa5a9;">Home</a>
+                                <a class="nav-link " aria-current="page" href="./home.php" style="color: #6aa5a9;">Home</a>
                             </li>
                             <li class="nb nav-item rounded-2 mx-1">
                                 <a class="nav-link " href="./cms.php" style="color: #6aa5a9;">Links</a>
@@ -40,10 +36,8 @@
                         }
                         ?>
 
-                        <a class="nb nav-link me-5 rounded-1" href="./profile.php"
-                            style="color: #6aa5a9;"><?php echo $nama; ?></a>
-                        <a class="nav-link me-5 text-danger" href="./cms.php?logout=<?= true ?>" id="logout">Log
-                            Out</a>
+                        <a class="nb nav-link me-5 rounded-1" href="./profile.php" style="color: #6aa5a9;"><?php echo $nama; ?></a>
+                        <p class="nav-link me-5 text-danger mt-3" style="cursor:pointer" id="logout">Log Out</p>
                     </div>
                 </div>
             </nav>

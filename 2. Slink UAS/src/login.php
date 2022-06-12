@@ -44,6 +44,8 @@ if (isset($_POST["login"])) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap" rel="stylesheet">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <title>Slink | Login</title>
 </head>
 
@@ -61,8 +63,31 @@ if (isset($_POST["login"])) {
                                     <!--awal login-->
                                     <main class="animasi">
                                         <div class="login border shadow p-3 mb-1 bg-body rounded-5 position-relative">
-                                            <?php if (isset($login["error"])) echo $login["error"] ?>
-                                            <?php if (isset($login["error_verified"])) echo $login["error_verified"] ?>
+                                            <!-- Info Hasil Proses -->
+                                            <?php if (isset($login["error_verified"])) {
+                                                echo $login["error_verified"];
+                                                echo "  <script>
+                                                    Swal.fire({
+                                                    icon: 'warning',
+                                                    title: 'Akun Belum Terverifikasi!',
+                                                    html: 'Silahkan Verifikasi Terlebih Dahulu',
+                                                    confirmButtonText: 'Ulangi',
+                                                    confirmButtonColor: 'blue',
+                                                    })
+                                                    </script>";
+                                            } ?>
+                                            <?php if (isset($login["error"])) {
+                                                echo $login["error"];
+                                                echo "  <script>
+                                                    Swal.fire({
+                                                    icon: 'error',
+                                                    title: 'Username atau Password Salah!',
+                                                    text: ' Masukan Username dan Password yang Dibuat Ketika Register!',
+                                                    confirmButtonText: 'Ulangi',
+                                                    confirmButtonColor: 'blue',
+                                                    })
+                                                    </script>";
+                                            } ?>
                                             <center><img src="../Foto/logo.png" alt="Logo_slink" class="logo1"></center>
                                             <h1 class="h3 mb-3 fw-normal">Login</h1>
                                             <form action="" method="POST">
