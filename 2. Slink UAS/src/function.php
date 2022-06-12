@@ -1243,9 +1243,9 @@ function transferData($data)
   }
 }
 
-function getUsers()
+function getUsers($user_id)
 {
-  $query = "SELECT id, username FROM users";
+  $query = "SELECT id, username FROM users WHERE id NOT IN ('$user_id')";
 
   return queryGetData($query);
 }

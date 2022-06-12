@@ -58,7 +58,7 @@ if (isset($_POST['delete_user'])) {
                         </script>";
             } ?>
             <form id="form_hapus_user" action="" method="POST">
-                <h3 class="mb-3 font-weight-bold">Ketikan " <?php echo $validation_text; ?>"</h3>
+                <h3 class="mb-3 font-weight-bold">Ketikan &nbsp <strong class="fw-bold">"<?php echo $validation_text; ?>"</strong></h3>
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="text" name="text" required />
                     <label class="fw-normal" for="username">Masukan kalimat</label>

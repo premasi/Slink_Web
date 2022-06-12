@@ -2,6 +2,7 @@
 // Import Function
 require "function.php";
 
+
 // Session untuk Limit Data Posts
 if (!isset($_SESSION['limit'])) {
     $_SESSION['limit'] = 0;
@@ -31,7 +32,7 @@ if ($_SESSION['limit'] == 0) {
 $posts = getPosts($_SESSION['limit']);
 
 // Ambil Data Users
-$users = getUsers();
+$users = getUsers($user_id);
 
 // Ambil Data Post Sesuai Keyword Pencarian
 if (isset($_POST["submit_search"])) {
@@ -111,7 +112,7 @@ if (isset($_POST['submit_category'])) {
                 <!-- Jika Tidak Ada Users dan Posts -->
 
                 <?php if (count($posts) == 0) : ?>
-                    <?php if (count($search_users_id) == 0) : ?>
+                    <?php if (!isset($search_users_id) or count($search_users_id) == 0) : ?>
                         <div class="d-flex justify-content-center mt-4"><img src="../Foto/kosong.png" alt=""></div>
                         <center>
                             <h3 class="">Posts/Users Tidak Ditemukan!</h3>
