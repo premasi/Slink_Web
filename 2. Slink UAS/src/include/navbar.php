@@ -37,7 +37,7 @@
                         ?>
 
                         <a class="nb nav-link me-5 rounded-1" href="./profile.php" style="color: #6aa5a9;"><?php echo $nama; ?></a>
-                        <p class="nav-link me-5 text-danger mt-3" style="cursor:pointer" id="logout">Log Out</p>
+                        <p class="nb nav-link me-5 text-danger mt-3" style="cursor:pointer" id="logout">Log Out</p>
                     </div>
                 </div>
             </nav>

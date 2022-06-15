@@ -3,3 +3,10 @@
     height: 300px;
     overflow-y: scroll;
   }
+
+  .lg:hover{
+    border-bottom-style: solid;
+    border-color: red;
+    font-weight:20px;
+    
+  }

@@ -165,3 +165,10 @@ form{
 	font-weight:20px;
 	
 }
+
+.lg:hover{
+	border-bottom-style: solid;
+  border-color: red;
+	font-weight:20px;
+	
+}

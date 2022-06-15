@@ -33,3 +33,10 @@ h3:hover {
   border-color: #6aa5a9;
 	font-weight:20px;
 }
+
+.lg:hover{
+	border-bottom-style: solid;
+  border-color: red;
+	font-weight:20px;
+	
+}

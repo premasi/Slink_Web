@@ -82,12 +82,23 @@ img.circle-img.circle-img--small {
 	box-shadow: -1px -9px 40px -12px rgba(0,0,0,0.75);
 	margin-top: -2%;
 }
+
+.lg:hover{
+	border-bottom-style: solid;
+  border-color: red;
+	font-weight:20px;
+	
+}
+
 .nb:hover{
 	border-bottom-style: solid;
   border-color: #6aa5a9;
 	font-weight:20px;
 	
 }
+
+
+
 /* Style The Dropdown Button */
 .dropbtn {
 	background-color: white;
@@ -132,3 +143,4 @@ img.circle-img.circle-img--small {
 	background-color: whitesmoke;
 	
   }
+
