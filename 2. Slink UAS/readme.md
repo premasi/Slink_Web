@@ -1,10 +1,27 @@
-## Ongoing Fitur Baru:
-### Jangan Lupa Installin Library-nya Dulu
-- [x] Verifikasi Aktifasi Akun OTP + Email (Pakein Akun Resmi Slink)
+## Fitur:
+- [x] Landing Page
+- [x] Verifikasi Aktifasi Akun OTP Dikirim ke Email
+- [x] Authentifikasi(Register & Login)
 - [x] Recovery Password
+- [x] Hapus Akun
+- [x] Transfer Data Akun
+- [x] CRUD Link/Posts
+- [x] Home(List Posts, Slider Top Posts, Rekomendasi Posts & Akun Dari Teman)
+- [x] Manajemen Profile
 - [x] Komentar
 - [x] Like
-- [x] Tombol Bookmark
-- [ ] Nampilin Bookmark
-- [ ] Friend(Follower&Following) + Rekomendasi Post
+- [x] Bookmark
+- [x] Friend(Follower&Following) 
+- [x] Rekomendasi Post Milik Teman
+- [x] Rekomendasi Following Milik Teman
 - [x] Leaderboard
+- [x] Validator di Tiap Process
+
+## Teknologi yang Digunakan
+- HTML, CSS, Javascript
+- PHP Native
+- Bootstrap
+- Jquery
+- Owl Carousel
+- Symfony Mailer
+- Sweet Alert
