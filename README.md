@@ -1,5 +1,7 @@
 # Slink
 Adalah sebuah forum berbasis website yang memfasilitasi penggunanya untuk memanajemen informasi berupa link yang dibuat menjadi sebuah postingan serta menyebarkannya ke pengguna lain.
+- Slink UTS : Versi Prototype
+- Slink UAS : Versi Akhir
 
 ## Tujuan Dibuat
 -  Menjadi tempat khusus berdiskusi disertai link yang relevan
